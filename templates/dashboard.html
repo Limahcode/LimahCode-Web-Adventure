@@ -1,0 +1,385 @@
+{% extends "base.html" %}
+
+{% block title %}HTML & CSS Adventure | Dashboard{% endblock %}
+
+{% block content %}
+<div class="dashboard-grid">
+    
+    <!-- LEFT SIDE: PROGRESS AND TIMETABLE -->
+    <div>
+        <!-- Progress Bar Card -->
+        <div class="card" style="margin-bottom: 25px;">
+            <div class="progress-section">
+                <div class="progress-header">
+                    <span style="font-family: 'Fredoka', sans-serif; font-size: 20px;">🎒 Your Learning Adventure</span>
+                    <span id="dashboard-progress-text" style="font-family: 'Fredoka', sans-serif; font-size: 20px; color: var(--color-success)">0% Completed</span>
+                </div>
+                <div class="progress-bar-container">
+                    <div id="dashboard-progress-fill" class="progress-bar-fill"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Cohort 2 Paid Announcement Card -->
+        <div class="card" style="margin-bottom: 30px; background: linear-gradient(135deg, #f0fdf4, #e0f2fe); border: 3px solid var(--color-primary); box-shadow: 0 8px 0 var(--color-primary);">
+            <div style="display: flex; align-items: center; gap: 15px; flex-wrap: wrap;">
+                <div style="font-size: 38px;">🚀</div>
+                <div style="flex: 1; min-width: 240px;">
+                    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
+                        <span class="stat-pill" style="background: var(--color-primary); color: #fff; font-size: 11px; padding: 2px 8px;">EARLY BIRD OPEN</span>
+                        <h3 style="font-size: 19px; margin: 0; color: var(--text-primary);">LimahCode Academy — Cohort 2</h3>
+                    </div>
+                    <p style="font-size: 13px; color: var(--text-secondary); margin: 0;">
+                        Ready for the next step? Join our Premium Web & CSS Mastery Bootcamp (with 1-on-1 mentorship & live portfolio deployment)!
+                    </p>
+                </div>
+                <div>
+                    <a href="https://wa.me/2348025034999?text=Hi%20LimahCode,%20I%20want%20to%20enroll%20my%20child%20in%20Cohort%202!" target="_blank" class="btn btn-primary" style="padding: 10px 18px; font-size: 14px; white-space: nowrap;">
+                        Enroll in Cohort 2 <i class="fa-solid fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Weekly Timetable / Lessons list -->
+        <div class="timetable-container">
+            <h2 style="font-size: 28px; margin-bottom: 25px;" id="timetable-title">📅 Learning Timetable</h2>
+            
+            <!-- Week 1 -->
+            <div class="timetable-week">
+                <div class="timetable-week-title">
+                    <span>Week 1: Discovering HTML (Building the Structure)</span>
+                    <span class="stat-pill" style="font-size: 14px; border-color: var(--color-primary); color: var(--color-primary)">Week 1</span>
+                </div>
+                <div class="timetable-grid">
+                    {% for lid in [1, 2, 3] %}
+                    {% set les = lessons[lid] %}
+                    <div class="timetable-card locked" data-id="{{ lid }}" onclick="window.location.href='/lesson/{{ lid }}'">
+                        <div>
+                            <div class="card-header-info">
+                                <span class="day">{{ les.day }}</span>
+                                <span class="points">+10 Stars</span>
+                            </div>
+                            <h3 class="timetable-card-title">{{ lid }}. {{ les.title }}</h3>
+                            <p class="timetable-card-desc">{{ les.description }}</p>
+                        </div>
+                        <div class="timetable-card-footer">
+                            <div class="status-label" style="font-weight: 700; font-size: 14px;">🔒 Locked</div>
+                            <span style="font-size: 20px;">⭐</span>
+                        </div>
+                    </div>
+                    {% endfor %}
+                    <!-- Challenge 1 Card -->
+                    <div class="timetable-card locked" data-type="challenge" data-id="1" onclick="window.location.href='/challenge/1'">
+                        <div>
+                            <div class="card-header-info">
+                                <span class="day" style="color: var(--color-purple)">Weekly Challenge</span>
+                                <span class="points" style="color: var(--color-purple)">+25 Stars</span>
+                            </div>
+                            <h3 class="timetable-card-title">🏆 HTML Explorer Challenge</h3>
+                            <p class="timetable-card-desc">Build your personal page and earn the HTML Explorer Badge!</p>
+                        </div>
+                        <div class="timetable-card-footer">
+                            <div class="status-label" style="font-weight: 700; font-size: 14px;">🔒 Locked</div>
+                            <span style="font-size: 20px;">🏆</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Week 2 -->
+            <div class="timetable-week">
+                <div class="timetable-week-title">
+                    <span>Week 2: Becoming an HTML Creator</span>
+                    <span class="stat-pill" style="font-size: 14px; border-color: var(--color-orange); color: var(--color-orange)">Week 2</span>
+                </div>
+                <div class="timetable-grid">
+                    {% for lid in [4, 5, 6] %}
+                    {% set les = lessons[lid] %}
+                    <div class="timetable-card locked" data-id="{{ lid }}" onclick="window.location.href='/lesson/{{ lid }}'">
+                        <div>
+                            <div class="card-header-info">
+                                <span class="day">{{ les.day }}</span>
+                                <span class="points">+15 Stars</span>
+                            </div>
+                            <h3 class="timetable-card-title">{{ lid }}. {{ les.title }}</h3>
+                            <p class="timetable-card-desc">{{ les.description }}</p>
+                        </div>
+                        <div class="timetable-card-footer">
+                            <div class="status-label" style="font-weight: 700; font-size: 14px;">🔒 Locked</div>
+                            <span style="font-size: 20px;">⭐</span>
+                        </div>
+                    </div>
+                    {% endfor %}
+                    <!-- Challenge 2 Card -->
+                    <div class="timetable-card locked" data-type="challenge" data-id="2" onclick="window.location.href='/challenge/2'">
+                        <div>
+                            <div class="card-header-info">
+                                <span class="day" style="color: var(--color-purple)">Weekly Challenge</span>
+                                <span class="points" style="color: var(--color-purple)">+25 Stars</span>
+                            </div>
+                            <h3 class="timetable-card-title">🏆 Website Builder Challenge</h3>
+                            <p class="timetable-card-desc">Build a registration page and earn the Website Builder Badge!</p>
+                        </div>
+                        <div class="timetable-card-footer">
+                            <div class="status-label" style="font-weight: 700; font-size: 14px;">🔒 Locked</div>
+                            <span style="font-size: 20px;">🏆</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Week 3 -->
+            <div class="timetable-week">
+                <div class="timetable-week-title">
+                    <span>Week 3: Making Websites Beautiful with CSS</span>
+                    <span class="stat-pill" style="font-size: 14px; border-color: var(--color-purple); color: var(--color-purple)">Week 3</span>
+                </div>
+                <div class="timetable-grid">
+                    {% for lid in [7, 8, 9, 10] %}
+                    {% set les = lessons[lid] %}
+                    <div class="timetable-card locked" data-id="{{ lid }}" onclick="window.location.href='/lesson/{{ lid }}'">
+                        <div>
+                            <div class="card-header-info">
+                                <span class="day">{{ les.day }}</span>
+                                <span class="points">+20 Stars</span>
+                            </div>
+                            <h3 class="timetable-card-title">{{ lid }}. {{ les.title }}</h3>
+                            <p class="timetable-card-desc">{{ les.description }}</p>
+                        </div>
+                        <div class="timetable-card-footer">
+                            <div class="status-label" style="font-weight: 700; font-size: 14px;">🔒 Locked</div>
+                            <span style="font-size: 20px;">⭐</span>
+                        </div>
+                    </div>
+                    {% endfor %}
+                    <!-- Challenge 3 Card -->
+                    <div class="timetable-card locked" data-type="challenge" data-id="3" onclick="window.location.href='/challenge/3'">
+                        <div>
+                            <div class="card-header-info">
+                                <span class="day" style="color: var(--color-purple)">Weekly Challenge</span>
+                                <span class="points" style="color: var(--color-purple)">+25 Stars</span>
+                            </div>
+                            <h3 class="timetable-card-title">🏆 Final Portfolio Challenge</h3>
+                            <p class="timetable-card-desc">Design your portfolio and earn the Junior Web Designer Certificate!</p>
+                        </div>
+                        <div class="timetable-card-footer">
+                            <div class="status-label" style="font-weight: 700; font-size: 14px;">🔒 Locked</div>
+                            <span style="font-size: 20px;">🏆</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- RIGHT SIDE: JOURNEY MAP & BADGES -->
+    <div>
+        <!-- Certificate claiming card -->
+        <div class="card" style="text-align: center; border-color: var(--color-warning); background: #fefbeb; margin-bottom: 30px;">
+            <h3 style="font-size: 20px; color: var(--color-orange); margin-bottom: 8px;">🎓 Final Graduation</h3>
+            <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 15px;">
+                Complete all 9 lessons and 3 weekly challenges to unlock your custom Junior Web Designer Certificate!
+            </p>
+            <button id="claim-certificate-btn" class="btn btn-warning" onclick="window.location.href='/certificate'" style="width: 100%;" disabled>
+                Claim Certificate <i class="fa-solid fa-graduation-cap"></i>
+            </button>
+        </div>
+
+        <!-- Badges Unlocked Section -->
+        <div class="card" style="margin-bottom: 30px;">
+            <h3 style="font-size: 22px; margin-bottom: 15px;">🏅 Collected Badges</h3>
+            <div class="badges-container">
+                <!-- Badge 1 -->
+                <div class="badge-item locked" data-badge="html_explorer">
+                    <div class="badge-img-wrapper">
+                        <img src="{{ url_for('static', filename='images/badges/html_explorer_badge.png') }}" class="badge-img" alt="HTML Explorer Badge">
+                    </div>
+                    <div class="badge-details">
+                        <h4>HTML Explorer</h4>
+                        <p class="badge-status">Locked</p>
+                    </div>
+                </div>
+                
+                <!-- Badge 2 -->
+                <div class="badge-item locked" data-badge="website_builder">
+                    <div class="badge-img-wrapper">
+                        <img src="{{ url_for('static', filename='images/badges/website_builder_badge.png') }}" class="badge-img" alt="Website Builder Badge">
+                    </div>
+                    <div class="badge-details">
+                        <h4>Website Builder</h4>
+                        <p class="badge-status">Locked</p>
+                    </div>
+                </div>
+                
+                <!-- Badge 3 -->
+                <div class="badge-item locked" data-badge="junior_web_designer">
+                    <div class="badge-img-wrapper">
+                        <img src="{{ url_for('static', filename='images/badges/junior_web_designer_badge.png') }}" class="badge-img" alt="Junior Web Designer Certificate">
+                    </div>
+                    <div class="badge-details">
+                        <h4>Junior Web Designer</h4>
+                        <p class="badge-status">Locked</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Winding Journey Map Card -->
+        <div class="card" style="padding: 10px 0;">
+            <h3 style="font-size: 22px; margin: 15px 0 0 20px;">🌍 Adventure Map</h3>
+            <div class="map-container">
+                <!-- SVG path showing winding line behind the buttons -->
+                <svg class="map-svg-line" viewBox="0 0 300 900">
+                    <path d="M 150,50 Q 270,120 150,190 T 150,330 T 150,470 T 150,610 T 150,750 T 150,890" fill="none" stroke="#cbd5e1" stroke-width="8" stroke-dasharray="10 10"/>
+                </svg>
+                
+                <div class="map-path">
+                    <!-- Lesson 1 Node -->
+                    <div class="map-node" data-type="lesson" data-id="1">
+                        <button class="node-btn locked" onclick="window.location.href='/lesson/1'">
+                            <span class="node-icon">🔒</span>
+                            <div class="node-tooltip">
+                                <div class="node-tooltip-title">1. Introduction to HTML</div>
+                                <div class="node-tooltip-desc">Learn about tags and write your first website elements!</div>
+                            </div>
+                        </button>
+                    </div>
+
+                    <!-- Lesson 2 Node -->
+                    <div class="map-node" data-type="lesson" data-id="2">
+                        <button class="node-btn locked" onclick="window.location.href='/lesson/2'">
+                            <span class="node-icon">🔒</span>
+                            <div class="node-tooltip">
+                                <div class="node-tooltip-title">2. Document Structure & Lists</div>
+                                <div class="node-tooltip-desc">Learn heads, bodies, lists and formatting.</div>
+                            </div>
+                        </button>
+                    </div>
+
+                    <!-- Lesson 3 Node -->
+                    <div class="map-node" data-type="lesson" data-id="3">
+                        <button class="node-btn locked" onclick="window.location.href='/lesson/3'">
+                            <span class="node-icon">🔒</span>
+                            <div class="node-tooltip">
+                                <div class="node-tooltip-title">3. Links & Images</div>
+                                <div class="node-tooltip-desc">Link webpages and insert beautiful photos.</div>
+                            </div>
+                        </button>
+                    </div>
+
+                    <!-- Challenge 1 Node (Weekly Badge) -->
+                    <div class="map-node challenge-node" data-type="challenge" data-id="1">
+                        <button class="node-btn locked" onclick="window.location.href='/challenge/1'">
+                            <span class="node-icon">🔒</span>
+                            <div class="node-tooltip">
+                                <div class="node-tooltip-title">🏆 HTML Explorer Challenge</div>
+                                <div class="node-tooltip-desc">Build your personal page and earn Week 1 Badge!</div>
+                            </div>
+                        </button>
+                    </div>
+
+                    <!-- Lesson 4 Node -->
+                    <div class="map-node" data-type="lesson" data-id="4">
+                        <button class="node-btn locked" onclick="window.location.href='/lesson/4'">
+                            <span class="node-icon">🔒</span>
+                            <div class="node-tooltip">
+                                <div class="node-tooltip-title">4. Forms & Inputs</div>
+                                <div class="node-tooltip-desc">Collect names, passwords, and add buttons!</div>
+                            </div>
+                        </button>
+                    </div>
+
+                    <!-- Lesson 5 Node -->
+                    <div class="map-node" data-type="lesson" data-id="5">
+                        <button class="node-btn locked" onclick="window.location.href='/lesson/5'">
+                            <span class="node-icon">🔒</span>
+                            <div class="node-tooltip">
+                                <div class="node-tooltip-title">5. Data Tables</div>
+                                <div class="node-tooltip-desc">Organize facts in grids and clean tables.</div>
+                            </div>
+                        </button>
+                    </div>
+
+                    <!-- Lesson 6 Node -->
+                    <div class="map-node" data-type="lesson" data-id="6">
+                        <button class="node-btn locked" onclick="window.location.href='/lesson/6'">
+                            <span class="node-icon">🔒</span>
+                            <div class="node-tooltip">
+                                <div class="node-tooltip-title">6. Complete Structure</div>
+                                <div class="node-tooltip-desc">Combine forms and tables to build full page blocks.</div>
+                            </div>
+                        </button>
+                    </div>
+
+                    <!-- Challenge 2 Node (Weekly Badge) -->
+                    <div class="map-node challenge-node" data-type="challenge" data-id="2">
+                        <button class="node-btn locked" onclick="window.location.href='/challenge/2'">
+                            <span class="node-icon">🔒</span>
+                            <div class="node-tooltip">
+                                <div class="node-tooltip-title">🏆 Website Builder Challenge</div>
+                                <div class="node-tooltip-desc">Build a registration page to earn Week 2 Badge!</div>
+                            </div>
+                        </button>
+                    </div>
+
+                    <!-- Lesson 7 Node -->
+                    <div class="map-node" data-type="lesson" data-id="7">
+                        <button class="node-btn locked" onclick="window.location.href='/lesson/7'">
+                            <span class="node-icon">🔒</span>
+                            <div class="node-tooltip">
+                                <div class="node-tooltip-title">7. Intro to CSS Colors</div>
+                                <div class="node-tooltip-desc">Learn selectors and paint backgrounds.</div>
+                            </div>
+                        </button>
+                    </div>
+
+                    <!-- Lesson 8 Node -->
+                    <div class="map-node" data-type="lesson" data-id="8">
+                        <button class="node-btn locked" onclick="window.location.href='/lesson/8'">
+                            <span class="node-icon">🔒</span>
+                            <div class="node-tooltip">
+                                <div class="node-tooltip-title">8. Borders & The Box Model</div>
+                                <div class="node-tooltip-desc">Add border radius, padding, and margin spacing.</div>
+                            </div>
+                        </button>
+                    </div>
+
+                    <!-- Lesson 9 Node -->
+                    <div class="map-node" data-type="lesson" data-id="9">
+                        <button class="node-btn locked" onclick="window.location.href='/lesson/9'">
+                            <span class="node-icon">🔒</span>
+                            <div class="node-tooltip">
+                                <div class="node-tooltip-title">9. Layouts with Flexbox</div>
+                                <div class="node-tooltip-desc">Align items side-by-side easily.</div>
+                            </div>
+                        </button>
+                    </div>
+
+                    <!-- Lesson 10 Node — Deployment -->
+                    <div class="map-node" data-type="lesson" data-id="10">
+                        <button class="node-btn locked" onclick="window.location.href='/lesson/10'">
+                            <span class="node-icon">🔒</span>
+                            <div class="node-tooltip">
+                                <div class="node-tooltip-title">10. Deploy Your Website 🚀</div>
+                                <div class="node-tooltip-desc">Put your website live on the real internet!</div>
+                            </div>
+                        </button>
+                    </div>
+                    <!-- Challenge 3 Node (Graduation Badge) -->
+                    <div class="map-node challenge-node" data-type="challenge" data-id="3">
+                        <button class="node-btn locked" onclick="window.location.href='/challenge/3'">
+                            <span class="node-icon">🔒</span>
+                            <div class="node-tooltip">
+                                <div class="node-tooltip-title">🎓 Final Portfolio Project</div>
+                                <div class="node-tooltip-desc">Design your portfolio and get your certificate!</div>
+                            </div>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+</div>
+{% endblock %}

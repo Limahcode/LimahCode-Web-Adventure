@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}LimahCode WebAdventure{% endblock %}</title>
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="A fun, game-inspired learning adventure platform for teenagers to learn HTML & CSS with LimahCode. Start building your first website today!">
+    <meta name="keywords" content="LimahCode, HTML, CSS, Coding, Learning, Gamified, Teenagers, Kids, Web Design, Interactive">
+    <meta name="author" content="LimahCode Team">
+    
+    <!-- FontAwesome for cute icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Custom Stylesheet -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    
+    <!-- Teacher Configurations -->
+    <script>
+        window.TEACHER_UNLOCKED_LESSONS = {{ teacher_unlocked_lessons | tojson }};
+        window.TEACHER_UNLOCKED_CHALLENGES = {{ teacher_unlocked_challenges | tojson }};
+    </script>
+</head>
+<body>
+
+    <!-- Navigation Header -->
+    <header class="navbar">
+        <div class="container navbar-content">
+            <a href="/" class="logo" id="nav-logo">
+                <span class="logo-icon">🚀</span>
+                <span>LimahCode <span style="font-weight:400; font-size: 20px; color: var(--color-purple);">WebAdventure</span></span>
+            </a>
+            
+            <div class="nav-stats">
+                <a href="/dashboard" class="btn btn-warning" id="dashboard-nav-btn" style="box-shadow: 2px 2px 0px var(--border-color); padding: 6px 14px;">
+                    <i class="fa-solid fa-map"></i> Map
+                </a>
+                <div class="stat-pill stars" title="Earned Stars">
+                    <span id="navbar-stars">0</span> <i class="fa-solid fa-star"></i>
+                </div>
+                <div class="stat-pill badges" title="Unlocked Badges">
+                    <span id="navbar-badges">0</span> <i class="fa-solid fa-award"></i>
+                </div>
+                <button class="btn btn-danger" onclick="resetGameState()" style="padding: 6px 12px; font-size: 13px; box-shadow: 2px 2px 0px var(--border-color);" title="Reset all progress">
+                    <i class="fa-solid fa-rotate-right"></i> Reset
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Block -->
+    <main class="container">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Celebration Overlay Popup -->
+    <div id="celebration-overlay" class="overlay">
+        <div class="popup">
+            <div class="popup-icon" id="popup-emoji">🎉</div>
+            <h2 id="popup-title">Awesome Job!</h2>
+            <p id="popup-text">You've successfully finished this task.</p>
+            <div style="margin: 20px 0;">
+                <img id="popup-badge-img" src="" alt="Unlocked Badge" style="max-height: 120px; display: none;">
+            </div>
+            <button class="btn btn-success" id="popup-action-btn" onclick="closeCelebrationPopup(); window.location.href='/dashboard';">
+                Continue Adventure!
+            </button>
+        </div>
+    </div>
+
+    <!-- Script loading -->
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>

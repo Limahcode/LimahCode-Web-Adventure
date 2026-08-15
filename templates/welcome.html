@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+
+{% block title %}HTML & CSS Adventure for Teenagers | Welcome{% endblock %}
+
+{% block content %}
+<div class="welcome-hero">
+    <div class="welcome-text">
+        <h1 style="color: var(--color-primary); font-size: 50px;">
+            Become a Web Creator! 🚀
+        </h1>
+        <p style="font-size: 22px; margin: 15px 0 30px 0; color: #475569;">
+            Welcome to the ultimate <strong>HTML & CSS Adventure</strong>. Learn how to write code, design beautiful websites, and earn rare badges in just 3 weeks!
+        </p>
+        
+        <div style="display: flex; gap: 15px;">
+            <a href="/dashboard" class="btn btn-primary" style="font-size: 20px; padding: 16px 36px;" id="start-adventure-btn">
+                Start Your Adventure! <i class="fa-solid fa-play"></i>
+            </a>
+        </div>
+    </div>
+    
+    <div class="welcome-image">
+        <img src="{{ url_for('static', filename='images/welcome_hero.png') }}" alt="Teenagers coding websites together" id="hero-img">
+    </div>
+</div>
+
+<div style="margin-top: 60px;">
+    <h2 style="text-align: center; font-size: 32px; margin-bottom: 40px;" id="journey-preview-heading">Your 3-Week Journey</h2>
+    <div class="timetable-grid">
+        <!-- Week 1 Preview -->
+        <div class="card card-hover" style="border-top: 10px solid var(--color-primary);">
+            <div style="font-size: 40px; margin-bottom: 10px;">🧱</div>
+            <h3>Week 1: Discovering HTML</h3>
+            <p style="color: var(--text-secondary); margin: 10px 0 20px 0;">
+                Learn what websites are made of! Discover headings, paragraphs, bullet lists, images, and links.
+            </p>
+            <div class="stat-pill" style="display: inline-flex; border-color: var(--color-primary); color: var(--color-primary);">
+                🏅 HTML Explorer Badge
+            </div>
+        </div>
+        
+        <!-- Week 2 Preview -->
+        <div class="card card-hover" style="border-top: 10px solid var(--color-orange);">
+            <div style="font-size: 40px; margin-bottom: 10px;">📋</div>
+            <h3>Week 2: Becoming an HTML Creator</h3>
+            <p style="color: var(--text-secondary); margin: 10px 0 20px 0;">
+                Build registration forms, text input textboxes, buttons, and tables to organize your information.
+            </p>
+            <div class="stat-pill" style="display: inline-flex; border-color: var(--color-orange); color: var(--color-orange);">
+                🏅 Website Builder Badge
+            </div>
+        </div>
+        
+        <!-- Week 3 Preview -->
+        <div class="card card-hover" style="border-top: 10px solid var(--color-purple);">
+            <div style="font-size: 40px; margin-bottom: 10px;">🎨</div>
+            <h3>Week 3: Making Websites Beautiful</h3>
+            <p style="color: var(--text-secondary); margin: 10px 0 20px 0;">
+                Style your content! Add background colors, round borders, margins, padding, and layout everything with CSS Flexbox.
+            </p>
+            <div class="stat-pill" style="display: inline-flex; border-color: var(--color-purple); color: var(--color-purple);">
+                🏅 Junior Web Designer Certificate
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card" style="margin-top: 60px; background: #e0f2fe; border-color: var(--color-secondary); text-align: center; padding: 40px;">
+    <h2>⭐ Ready to earn stars and badges? ⭐</h2>
+    <p style="font-size: 18px; margin: 15px 0 25px 0; color: #0369a1;">
+        No prior coding experience needed. Our step-by-step game lessons and code playgrounds will guide you from zero to developer!
+    </p>
+    <a href="/dashboard" class="btn btn-success" style="font-size: 18px; padding: 12px 30px;" id="join-now-btn">
+        Enter Dashboard <i class="fa-solid fa-arrow-right"></i>
+    </a>
+</div>
+{% endblock %}

@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+
+{% block title %}Graduation Certificate | Junior Web Designer{% endblock %}
+
+{% block content %}
+<!-- Page access checking -->
+<script>
+    (function() {
+        if (!localStorage.getItem('html_css_adventure_state')) {
+            localStorage.setItem('html_css_adventure_state', JSON.stringify({
+                completedLessons: [1,2,3,4,5,6,7,8,9],
+                completedChallenges: [1,2,3],
+                stars: 100,
+                badges: ['html_explorer', 'website_builder', 'junior_web_designer']
+            }));
+        }
+    })();
+</script>
+
+<div class="no-print" style="margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between;">
+    <a href="/dashboard" class="btn" style="padding: 8px 16px; font-size: 14px;">
+        <i class="fa-solid fa-arrow-left"></i> Back to Map
+    </a>
+    <div style="display: flex; gap: 10px;">
+        <button class="btn btn-primary" onclick="window.print()" style="padding: 8px 16px; font-size: 14px;">
+            <i class="fa-solid fa-print"></i> Print Certificate
+        </button>
+    </div>
+</div>
+
+<!-- Input for Name -->
+<div class="card no-print" style="max-width: 500px; margin: 0 auto 30px auto; border-color: var(--color-warning);">
+    <h3 style="margin-bottom: 10px;"><i class="fa-solid fa-signature"></i> Enter Your Name:</h3>
+    <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 15px;">
+        Type your name below to customize your official coding graduation certificate!
+    </p>
+    <input type="text" id="student-name-input" placeholder="Your Name" value="Code Explorer" 
+           style="width: 100%; padding: 12px; font-size: 16px; border: 3px solid var(--border-color); border-radius: var(--radius-md); font-family: 'Fredoka', sans-serif; font-weight: 600;" 
+           oninput="document.getElementById('cert-student-name').textContent = this.value || 'Code Explorer'">
+</div>
+
+<!-- Certificate layout -->
+<div class="certificate-wrapper" id="certificate-print-area">
+    <!-- Wreath / Decorative borders -->
+    <div class="cert-seal">🏆</div>
+    
+    <h1 class="cert-title">CERTIFICATE OF COMPLETION</h1>
+    <h3 class="cert-subtitle">HTML & CSS Adventure for Teenagers</h3>
+    
+    <p style="font-size: 16px; color: var(--text-secondary); margin-bottom: 10px;">This certifies that</p>
+    
+    <div class="cert-name" id="cert-student-name">Code Explorer</div>
+    
+    <p class="cert-description">
+        has successfully completed the 3-week coding curriculum. They have mastered HTML page structure, images, clickable links, lists, data forms, input elements, tables, CSS styling, colors, borders, and modern Flexbox layouts.
+    </p>
+    
+    <div style="margin: 25px 0;">
+        <img src="{{ url_for('static', filename='images/badges/junior_web_designer_badge.png') }}" alt="Junior Web Designer Seal" style="width: 100px; height: 100px; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.15));">
+    </div>
+    
+    <div class="cert-footer">
+        <div class="cert-signature">
+            <div style="font-family: 'Fredoka', sans-serif; font-weight: 700; color: var(--color-primary);">LimahCode Team</div>
+            <div class="cert-sig-line">Course Provider</div>
+        </div>
+        <div class="cert-signature">
+            <div style="font-family: 'Fredoka', sans-serif; font-weight: 700; color: var(--color-success);" id="cert-date">June 16, 2026</div>
+            <div class="cert-sig-line">Date of Graduation</div>
+        </div>
+    </div>
+</div>
+
+<!-- Additional print-only styling -->
+<style>
+@media print {
+    /* Hide navigation bar and other non-certificate elements */
+    .navbar, .no-print, footer, header, .btn, .card {
+        display: none !important;
+    }
+    body {
+        background-color: white !important;
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+    .container {
+        max-width: 100% !important;
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+    .certificate-wrapper {
+        border: 20px double #1e293b !important;
+        box-shadow: none !important;
+        margin: 0 auto !important;
+        width: 100% !important;
+        page-break-after: avoid;
+        page-break-before: avoid;
+    }
+}
+</style>
+
+<script>
+    // Trigger confetti shower on load to celebrate
+    document.addEventListener('DOMContentLoaded', () => {
+        setTimeout(triggerConfettiShower, 500);
+        // Set date to today
+        const options = { year: 'numeric', month: 'long', day: 'numeric' };
+        document.getElementById('cert-date').textContent = new Date().toLocaleDateString(undefined, options);
+    });
+</script>
+{% endblock %}

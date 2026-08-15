@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+
+{% block title %}Lesson {{ lesson.id }}: {{ lesson.title }}{% endblock %}
+
+{% block content %}
+<!-- Page access restriction checking -->
+<script>
+    (function() {
+        if (!localStorage.getItem('html_css_adventure_state')) {
+            localStorage.setItem('html_css_adventure_state', JSON.stringify({
+                completedLessons: [],
+                completedChallenges: [],
+                stars: 0,
+                badges: []
+            }));
+        }
+    })();
+</script>
+<div style="margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between;">
+
+    <a href="/dashboard" class="btn" style="padding: 8px 16px; font-size: 14px;">
+        <i class="fa-solid fa-arrow-left"></i> Back to Map
+    </a>
+    <div style="font-family: 'Fredoka', sans-serif; font-size: 14px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--color-primary)">
+        {{ lesson.week_title }}
+    </div>
+</div>
+
+<div class="lesson-layout">
+    
+    <!-- LEFT SIDE: INSTRUCTIONS -->
+    <div class="lesson-content">
+        <h1 style="font-size: 28px; margin-bottom: 10px; color: var(--color-primary);">
+            Lesson {{ lesson.id }}: {{ lesson.title }}
+        </h1>
+        <p style="font-size: 18px; color: var(--text-secondary); margin-bottom: 25px;">
+            <i class="fa-solid fa-lightbulb"></i> {{ lesson.concept }}
+        </p>
+        
+        {% for step in lesson.steps %}
+        <div class="lesson-step">
+            <div class="lesson-step-header">
+                <span class="step-num">{{ loop.index }}</span>
+                <h3>{{ step.title }}</h3>
+            </div>
+            <p style="margin-left: 38px; color: #475569;">
+                {{ step.text }}
+            </p>
+        </div>
+        {% endfor %}
+        
+        <!-- Interactive Code Example block -->
+        <div style="margin-top: 25px;">
+            <h3>👁️ Code Example:</h3>
+            <pre class="code-example-block"><code>{{ lesson.example }}</code></pre>
+        </div>
+        
+        <!-- Mini Challenge details -->
+        <div class="card" style="background: #f0fdf4; border-color: var(--color-success); margin-top: 30px; padding: 20px;">
+            <h3 style="color: var(--color-success); margin-bottom: 10px;">⚡ Mini Challenge:</h3>
+            <p style="font-size: 15px; color: #166534; margin-bottom: 15px;">
+                Complete the code task in the editor. Once you are done, click <strong>"Check Answer"</strong> to claim your stars!
+            </p>
+            <p style="font-weight: 700; font-size: 14px;">
+                Task: Write the code in the playground to complete the challenge.
+            </p>
+        </div>
+    </div>
+    
+    <!-- RIGHT SIDE: CODE SANDBOX PLAYGROUND -->
+    <div class="sandbox-container">
+        <!-- Editor Header -->
+        <div class="sandbox-header">
+            <div class="sandbox-title">
+                <i class="fa-solid fa-code" style="color: var(--color-primary)"></i> Code Playground
+            </div>
+            <div style="display: flex; gap: 8px;">
+                <span style="background: #334155; padding: 3px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; color: #cbd5e1;">HTML</span>
+            </div>
+        </div>
+        
+        <!-- Code editor textarea -->
+        <div class="editor-section">
+            <textarea id="code-editor" class="code-editor" autocomplete="off" autofocus spellcheck="false">{{ lesson.editor_template }}</textarea>
+        </div>
+        
+        <!-- Preview section -->
+        <div class="preview-section">
+            <div class="preview-header">Live Output Preview</div>
+            <iframe id="preview-frame" class="preview-frame"></iframe>
+        </div>
+        
+        <!-- Actions footer -->
+        <div class="sandbox-actions">
+            <button class="btn" type="button" onclick="resetEditorCode('{{ lesson.editor_template | replace('\n', '\\n') | replace('\'', '\\\'') }}')" style="font-size: 13px; padding: 6px 12px; background: #334155; color: #cbd5e1; border: 1px solid #475569;">
+                <i class="fa-solid fa-rotate-left"></i> Reset
+            </button>
+            <button class="btn btn-primary" onclick="runCodePreview()" style="font-size: 14px; padding: 8px 16px; box-shadow: 2px 2px 0px var(--border-color);">
+                <i class="fa-solid fa-play"></i> Run Code
+            </button>
+            <button class="btn btn-success" id="check-answer-btn" data-solution-check="{{ lesson.solution_check }}" onclick="verifyLesson({{ lesson.id }})" style="font-size: 14px; padding: 8px 20px; box-shadow: 2px 2px 0px var(--border-color);">
+                <i class="fa-solid fa-check"></i> Check Answer  
+            </button>
+        </div>
+    </div>
+</div>
+{% endblock %}

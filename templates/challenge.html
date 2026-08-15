@@ -1,0 +1,106 @@
+{% extends "base.html" %}
+
+{% block title %}Weekly Challenge: {{ challenge.title }}{% endblock %}
+
+{% block content %}
+<!-- Page access restriction checking -->
+<script>
+    (function() {
+        if (!localStorage.getItem('html_css_adventure_state')) {
+            localStorage.setItem('html_css_adventure_state', JSON.stringify({
+                completedLessons: [],
+                completedChallenges: [],
+                stars: 0,
+                badges: []
+            }));
+        }
+    })();
+</script>
+
+<div style="margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between;">
+    <a href="/dashboard" class="btn" style="padding: 8px 16px; font-size: 14px;">
+        <i class="fa-solid fa-arrow-left"></i> Back to Map
+    </a>
+    <div style="font-family: 'Fredoka', sans-serif; font-size: 14px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--color-purple)">
+        WEEKLY CHALLENGE
+    </div>
+</div>
+
+<div class="lesson-layout">
+    
+    <!-- LEFT SIDE: CHALLENGE INSTRUCTIONS & TARGET BADGE -->
+    <div class="lesson-content" style="border-color: var(--color-purple); box-shadow: 6px 6px 0px var(--color-purple);">
+        <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
+            <div style="font-size: 40px;">🏆</div>
+            <div>
+                <h1 style="font-size: 26px; color: var(--color-purple);">{{ challenge.title }}</h1>
+                <p style="font-size: 13px; color: var(--text-secondary); text-transform: uppercase; font-weight: 700;">
+                    Earn the {{ challenge.badge_name }}!
+                </p>
+            </div>
+        </div>
+        
+        <!-- Target Badge Card -->
+        <div class="card" style="display: flex; align-items: center; gap: 20px; background: #faf5ff; border-color: var(--color-purple); margin-bottom: 25px; padding: 15px;">
+            <img src="{{ url_for('static', filename='images/badges/' + challenge.badge + '_badge.png') }}" alt="{{ challenge.badge_name }}" style="width: 80px; height: 80px; filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.15));">
+            <div>
+                <h4 style="font-family: 'Fredoka', sans-serif; color: var(--color-purple);">Reward: +25 Stars</h4>
+                <p style="font-size: 13px; color: var(--text-secondary);">
+                    Completing this challenge unlocks the badge and grants access to next week's topics.
+                </p>
+            </div>
+        </div>
+
+        <div style="margin-bottom: 20px;">
+            <h3 style="margin-bottom: 10px;"><i class="fa-solid fa-circle-question"></i> Challenge Mission:</h3>
+            <p style="white-space: pre-line; color: #475569; font-size: 15px; line-height: 1.8;">
+                {{ challenge.instructions }}
+            </p>
+        </div>
+        
+        <div class="card" style="background: #fffbeb; border-color: var(--color-warning); padding: 15px;">
+            <h4 style="color: var(--color-orange); margin-bottom: 5px;"><i class="fa-solid fa-circle-info"></i> Adventure Tip:</h4>
+            <p style="font-size: 12px; color: #b45309; line-height: 1.5;">
+                Remember to write all tags exactly as requested. Check that you close every element and use the appropriate attributes!
+            </p>
+        </div>
+    </div>
+    
+    <!-- RIGHT SIDE: CODE SANDBOX PLAYGROUND -->
+    <div class="sandbox-container" style="border-color: var(--color-purple);">
+        <!-- Editor Header -->
+        <div class="sandbox-header" style="background: #1e1b4b;">
+            <div class="sandbox-title" style="color: #c084fc;">
+                <i class="fa-solid fa-code"></i> Challenge Sandbox
+            </div>
+            <div style="display: flex; gap: 8px;">
+                <span style="background: #312e81; padding: 3px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; color: #e9d5ff;">HTML & CSS</span>
+            </div>
+        </div>
+        
+        <!-- Code editor textarea -->
+        <div class="editor-section">
+            <textarea id="code-editor" class="code-editor" autocomplete="off" autofocus spellcheck="false">{{ challenge.editor_template }}</textarea>
+        </div>
+        
+        <!-- Preview section -->
+        <div class="preview-section">
+            <div class="preview-header">Live Output Preview</div>
+            <iframe id="preview-frame" class="preview-frame"></iframe>
+        </div>
+        
+        <!-- Actions footer -->
+        <div class="sandbox-actions" style="background: #1e1b4b;">
+            <button class="btn" type="button" onclick="resetEditorCode('{{ challenge.editor_template | replace('\n', '\\n') | replace('\'', '\\\'') }}')" style="font-size: 13px; padding: 6px 12px; background: #312e81; color: #cbd5e1; border: 1px solid #4338ca;">
+                <i class="fa-solid fa-rotate-left"></i> Reset
+            </button>
+            <button class="btn btn-primary" onclick="runCodePreview()" style="font-size: 14px; padding: 8px 16px; box-shadow: 2px 2px 0px var(--border-color);">
+                <i class="fa-solid fa-play"></i> Run Code
+            </button>
+            <button class="btn btn-success" id="check-challenge-btn" data-solution-check="{{ challenge.solution_check }}" data-badge="{{ challenge.badge }}" data-badge-name="{{ challenge.badge_name }}" onclick="verifyChallenge({{ challenge.id }})" style="font-size: 14px; padding: 8px 20px; box-shadow: 2px 2px 0px var(--border-color);">
+                <i class="fa-solid fa-award"></i> Submit & Check Challenge
+            </button>
+        </div>
+    </div>
+</div>
+{% endblock %}
