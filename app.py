@@ -170,7 +170,7 @@ LESSONS = {
             {"title": "Styling Text and Borders", "text": "We can change text looks with `font-family: Arial;`, `font-weight: bold;`, and align it using `text-align: center;`."},
             {"title": "Borders", "text": "Add borders like this: `border: 4px solid black;`. You can round the corners with `border-radius: 12px;`!"}
         ],
-        "example": "<style>\n  .card {\n    border: 3px solid #ff4757;\n    border-radius: 16px;\n    padding: 20px;\n    margin: 10px;\n    background-color: white;\n    font-family: 'Comic Sans MS', sans-serif;\n  }\n</style>\n<div class=\"card\">\n  <h3>A Beautiful Box</h3>\n  <p>Check out my round borders and padding!</p>\n</div>",
+        "example": "<style>\n  .card {\n    border: 3px solid red;\n    border-radius: 16px;\n    padding: 20px;\n    margin: 10px;\n    background-color: lightyellow;\n    font-family: Arial, sans-serif;\n  }\n</style>\n<div class=\"card\">\n  <h3>A Beautiful Box</h3>\n  <p>Check out my round borders and padding!</p>\n</div>",
         "editor_template": "<!-- In the style tag, give the .box class a border-radius of '15px' and a padding of '20px'! -->\n<style>\n  .box {\n    border: 2px solid blue;\n    \n    \n  }\n</style>\n<div class=\"box\">\n  Styling Boxes!\n</div>",
         "solution_check": "code.includes('border-radius') && code.includes('padding') && code.includes('15px') && code.includes('20px')"
     },
@@ -187,7 +187,7 @@ LESSONS = {
             {"title": "Why Flexbox?", "text": "Traditionally, placing elements side-by-side or centering them was hard. Flexbox solves this. You just apply styles to the container element!"},
             {"title": "Flexbox Properties", "text": "On a container, use `display: flex;` to align items. You can use `justify-content: center;` to center horizontally, `justify-content: space-between;` to spread them out, or `flex-direction: column;` to stack them!"}
         ],
-        "example": "<style>\n  .row {\n    display: flex;\n    justify-content: space-around;\n    background-color: #dfe4ea;\n    padding: 10px;\n  }\n  .box {\n    background-color: #ff6b81;\n    padding: 15px;\n    border-radius: 8px;\n  }\n</style>\n<div class=\"row\">\n  <div class=\"box\">Item 1</div>\n  <div class=\"box\">Item 2</div>\n  <div class=\"box\">Item 3</div>\n</div>",
+        "example": "<style>\n  .row {\n    display: flex;\n    justify-content: space-around;\n    background-color: lightgray;\n    padding: 10px;\n  }\n  .box {\n    background-color: coral;\n    padding: 15px;\n    border-radius: 8px;\n  }\n</style>\n<div class=\"row\">\n  <div class=\"box\">Item 1</div>\n  <div class=\"box\">Item 2</div>\n  <div class=\"box\">Item 3</div>\n</div>",
         "editor_template": "<!-- Complete the CSS for the .container class to make it display as flex, and justify-content as space-between! -->\n<style>\n  .container {\n    \n    \n  }\n</style>\n<div class=\"container\">\n  <div>Left Box</div>\n  <div>Right Box</div>\n</div>",
         "solution_check": "code.includes('display') && code.includes('flex') && code.includes('justify-content') && code.includes('space-between')"
     },
