@@ -561,9 +561,10 @@ a {
     overflow: hidden;
     display: flex;
     flex-direction: column;
-    height: 620px;
+    height: 640px;
     position: sticky;
-    top: 90px;
+    top: 20px;
+    z-index: 10;
 }
 
 .sandbox-header {
