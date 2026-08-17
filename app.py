@@ -178,38 +178,60 @@ LESSONS = {
         "id": 9,
         "week": 3,
         "week_title": "Making Websites Beautiful with CSS",
-        "title": "Simple Layouts with Flexbox",
+        "title": "Master Review & Final Project Briefing (Lessons 1-8)",
         "day": "Wednesday",
-        "description": "Learn to position items side-by-side or center them beautifully using CSS Flexbox.",
-        "points": 20,
-        "concept": "Flexbox makes layout design easy. Turning on 'display: flex' converts a container into a flexible box that aligns items automatically.",
+        "description": "Full summary of everything learned from HTML structure to CSS styling, plus full instructions for your 3-page Final Portfolio Project!",
+        "points": 25,
+        "concept": "You have mastered HTML structure (headings, text, images, links, lists, tables, forms, layout divs) and CSS styling (colors, background-images, fonts, borders, padding, margins)! Now let's connect all 3 pages together: Sign-Up, Login, and Dashboard.",
         "steps": [
-            {"title": "Why Flexbox?", "text": "Traditionally, placing elements side-by-side or centering them was hard. Flexbox solves this. You just apply styles to the container element!"},
-            {"title": "Flexbox Properties", "text": "On a container, use `display: flex;` to align items. You can use `justify-content: center;` to center horizontally, `justify-content: space-between;` to spread them out, or `flex-direction: column;` to stack them!"}
+            {
+                "title": "1. The Complete Master Review (Lessons 1 to 8)",
+                "text": "Here is your cheat sheet of superpowers:\n• **HTML Structure**: `<!DOCTYPE html>`, `<html>`, `<head>` (brain/styles), `<body>` (visible content)\n• **Headings & Paragraphs**: `<h1>` to `<h6>`, `<p>`\n• **Visuals & Links**: `<img src=\"...\" alt=\"...\">`, `<a href=\"...\">`\n• **Lists**: `<ul>` & `<li>` (bullet points), `<ol>` & `<li>` (numbered)\n• **Tables**: `<table>`, `<tr>` (row), `<th>` (header), `<td>` (data cell)\n• **Forms & Input**: `<form action=\"page.html\">`, `<label>`, `<input type=\"text|email|password\">`, `<button type=\"submit\">`\n• **CSS Basics**: `<style>` in `<head>`, selectors (`body`, `h1`, `.card`), colors (`color`, `background-color`, `background-image: url(...)`)\n• **Box Model**: `border: 3px solid black;`, `border-radius: 12px;`, `padding: 15px;`, `margin: 10px;`, `font-family: Arial, sans-serif;`"
+            },
+            {
+                "title": "2. 🚀 Your Final Portfolio Project Requirements",
+                "text": "Every student will build a **3-Page Linked Website**:\n1. **`signup.html`**: Registration form (Full Name, Email, Password, Favorite Hobby) that submits to `login.html` via `<form action=\"login.html\">`.\n2. **`login.html`**: Login form (Email, Password) with a button that submits to `dashboard.html` via `<form action=\"dashboard.html\">`.\n3. **`dashboard.html`**: Your personal command center! Features your Welcome Banner (`<header>`), About Me (`<p>`), My Hobbies Table (`<table>`), and Favorite Links (`<a>`).\n• **Styling**: Give all 3 pages beautiful CSS backgrounds, rounded borders, padding, and custom fonts!"
+            },
+            {
+                "title": "3. 📅 Important Timeline & Deadlines",
+                "text": "• **Wednesday**: Master Review & start coding your 3 pages.\n• **Friday**: Final Project Submission deadline (Submit your project folder or live link in the WhatsApp group).\n• **Saturday**: Live Class Presentation & Project Defense! Each student will present their project in class and explain how they built it!"
+            }
         ],
-        "example": "<style>\n  .row {\n    display: flex;\n    justify-content: space-around;\n    background-color: lightgray;\n    padding: 10px;\n  }\n  .box {\n    background-color: coral;\n    padding: 15px;\n    border-radius: 8px;\n  }\n</style>\n<div class=\"row\">\n  <div class=\"box\">Item 1</div>\n  <div class=\"box\">Item 2</div>\n  <div class=\"box\">Item 3</div>\n</div>",
-        "editor_template": "<!-- Complete the CSS for the .container class to make it display as flex, and justify-content as space-between! -->\n<style>\n  .container {\n    \n    \n  }\n</style>\n<div class=\"container\">\n  <div>Left Box</div>\n  <div>Right Box</div>\n</div>",
-        "solution_check": "code.includes('display') && code.includes('flex') && code.includes('justify-content') && code.includes('space-between')"
+        "example": "<!-- Complete 3-Page Website Structure Example -->\n<!-- 1. SIGNUP PAGE (signup.html) -->\n<style>\n  body { background-color: lightyellow; font-family: Arial, sans-serif; padding: 20px; }\n  .card { border: 3px solid black; border-radius: 12px; padding: 20px; max-width: 400px; margin: 0 auto; background: white; }\n  input { width: 90%; padding: 8px; margin-bottom: 10px; border-radius: 6px; border: 2px solid black; }\n  button { background-color: coral; color: white; border: 2px solid black; border-radius: 8px; padding: 10px 16px; font-weight: bold; cursor: pointer; }\n</style>\n\n<div class=\"card\">\n  <h2>🚀 Create Your Account</h2>\n  <form action=\"login.html\">\n    <label>Full Name:</label><br>\n    <input type=\"text\" placeholder=\"Enter your name\" required><br>\n    <label>Email Address:</label><br>\n    <input type=\"email\" placeholder=\"name@example.com\" required><br>\n    <button type=\"submit\">Register & Go to Login ➡️</button>\n  </form>\n</div>",
+        "editor_template": "<!-- 🎯 Lesson 9 Task: Build your SignUp Card that links to login.html! -->\n<!-- 1. In the <style> block, style body with a background color and .card with a border, border-radius, and padding -->\n<!-- 2. Inside the card, create a <form action=\"login.html\"> with an <input> and <button type=\"submit\"> -->\n<style>\n  body {\n    background-color: lightyellow;\n    font-family: Arial, sans-serif;\n  }\n  .card {\n    border: 3px solid black;\n    border-radius: 12px;\n    padding: 20px;\n    background-color: white;\n  }\n</style>\n\n<div class=\"card\">\n  <h2>Sign Up</h2>\n  <form action=\"login.html\">\n    <input type=\"text\" placeholder=\"Your name\">\n    <button type=\"submit\">Submit to Login</button>\n  </form>\n</div>",
+        "solution_check": "code.includes('<form') && code.includes('login.html') && code.includes('border-radius') && code.includes('padding')"
     },
     
     10: {
         "id": 10,
         "week": 3,
         "week_title": "Making Websites Beautiful with CSS",
-        "title": "Deploy Your Website — Going Live!",
+        "title": "Bonus Masterclass: Deploying to Netlify (Going Live!)",
         "day": "Bonus",
-        "description": "Put your finished website on the real internet with a real link you can share with anyone in the world!",
-        "points": 20,
-        "concept": "Deploying means putting your website files onto a server so anyone, anywhere, can visit it using a link. We use a free tool called Netlify to do this in seconds!",
+        "description": "Turn your 3-page project into a real, live website on the internet with a public link you can share worldwide!",
+        "points": 25,
+        "concept": "Deploying means hosting your files on a 24/7 web server. With Netlify Drop, you can publish your entire project folder in under 30 seconds for FREE without any command line tools.",
         "steps": [
-            {"title": "What Does 'Deploy' Mean?", "text": "Right now your website only lives on YOUR computer. Nobody else can see it. **Deploying** means uploading your website files to the internet so it gets a real web address (URL) that anyone can open — your parents, your friends, anyone in the world!"},
-            {"title": "Meet Netlify Drop", "text": "Netlify is a free tool that takes your website folder and puts it online instantly. No payment, no complicated setup — just drag and drop your files!"},
-            {"title": "How To Deploy (Do This Now!)", "text": "1. Go to **app.netlify.com/drop** in a new browser tab\\n2. Find your project folder on your computer (the one with your index.html file)\\n3. **Drag the whole folder** onto the purple dotted box on the Netlify page\\n4. Wait about 10-20 seconds\\n5. Netlify gives you a live URL like: **https://amazing-yourname-123.netlify.app**\\n6. Copy that link and share it — your website is now LIVE on the internet!"},
-            {"title": "Share Your Link!", "text": "Once deployed, paste your live URL in the class WhatsApp group. Send it to your parents. Send it to your friends. You built something real, and now the whole world can see it!"}
+            {
+                "title": "Step 1: Organize Your Project Folder on Your Computer",
+                "text": "Before uploading, make sure your folder is properly organized:\n• Folder name: e.g. `my-final-portfolio/`\n• Main entry file **MUST** be named exactly `index.html` (or `signup.html` / `dashboard.html`). If your homepage is `signup.html`, make a copy or rename it to `index.html` so Netlify knows which page to open first!\n• All image files should be inside the same folder or in an `images/` subfolder."
+            },
+            {
+                "title": "Step 2: Open Netlify Drop",
+                "text": "1. Open your browser and go to: **https://app.netlify.com/drop**\n2. (Optional & Recommended) Sign up for a free Netlify account so your live website links never expire!\n3. You will see a large box that says **'Drag and drop your site output folder here'**."
+            },
+            {
+                "title": "Step 3: Drag & Drop Your Folder",
+                "text": "1. Open your computer's File Explorer (Windows) or Finder (Mac).\n2. Drag your **ENTIRE project folder** and drop it directly onto the Netlify webpage.\n3. Wait 10 to 15 seconds while Netlify uploads and builds your site.\n4. Netlify will display: **'Production: Published'** with your live link (e.g. `https://super-coder-12345.netlify.app`)!"
+            },
+            {
+                "title": "Step 4: Customize Your Link & Share",
+                "text": "1. Click **Site configuration** > **Change site name** to make it personalized (e.g. `https://limahcode-alex.netlify.app`).\n2. Open the link on your mobile phone or send it to your parents and WhatsApp group!\n3. Paste your live URL below in the playground to complete the bonus masterclass!"
+            }
         ],
-        "example": "STEPS TO DEPLOY:\\n\\n1. Open a new tab: app.netlify.com/drop\\n2. Drag your project folder onto the page\\n3. Wait for the green 'Published' message\\n4. Copy your new live URL\\n5. Open it in a new tab to see YOUR website live on the internet!\\n\\nExample URL you might get:\\nhttps://cheerful-panda-482910.netlify.app",
-        "editor_template": "<!-- This lesson doesn't need code! -->\\n<!-- Instead: open a NEW browser tab and go to app.netlify.com/drop -->\\n<!-- Drag your project folder there, then paste your live link below as a comment -->\\n\\n<!-- My live website link: PASTE_YOUR_LINK_HERE -->\\n",
-        "solution_check": "code.includes('netlify.app') || code.includes('vercel.app') || code.toLowerCase().includes('http')"
+        "example": "📁 YOUR PROJECT FOLDER STRUCTURE:\nmy-portfolio/\n├── index.html        (Your Homepage)\n├── login.html        (Your Login Page)\n├── dashboard.html    (Your Dashboard)\n└── images/\n    └── my-photo.jpg\n\n🎉 YOUR NETLIFY LIVE URL WILL LOOK LIKE:\nhttps://alex-webadventure.netlify.app",
+        "editor_template": "<!-- 🎯 Lesson 10 Bonus Task: Deploy your website on Netlify! -->\n<!-- 1. Go to https://app.netlify.com/drop -->\n<!-- 2. Drag and drop your project folder -->\n<!-- 3. Copy your live link and paste it below: -->\n\n<!-- My Live Netlify Website: https://my-name.netlify.app -->\n<p>My website is live on the internet! 🚀</p>\n",
+        "solution_check": "code.toLowerCase().includes('netlify.app') || code.toLowerCase().includes('vercel.app') || code.toLowerCase().includes('http') || code.toLowerCase().includes('https')"
     }
 }
 
@@ -237,12 +259,12 @@ CHALLENGES = {
     3: {
         "id": 3,
         "week": 3,
-        "title": "Final Portfolio Project",
+        "title": "Final Portfolio Defense Project",
         "badge": "junior_web_designer",
         "badge_name": "Junior Web Designer Certificate",
-        "instructions": "Create your colorful personal portfolio website! It should contain:\n1. A Header (<header>) with your name in a big heading (<h1>)\n2. An About Me section inside a styled container (<div class=\"card\">) with a paragraph\n3. CSS styles in a <style> block to:\n   - Set a custom background color on body\n   - Add borders, padding, and margin to your .card container\n   - Align the heading in the center using CSS text-align",
-        "editor_template": "<!-- Create your final Portfolio website! -->\n<style>\n  body {\n    background-color: \n  }\n  .card {\n    \n  }\n</style>\n",
-        "solution_check": "code.includes('<header>') && code.includes('</header>') && code.includes('<h1>') && code.includes('</h1>') && code.includes('class=\"card\"') && code.includes('background-color') && code.includes('border') && code.includes('padding') && code.includes('margin') && code.includes('text-align') && code.includes('center')"
+        "instructions": "Build your 3-Page Linked Website for Friday Submission and Saturday Live Defense!\nRequirements:\n1. Sign Up Page (signup.html): Form submitting to login.html\n2. Login Page (login.html): Form submitting to dashboard.html\n3. Dashboard Page (dashboard.html): Header, styled cards (<div class=\"card\">), hobbies table (<table>), and custom CSS (background-color, borders, border-radius, padding, fonts)!\n4. Use the playground below to test and submit your combined dashboard prototype!",
+        "editor_template": "<!-- 🏆 Final Portfolio Defense Project -->\n<!-- Style your complete Dashboard below with CSS and HTML! -->\n<style>\n  body {\n    background-color: lightyellow;\n    font-family: Arial, sans-serif;\n    padding: 20px;\n  }\n  .card {\n    border: 3px solid black;\n    border-radius: 14px;\n    padding: 20px;\n    margin: 15px 0;\n    background-color: white;\n  }\n  table {\n    border-collapse: collapse;\n    width: 100%;\n  }\n  th, td {\n    border: 2px solid black;\n    padding: 8px;\n  }\n</style>\n\n<header class=\"card\">\n  <h1>🚀 Welcome to My Portfolio Dashboard</h1>\n  <p>Built with HTML & CSS by a Junior Web Designer!</p>\n</header>\n\n<div class=\"card\">\n  <h2>🏆 My Favorite Skills & Hobbies</h2>\n  <table>\n    <tr><th>Skill / Hobby</th><th>Experience Level</th></tr>\n    <tr><td>HTML & CSS Coding</td><td>Master</td></tr>\n    <tr><td>Game Building</td><td>Intermediate</td></tr>\n  </table>\n</div>\n",
+        "solution_check": "code.includes('<header') && code.includes('<h1>') && code.includes('class=\"card\"') && code.includes('<table>') && code.includes('border-radius') && code.includes('padding')"
     }
 }
 
