@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+
+{% block title %}Mini Dashboard | LimahCode WebAdventure{% endblock %}
+
+{% block content %}
+<div style="max-width: 900px; margin: 30px auto;">
+    <!-- Welcome Header Banner -->
+    <div class="card" style="background: linear-gradient(135deg, #6366f1 0%, #3b82f6 100%); color: white; padding: 30px; border-radius: var(--radius-lg); margin-bottom: 30px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px;">
+            <div>
+                <h1 style="color: white; font-size: 32px; margin-bottom: 8px;">🚀 Student Dashboard</h1>
+                <p style="font-size: 18px; opacity: 0.9;">Welcome back, Junior Developer! Ready to build amazing websites?</p>
+            </div>
+            <div>
+                <a href="/dashboard" class="btn btn-warning" style="font-size: 16px; padding: 12px 24px;">
+                    Open Learning Map <i class="fa-solid fa-map-location-dot"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Stats Grid -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; margin-bottom: 30px;">
+        <div class="card" style="background: white; padding: 20px; text-align: center;">
+            <div style="font-size: 36px; margin-bottom: 5px;">📘</div>
+            <h3 style="color: var(--text-secondary); font-size: 16px;">Course Status</h3>
+            <p style="font-size: 24px; font-weight: 700; color: var(--color-primary); margin-top: 5px;">Lessons 1 - 9 Active</p>
+        </div>
+        <div class="card" style="background: white; padding: 20px; text-align: center;">
+            <div style="font-size: 36px; margin-bottom: 5px;">🏆</div>
+            <h3 style="color: var(--text-secondary); font-size: 16px;">Capstone Project</h3>
+            <p style="font-size: 24px; font-weight: 700; color: var(--color-success); margin-top: 5px;">Ready for Defense</p>
+        </div>
+        <div class="card" style="background: white; padding: 20px; text-align: center;">
+            <div style="font-size: 36px; margin-bottom: 5px;">🎓</div>
+            <h3 style="color: var(--text-secondary); font-size: 16px;">Certificate</h3>
+            <p style="font-size: 24px; font-weight: 700; color: var(--color-purple); margin-top: 5px;">Unlocked!</p>
+        </div>
+    </div>
+
+    <!-- Student Hobbies & Skills Table (Satisfies Project Requirement) -->
+    <div class="card" style="background: white; padding: 25px; margin-bottom: 30px;">
+        <h2 style="font-size: 22px; color: var(--text-primary); margin-bottom: 15px;">
+            <i class="fa-solid fa-code" style="color: var(--color-primary);"></i> My Coding Skills & Hobbies
+        </h2>
+        
+        <table style="width: 100%; border-collapse: collapse; margin-top: 10px;">
+            <thead>
+                <tr style="background: #f8fafc; text-align: left;">
+                    <th style="padding: 12px 15px; border-bottom: 2px solid var(--border-color); font-family: 'Fredoka', sans-serif;">Skill / Hobby</th>
+                    <th style="padding: 12px 15px; border-bottom: 2px solid var(--border-color); font-family: 'Fredoka', sans-serif;">Category</th>
+                    <th style="padding: 12px 15px; border-bottom: 2px solid var(--border-color); font-family: 'Fredoka', sans-serif;">Level</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td style="padding: 12px 15px; border-bottom: 1px solid #e2e8f0;">HTML Structure & Tags</td>
+                    <td style="padding: 12px 15px; border-bottom: 1px solid #e2e8f0;">Web Development</td>
+                    <td style="padding: 12px 15px; border-bottom: 1px solid #e2e8f0;"><span class="badge" style="background: #dcfce7; color: #166534; padding: 4px 10px; border-radius: 20px; font-weight: 700; font-size: 13px;">Master</span></td>
+                </tr>
+                <tr>
+                    <td style="padding: 12px 15px; border-bottom: 1px solid #e2e8f0;">CSS Styling & Colors</td>
+                    <td style="padding: 12px 15px; border-bottom: 1px solid #e2e8f0;">Web Design</td>
+                    <td style="padding: 12px 15px; border-bottom: 1px solid #e2e8f0;"><span class="badge" style="background: #e0e7ff; color: #3730a3; padding: 4px 10px; border-radius: 20px; font-weight: 700; font-size: 13px;">Advanced</span></td>
+                </tr>
+                <tr>
+                    <td style="padding: 12px 15px; border-bottom: 1px solid #e2e8f0;">Forms & Table Design</td>
+                    <td style="padding: 12px 15px; border-bottom: 1px solid #e2e8f0;">UI Design</td>
+                    <td style="padding: 12px 15px; border-bottom: 1px solid #e2e8f0;"><span class="badge" style="background: #fef3c7; color: #92400e; padding: 4px 10px; border-radius: 20px; font-weight: 700; font-size: 13px;">Intermediate</span></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Quick Navigation Bar -->
+    <div style="display: flex; justify-content: space-between; align-items: center; background: #e0e7ff; padding: 15px 25px; border-radius: var(--radius-md); border: 2px solid var(--color-secondary);">
+        <span style="font-weight: 700; color: var(--color-primary-dark);">🔗 Navigation Shortcut:</span>
+        <div style="display: flex; gap: 10px;">
+            <a href="/signup" class="btn btn-secondary" style="padding: 6px 14px; font-size: 14px;">Sign Up Page</a>
+            <a href="/login" class="btn btn-secondary" style="padding: 6px 14px; font-size: 14px;">Login Page</a>
+            <a href="/dashboard" class="btn btn-primary" style="padding: 6px 14px; font-size: 14px;">Main Adventure Map</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

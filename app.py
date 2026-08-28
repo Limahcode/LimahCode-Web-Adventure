@@ -305,9 +305,17 @@ def challenge(challenge_id):
     challenge_data = CHALLENGES[challenge_id]
     return render_template('challenge.html', challenge=challenge_data, lessons=LESSONS)
 
-@app.route('/certificate')
-def certificate():
-    return render_template('certificate.html')
+@app.route('/signup')
+def signup():
+    return render_template('signup.html')
+
+@app.route('/login')
+def login():
+    return render_template('login.html')
+
+@app.route('/mini-dashboard')
+def mini_dashboard():
+    return render_template('mini_dashboard.html')
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5000)
