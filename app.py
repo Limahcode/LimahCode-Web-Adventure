@@ -186,60 +186,77 @@ LESSONS = {
     9: {
         "id": 9,
         "week": 3,
-        "week_title": "Making Websites Beautiful with CSS",
-        "title": "Master Review & Final Project Briefing (Lessons 1-8)",
+        "month": 3,
+        "week_title": "Month 3: JavaScript Programming (The Brain & Interactivity)",
+        "title": "What is JavaScript? Variables & Data Types",
         "day": "Wednesday",
-        "description": "Full summary of everything learned from HTML structure to CSS styling, plus full instructions for your 3-page Final Portfolio Project!",
+        "description": "Give your websites a brain! Learn how JavaScript makes pages interactive with variables (let, const) and numbers/text.",
         "points": 25,
-        "concept": "You have mastered HTML structure (headings, text, images, links, lists, tables, forms, layout divs) and CSS styling (colors, background-images, fonts, borders, padding, margins)! Now let's connect all 3 pages together: Sign-Up, Login, and Dashboard.",
+        "concept": "HTML is the skeleton, CSS is the style, and JavaScript is the brain! We use variables like 'let' to remember player names, scores, and lives.",
         "steps": [
-            {
-                "title": "1. The Complete Master Review (Lessons 1 to 8)",
-                "text": "Here is your cheat sheet of superpowers:\n• **HTML Structure**: `<!DOCTYPE html>`, `<html>`, `<head>` (brain/styles), `<body>` (visible content)\n• **Headings & Paragraphs**: `<h1>` to `<h6>`, `<p>`\n• **Visuals & Links**: `<img src=\"...\" alt=\"...\">`, `<a href=\"...\">`\n• **Lists**: `<ul>` & `<li>` (bullet points), `<ol>` & `<li>` (numbered)\n• **Tables**: `<table>`, `<tr>` (row), `<th>` (header), `<td>` (data cell)\n• **Forms & Input**: `<form action=\"page.html\">`, `<label>`, `<input type=\"text|email|password\">`, `<button type=\"submit\">`\n• **CSS Basics**: `<style>` in `<head>`, selectors (`body`, `h1`, `.card`), colors (`color`, `background-color`, `background-image: url(...)`)\n• **Box Model**: `border: 3px solid black;`, `border-radius: 12px;`, `padding: 15px;`, `margin: 10px;`, `font-family: Arial, sans-serif;`"
-            },
-            {
-                "title": "2. 🚀 Your Final Portfolio Project Requirements",
-                "text": "Every student will build a **3-Page Linked Website**:\n1. **`signup.html`**: Registration form (Full Name, Email, Password, Favorite Hobby) that submits to `login.html` via `<form action=\"login.html\">`.\n2. **`login.html`**: Login form (Email, Password) with a button that submits to `dashboard.html` via `<form action=\"dashboard.html\">`.\n3. **`dashboard.html`**: Your personal command center! Features your Welcome Banner (`<header>`), About Me (`<p>`), My Hobbies Table (`<table>`), and Favorite Links (`<a>`).\n• **Styling**: Give all 3 pages beautiful CSS backgrounds, rounded borders, padding, and custom fonts!"
-            },
-            {
-                "title": "3. 📅 Important Timeline & Deadlines",
-                "text": "• **Wednesday**: Master Review & start coding your 3 pages.\n• **Friday**: Final Project Submission deadline (Submit your project folder or live link in the WhatsApp group).\n• **Saturday**: Live Class Presentation & Project Defense! Each student will present their project in class and explain how they built it!"
-            }
+            {"title": "The Power of JavaScript", "text": "JavaScript allows websites to calculate scores, play sounds, react to clicks, and change content dynamically without refreshing the page."},
+            {"title": "Variables: `let` and `const`", "text": "Use `let score = 0;` to store values that can change. Use `const gameName = 'CyberGame';` for values that stay constant."},
+            {"title": "Running JavaScript in HTML", "text": "Wrap your JS code inside `<script> ... </script>` tags at the bottom of your HTML body!"}
         ],
-        "example": "<!-- Complete 3-Page Website Structure Example -->\n<!-- 1. SIGNUP PAGE (signup.html) -->\n<style>\n  body { background-color: lightyellow; font-family: Arial, sans-serif; padding: 20px; }\n  .card { border: 3px solid black; border-radius: 12px; padding: 20px; max-width: 400px; margin: 0 auto; background: white; }\n  input { width: 90%; padding: 8px; margin-bottom: 10px; border-radius: 6px; border: 2px solid black; }\n  button { background-color: coral; color: white; border: 2px solid black; border-radius: 8px; padding: 10px 16px; font-weight: bold; cursor: pointer; }\n</style>\n\n<div class=\"card\">\n  <h2>🚀 Create Your Account</h2>\n  <form action=\"login.html\">\n    <label>Full Name:</label><br>\n    <input type=\"text\" placeholder=\"Enter your name\" required><br>\n    <label>Email Address:</label><br>\n    <input type=\"email\" placeholder=\"name@example.com\" required><br>\n    <button type=\"submit\">Register & Go to Login ➡️</button>\n  </form>\n</div>",
-        "editor_template": "<!-- 🎯 Lesson 9 Task: Build your SignUp Card that links to login.html! -->\n<!-- 1. In the <style> block, style body with a background color and .card with a border, border-radius, and padding -->\n<!-- 2. Inside the card, create a <form action=\"login.html\"> with an <input> and <button type=\"submit\"> -->\n<style>\n  body {\n    background-color: lightyellow;\n    font-family: Arial, sans-serif;\n  }\n  .card {\n    border: 3px solid black;\n    border-radius: 12px;\n    padding: 20px;\n    background-color: white;\n  }\n</style>\n\n<div class=\"card\">\n  <h2>Sign Up</h2>\n  <form action=\"login.html\">\n    <input type=\"text\" placeholder=\"Your name\">\n    <button type=\"submit\">Submit to Login</button>\n  </form>\n</div>",
-        "solution_check": "code.includes('<form') && code.includes('login.html') && code.includes('border-radius') && code.includes('padding')"
+        "example": "<!DOCTYPE html>\n<html>\n<body>\n  <h1 id=\"player-tag\">Player Profile</h1>\n  <p id=\"score-text\"></p>\n\n  <script>\n    let playerName = \"Alex\";\n    let score = 100;\n    document.getElementById(\"score-text\").textContent = playerName + \" has \" + score + \" points!\";\n  </script>\n</body>\n</html>",
+        "editor_template": "<!-- 🎯 Lesson 9: Your First JavaScript Variable! -->\n<h1>Player Scoreboard</h1>\n<p id=\"status\"></p>\n\n<script>\n  // 1. Declare a variable called 'playerName' with your name\n  // 2. Declare a variable called 'level' with number 1\n  \n  \n</script>",
+        "solution_check": "code.includes('<script>') && code.includes('</script>') && code.includes('playerName') && (code.includes('let ') || code.includes('const ') || code.includes('var '))"
     },
-    
     10: {
         "id": 10,
         "week": 3,
-        "week_title": "Making Websites Beautiful with CSS",
-        "title": "Bonus Masterclass: Deploying to Netlify (Going Live!)",
-        "day": "Bonus",
-        "description": "Turn your 3-page project into a real, live website on the internet with a public link you can share worldwide!",
+        "month": 3,
+        "week_title": "Month 3: JavaScript Programming (The Brain & Interactivity)",
+        "title": "DOM Manipulation: Button Clicks & Live Actions",
+        "day": "Friday",
+        "description": "Connect HTML buttons to JavaScript using onclick and document.getElementById() to change webpage content in real time!",
         "points": 25,
-        "concept": "Deploying means hosting your files on a 24/7 web server. With Netlify Drop, you can publish your entire project folder in under 30 seconds for FREE without any command line tools.",
+        "concept": "The DOM (Document Object Model) lets JavaScript reach into the HTML page and change colors, text, or hide/show elements when a user clicks a button!",
         "steps": [
-            {
-                "title": "Step 1: Organize Your Project Folder on Your Computer",
-                "text": "Before uploading, make sure your folder is properly organized:\n• Folder name: e.g. `my-final-portfolio/`\n• Main entry file **MUST** be named exactly `index.html` (or `signup.html` / `dashboard.html`). If your homepage is `signup.html`, make a copy or rename it to `index.html` so Netlify knows which page to open first!\n• All image files should be inside the same folder or in an `images/` subfolder."
-            },
-            {
-                "title": "Step 2: Open Netlify Drop",
-                "text": "1. Open your browser and go to: **https://app.netlify.com/drop**\n2. (Optional & Recommended) Sign up for a free Netlify account so your live website links never expire!\n3. You will see a large box that says **'Drag and drop your site output folder here'**."
-            },
-            {
-                "title": "Step 3: Drag & Drop Your Folder",
-                "text": "1. Open your computer's File Explorer (Windows) or Finder (Mac).\n2. Drag your **ENTIRE project folder** and drop it directly onto the Netlify webpage.\n3. Wait 10 to 15 seconds while Netlify uploads and builds your site.\n4. Netlify will display: **'Production: Published'** with your live link (e.g. `https://super-coder-12345.netlify.app`)!"
-            },
-            {
-                "title": "Step 4: Customize Your Link & Share",
-                "text": "1. Click **Site configuration** > **Change site name** to make it personalized (e.g. `https://limahcode-alex.netlify.app`).\n2. Open the link on your mobile phone or send it to your parents and WhatsApp group!\n3. Paste your live URL below in the playground to complete the bonus masterclass!"
-            }
+            {"title": "Selecting Elements: `document.getElementById()`", "text": "Give an HTML element an `id=\"my-box\"`. In JS, grab it with `document.getElementById('my-box')`."},
+            {"title": "Button Click Events (`onclick`)", "text": "Add `onclick=\"myFunction()\"` to any button to run JavaScript code the moment a user clicks!"},
+            {"title": "Changing Content dynamically", "text": "Use `.textContent = 'New text!'` or `.style.backgroundColor = 'coral'` to change page elements in real time."}
         ],
-        "example": "📁 YOUR PROJECT FOLDER STRUCTURE:\nmy-portfolio/\n├── index.html        (Your Homepage)\n├── login.html        (Your Login Page)\n├── dashboard.html    (Your Dashboard)\n└── images/\n    └── my-photo.jpg\n\n🎉 YOUR NETLIFY LIVE URL WILL LOOK LIKE:\nhttps://alex-webadventure.netlify.app",
-        "editor_template": "<!-- 🎯 Lesson 10 Bonus Task: Deploy your website on Netlify! -->\n<!-- 1. Go to https://app.netlify.com/drop -->\n<!-- 2. Drag and drop your project folder -->\n<!-- 3. Copy your live link and paste it below: -->\n\n<!-- My Live Netlify Website: https://my-name.netlify.app -->\n<p>My website is live on the internet! 🚀</p>\n",
+        "example": "<body>\n  <h2 id=\"headline\">Click the button to change me!</h2>\n  <button onclick=\"changeHeadline()\">Magic Button ✨</button>\n\n  <script>\n    function changeHeadline() {\n      document.getElementById('headline').textContent = '🎉 You Clicked Me!';\n      document.getElementById('headline').style.color = 'green';\n    }\n  </script>\n</body>",
+        "editor_template": "<!-- 🎯 Lesson 10: Interactive Click Button! -->\n<h2 id=\"greeting\">Hello World</h2>\n<button onclick=\"sayHello()\">Click Me</button>\n\n<script>\n  function sayHello() {\n    // Change greeting text to 'Welcome to LimahCode!'\n    \n  }\n</script>",
+        "solution_check": "code.includes('document.getElementById') && code.includes('onclick') && code.includes('function sayHello')"
+    },
+    11: {
+        "id": 11,
+        "week": 3,
+        "month": 3,
+        "week_title": "Month 3: JavaScript Programming (The Brain & Interactivity)",
+        "title": "Conditionals (If/Else) & Building a Clicker Counter",
+        "day": "Saturday",
+        "description": "Learn programming logic with if/else statements and build a live Click Counter game!",
+        "points": 30,
+        "concept": "Conditionals let computers make decisions! If score >= 10, display 'Winner!'; else, display 'Keep clicking!'.",
+        "steps": [
+            {"title": "Making Decisions: `if` and `else`", "text": "Use `if (condition) { ... } else { ... }` to execute code depending on user actions."},
+            {"title": "Click Counter Math", "text": "Increment numbers with `count = count + 1` or `count++` every time a button is clicked!"},
+            {"title": "Live Score Feedback", "text": "Display win messages dynamically when reaching target milestones."}
+        ],
+        "example": "<body>\n  <h2>Cookie Counter: <span id=\"score\">0</span></h2>\n  <button onclick=\"tapCookie()\">🍪 Tap Cookie</button>\n  <p id=\"message\"></p>\n\n  <script>\n    let clicks = 0;\n    function tapCookie() {\n      clicks++;\n      document.getElementById('score').textContent = clicks;\n      if (clicks >= 5) {\n        document.getElementById('message').textContent = '🏆 Cookie Master Level!';\n      }\n    }\n  </script>\n</body>",
+        "editor_template": "<!-- 🎯 Lesson 11: Build a Click Counter with if/else! -->\n<h2>Clicks: <span id=\"count\">0</span></h2>\n<button onclick=\"addPoint()\">+1 Point</button>\n<p id=\"feedback\"></p>\n\n<script>\n  let count = 0;\n  function addPoint() {\n    count++;\n    document.getElementById('count').textContent = count;\n    // If count >= 3, set feedback text to 'Great Job!'\n    \n  }\n</script>",
+        "solution_check": "code.includes('count++') || code.includes('count = count + 1') && code.includes('if') && code.includes('document.getElementById')"
+    },
+    12: {
+        "id": 12,
+        "week": 3,
+        "month": 3,
+        "week_title": "Month 3: JavaScript Programming (The Brain & Interactivity)",
+        "title": "Grand Graduation: Netlify Deployment & Live App Showcase",
+        "day": "Bonus",
+        "description": "Deploy your complete interactive HTML + CSS + JavaScript web app live on Netlify and prepare for class defense!",
+        "points": 30,
+        "concept": "Turn your code into a real, live web app accessible anywhere in the world on Netlify Drop with custom domain names!",
+        "steps": [
+            {"title": "Organizing your 3-Month Project", "text": "Bundle your `index.html`, styled CSS, and interactive JavaScript files into one neat project folder."},
+            {"title": "Drag and Drop to Netlify", "text": "Drop your folder on **app.netlify.com/drop** to launch your live URL in 15 seconds!"},
+            {"title": "Claim your Diploma", "text": "Present your live project in class to receive your official Junior Full-Stack Web Creator Diploma."}
+        ],
+        "example": "<!-- Live Project Deployed to Netlify -->\n<p>My Live Interactive App: <a href=\"https://limahcode-games.netlify.app\">limahcode-games.netlify.app</a></p>",
+        "editor_template": "<!-- 🎯 Lesson 12: Paste your live Netlify or project URL below! -->\n<h1>My Grand Graduation Web App</h1>\n<p>Visit my live website: <a href=\"https://my-app.netlify.app\">Click Here</a></p>\n",
         "solution_check": "code.toLowerCase().includes('netlify.app') || code.toLowerCase().includes('vercel.app') || code.toLowerCase().includes('http') || code.toLowerCase().includes('https')"
     }
 }
@@ -248,9 +265,10 @@ CHALLENGES = {
     1: {
         "id": 1,
         "week": 1,
-        "title": "HTML Explorer Challenge",
+        "month": 1,
+        "title": "Month 1: HTML Explorer Capstone",
         "badge": "html_explorer",
-        "badge_name": "HTML Explorer Badge",
+        "badge_name": "Certified HTML Specialist",
         "instructions": "Create your first personal webpage! Your page must contain:\n1. A big heading (<h1>)\n2. A paragraph about yourself (<p>)\n3. A bulleted list (<ul> and <li>) with at least two hobbies\n4. A link (<a>) to your favorite website",
         "editor_template": "<!-- Build your first personal webpage here! -->\n<h1>My Webpage</h1>\n",
         "solution_check": "code.includes('<h1>') && code.includes('</h1>') && code.includes('<p>') && code.includes('</p>') && code.includes('<ul>') && code.includes('</ul>') && (code.match(/<li>/g) || []).length >= 2 && code.includes('<a') && code.includes('href')"
@@ -258,22 +276,24 @@ CHALLENGES = {
     2: {
         "id": 2,
         "week": 2,
-        "title": "Website Builder Challenge",
+        "month": 2,
+        "title": "Month 2: CSS Designer Showcase",
         "badge": "website_builder",
-        "badge_name": "Website Builder Badge",
-        "instructions": "Build a Registration Page! Your webpage must contain:\n1. A form (<form>)\n2. A text input (<input type=\"text\">) inside the form\n3. A submit button (<button>)\n4. A table (<table>) listing 'Registrant Name' and 'Registration Date' as column headers (<th>)",
-        "editor_template": "<!-- Build a simple registration page! -->\n",
-        "solution_check": "code.includes('<form>') && code.includes('</form>') && code.includes('<input') && code.includes('<button') && code.includes('<table>') && code.includes('</table>') && (code.match(/<th>/g) || []).length >= 2"
+        "badge_name": "Certified CSS Stylist",
+        "instructions": "Build a styled registration card! Your webpage must contain:\n1. A form container (<form>)\n2. Text inputs (<input type=\"text\">)\n3. A submit button (<button>)\n4. CSS rounded borders (border-radius) and padding!",
+        "editor_template": "<!-- Build a styled registration card! -->\n",
+        "solution_check": "code.includes('<form>') && code.includes('</form>') && code.includes('<input') && code.includes('<button') && (code.includes('border-radius') || code.includes('padding'))"
     },
     3: {
         "id": 3,
         "week": 3,
-        "title": "Final Portfolio Defense Project",
+        "month": 3,
+        "title": "Month 3: Full-Stack JavaScript Capstone",
         "badge": "junior_web_designer",
-        "badge_name": "Junior Web Designer Certificate",
-        "instructions": "Build your 3-Page Linked Website for Friday Submission and Saturday Live Defense!\nRequirements:\n1. Sign Up Page (signup.html): Form submitting to login.html\n2. Login Page (login.html): Form submitting to dashboard.html\n3. Dashboard Page (dashboard.html): Header, styled cards (<div class=\"card\">), hobbies table (<table>), and custom CSS (background-color, borders, border-radius, padding, fonts)!\n4. Use the playground below to test and submit your combined dashboard prototype!",
-        "editor_template": "<!-- 🏆 Final Portfolio Defense Project -->\n<!-- Style your complete Dashboard below with CSS and HTML! -->\n<style>\n  body {\n    background-color: lightyellow;\n    font-family: Arial, sans-serif;\n    padding: 20px;\n  }\n  .card {\n    border: 3px solid black;\n    border-radius: 14px;\n    padding: 20px;\n    margin: 15px 0;\n    background-color: white;\n  }\n  table {\n    border-collapse: collapse;\n    width: 100%;\n  }\n  th, td {\n    border: 2px solid black;\n    padding: 8px;\n  }\n</style>\n\n<header class=\"card\">\n  <h1>🚀 Welcome to My Portfolio Dashboard</h1>\n  <p>Built with HTML & CSS by a Junior Web Designer!</p>\n</header>\n\n<div class=\"card\">\n  <h2>🏆 My Favorite Skills & Hobbies</h2>\n  <table>\n    <tr><th>Skill / Hobby</th><th>Experience Level</th></tr>\n    <tr><td>HTML & CSS Coding</td><td>Master</td></tr>\n    <tr><td>Game Building</td><td>Intermediate</td></tr>\n  </table>\n</div>\n",
-        "solution_check": "code.includes('<header') && code.includes('<h1>') && code.includes('class=\"card\"') && code.includes('<table>') && code.includes('border-radius') && code.includes('padding')"
+        "badge_name": "Junior Full-Stack Web Creator Diploma",
+        "instructions": "Build your Final Graduation Interactive Web App!\nRequirements:\n1. Header and styled cards (<div class=\"card\">)\n2. Interactive button with an onclick event\n3. Dynamic JavaScript logic (variables and DOM updates)\n4. Beautiful CSS styling with rounded borders and padding!",
+        "editor_template": "<!-- 🏆 Final Graduation Interactive Web App -->\n<style>\n  body {\n    background-color: lightyellow;\n    font-family: Arial, sans-serif;\n    padding: 20px;\n  }\n  .card {\n    border: 3px solid black;\n    border-radius: 14px;\n    padding: 20px;\n    background-color: white;\n    max-width: 500px;\n    margin: 20px auto;\n  }\n  button {\n    background-color: coral;\n    color: white;\n    padding: 10px 16px;\n    border-radius: 8px;\n    border: 2px solid black;\n    font-size: 16px;\n    cursor: pointer;\n  }\n</style>\n\n<div class=\"card\">\n  <h1>🚀 Interactive Game Counter</h1>\n  <p>Clicks: <span id=\"score-display\">0</span></p>\n  <button onclick=\"addClick()\">Tap Me!</button>\n</div>\n\n<script>\n  let score = 0;\n  function addClick() {\n    score++;\n    document.getElementById('score-display').textContent = score;\n  }\n</script>\n",
+        "solution_check": "code.includes('class=\"card\"') && code.includes('<button') && code.includes('onclick') && code.includes('<script>') && code.includes('document.getElementById')"
     }
 }
 
