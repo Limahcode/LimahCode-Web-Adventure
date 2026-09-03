@@ -13,6 +13,9 @@
     <!-- FontAwesome for cute icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/limahcode_logo.png') }}">
+    
     <!-- Custom Stylesheet -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     
@@ -27,8 +30,8 @@
     <!-- Navigation Header -->
     <header class="navbar">
         <div class="container navbar-content">
-            <a href="/" class="logo" id="nav-logo">
-                <span class="logo-icon">🚀</span>
+            <a href="/" class="logo" id="nav-logo" style="display: flex; align-items: center; gap: 10px; text-decoration: none;">
+                <img src="{{ url_for('static', filename='images/limahcode_logo.png') }}" alt="LimahCode Logo" style="height: 42px; width: 42px; border-radius: 50%; object-fit: cover; border: 2px solid var(--border-color); box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
                 <span>LimahCode <span style="font-weight:400; font-size: 20px; color: var(--color-purple);">WebAdventure</span></span>
             </a>
             
