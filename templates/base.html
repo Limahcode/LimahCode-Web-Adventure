@@ -33,15 +33,33 @@
             </a>
             
             <div class="nav-stats">
-                <a href="/signup" class="btn btn-primary" id="signup-nav-btn" style="box-shadow: 2px 2px 0px var(--border-color); padding: 6px 14px; font-size: 14px;">
-                    <i class="fa-solid fa-user-plus"></i> Sign Up
-                </a>
-                <a href="/login" class="btn btn-secondary" id="login-nav-btn" style="box-shadow: 2px 2px 0px var(--border-color); padding: 6px 14px; font-size: 14px;">
-                    <i class="fa-solid fa-right-to-bracket"></i> Log In
-                </a>
-                <a href="/dashboard" class="btn btn-warning" id="dashboard-nav-btn" style="box-shadow: 2px 2px 0px var(--border-color); padding: 6px 14px; font-size: 14px;">
-                    <i class="fa-solid fa-map"></i> Map
-                </a>
+                {% if current_user %}
+                    {% if current_user.role == 'teacher' %}
+                        <a href="/admin" class="btn btn-warning" style="padding: 6px 12px; font-size: 13px;">
+                            <i class="fa-solid fa-chalkboard-user"></i> Admin Panel
+                        </a>
+                    {% endif %}
+                    <span style="font-size: 14px; font-weight: 700; color: var(--color-primary); background: white; border: 2px solid var(--border-color); padding: 5px 12px; border-radius: 20px;">
+                        👤 {{ current_user.fullname }}
+                    </span>
+                    <a href="/dashboard" class="btn btn-warning" id="dashboard-nav-btn" style="box-shadow: 2px 2px 0px var(--border-color); padding: 6px 14px; font-size: 14px;">
+                        <i class="fa-solid fa-map"></i> Map
+                    </a>
+                    <a href="/logout" class="btn btn-danger" style="padding: 6px 12px; font-size: 13px; box-shadow: 2px 2px 0px var(--border-color);" title="Log out">
+                        <i class="fa-solid fa-right-from-bracket"></i>
+                    </a>
+                {% else %}
+                    <a href="/signup" class="btn btn-primary" id="signup-nav-btn" style="box-shadow: 2px 2px 0px var(--border-color); padding: 6px 14px; font-size: 14px;">
+                        <i class="fa-solid fa-user-plus"></i> Sign Up
+                    </a>
+                    <a href="/login" class="btn btn-secondary" id="login-nav-btn" style="box-shadow: 2px 2px 0px var(--border-color); padding: 6px 14px; font-size: 14px;">
+                        <i class="fa-solid fa-right-to-bracket"></i> Log In
+                    </a>
+                    <a href="/dashboard" class="btn btn-warning" id="dashboard-nav-btn" style="box-shadow: 2px 2px 0px var(--border-color); padding: 6px 14px; font-size: 14px;">
+                        <i class="fa-solid fa-map"></i> Map
+                    </a>
+                {% endif %}
+
                 <div class="stat-pill stars" title="Earned Stars">
                     <span id="navbar-stars">0</span> <i class="fa-solid fa-star"></i>
                 </div>

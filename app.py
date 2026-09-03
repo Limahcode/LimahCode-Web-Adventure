@@ -1,13 +1,18 @@
 import json
 import os
-from flask import Flask, render_template, jsonify, request, redirect, url_for
+from flask import Flask, render_template, jsonify, request, redirect, url_for, session, flash
+import database
 
 app = Flask(__name__)
+app.secret_key = os.environ.get('SECRET_KEY', 'limahcode_super_adventure_secret_2026')
+
+# Initialize SQLite database
+database.init_db()
 
 def get_teacher_config():
     config_path = os.path.join(app.root_path, 'teacher_config.json')
     if not os.path.exists(config_path):
-        default_config = {"unlocked_lessons": [1], "unlocked_challenges": []}
+        default_config = {"unlocked_lessons": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], "unlocked_challenges": [1, 2, 3]}
         with open(config_path, 'w') as f:
             json.dump(default_config, f, indent=4)
         return default_config
@@ -15,14 +20,18 @@ def get_teacher_config():
         with open(config_path, 'r') as f:
             return json.load(f)
     except Exception:
-        return {"unlocked_lessons": [1], "unlocked_challenges": []}
+        return {"unlocked_lessons": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], "unlocked_challenges": [1, 2, 3]}
 
 @app.context_processor
-def inject_teacher_config():
+def inject_global_context():
     config = get_teacher_config()
+    current_user = None
+    if 'user_id' in session:
+        current_user = database.get_user_by_id(session['user_id'])
     return {
-        "teacher_unlocked_lessons": config.get("unlocked_lessons", [1]),
-        "teacher_unlocked_challenges": config.get("unlocked_challenges", [])
+        "teacher_unlocked_lessons": config.get("unlocked_lessons", [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]),
+        "teacher_unlocked_challenges": config.get("unlocked_challenges", [1, 2, 3]),
+        "current_user": current_user
     }
 
 
@@ -305,17 +314,145 @@ def challenge(challenge_id):
     challenge_data = CHALLENGES[challenge_id]
     return render_template('challenge.html', challenge=challenge_data, lessons=LESSONS)
 
-@app.route('/signup')
+@app.route('/signup', methods=['GET', 'POST'])
 def signup():
+    if request.method == 'POST':
+        fullname = request.form.get('fullname', '').strip()
+        email = request.form.get('email', '').strip()
+        password = request.form.get('password', '')
+        
+        if not fullname or not email or not password:
+            flash("All fields are required!", "error")
+            return render_template('signup.html')
+            
+        user_id, error = database.create_user(fullname, email, password, role='student')
+        if error:
+            flash(error, "error")
+            return render_template('signup.html')
+            
+        session['user_id'] = user_id
+        session['user_role'] = 'student'
+        flash(f"Welcome to LimahCode Web Adventure, {fullname}! 🚀", "success")
+        return redirect(url_for('dashboard'))
+        
     return render_template('signup.html')
 
-@app.route('/login')
+@app.route('/login', methods=['GET', 'POST'])
 def login():
+    if request.method == 'POST':
+        email = request.form.get('email', '').strip()
+        password = request.form.get('password', '')
+        
+        user = database.authenticate_user(email, password)
+        if not user:
+            flash("Invalid email or password. Please try again.", "error")
+            return render_template('login.html')
+            
+        session['user_id'] = user['id']
+        session['user_role'] = user['role']
+        flash(f"Welcome back, {user['fullname']}! 🌟", "success")
+        
+        if user['role'] == 'teacher':
+            return redirect(url_for('admin_panel'))
+        return redirect(url_for('dashboard'))
+        
     return render_template('login.html')
+
+@app.route('/logout')
+def logout():
+    session.clear()
+    flash("You have logged out. Keep up the great coding! 👋", "info")
+    return redirect(url_for('welcome'))
+
+@app.route('/admin', methods=['GET', 'POST'])
+def admin_panel():
+    if 'user_id' not in session or session.get('user_role') != 'teacher':
+        # If not logged in as teacher, prompt for teacher credentials
+        if request.method == 'POST':
+            email = request.form.get('email', '').strip()
+            password = request.form.get('password', '')
+            user = database.authenticate_user(email, password)
+            if user and user['role'] == 'teacher':
+                session['user_id'] = user['id']
+                session['user_role'] = 'teacher'
+                return redirect(url_for('admin_panel'))
+            else:
+                flash("Unauthorized. Teacher credentials required.", "error")
+        return render_template('admin_login.html')
+        
+    students = database.get_all_students()
+    config = get_teacher_config()
+    return render_template('admin.html', students=students, config=config, lessons=LESSONS, challenges=CHALLENGES)
+
+@app.route('/admin/update-locks', methods=['POST'])
+def admin_update_locks():
+    if 'user_id' not in session or session.get('user_role') != 'teacher':
+        return jsonify({"success": False, "error": "Unauthorized"}), 403
+        
+    data = request.get_json() or {}
+    unlocked_lessons = data.get('unlocked_lessons', [1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
+    unlocked_challenges = data.get('unlocked_challenges', [1, 2, 3])
+    
+    config_path = os.path.join(app.root_path, 'teacher_config.json')
+    new_config = {
+        "unlocked_lessons": unlocked_lessons,
+        "unlocked_challenges": unlocked_challenges
+    }
+    with open(config_path, 'w') as f:
+        json.dump(new_config, f, indent=4)
+        
+    return jsonify({"success": True, "config": new_config})
+
+@app.route('/api/user-state', methods=['GET'])
+def get_user_state():
+    if 'user_id' in session:
+        user = database.get_user_by_id(session['user_id'])
+        if user:
+            return jsonify({
+                "logged_in": True,
+                "fullname": user['fullname'],
+                "email": user['email'],
+                "role": user['role'],
+                "stars": user['stars'],
+                "badges": json.loads(user['badges']) if user['badges'] else [],
+                "completedLessons": json.loads(user['completed_lessons']) if user['completed_lessons'] else [],
+                "completedChallenges": json.loads(user['completed_challenges']) if user['completed_challenges'] else [],
+                "savedCodes": json.loads(user['saved_codes']) if user['saved_codes'] else {}
+            })
+    return jsonify({"logged_in": False})
+
+@app.route('/api/save-progress', methods=['POST'])
+def save_user_progress():
+    if 'user_id' not in session:
+        return jsonify({"success": False, "message": "Guest mode - saved to localStorage only"}), 200
+        
+    data = request.get_json() or {}
+    stars = data.get('stars')
+    badges = data.get('badges')
+    completed_lessons = data.get('completedLessons')
+    completed_challenges = data.get('completedChallenges')
+    saved_codes = data.get('savedCodes')
+    
+    database.update_user_progress(
+        session['user_id'],
+        stars=stars,
+        badges=badges,
+        completed_lessons=completed_lessons,
+        completed_challenges=completed_challenges,
+        saved_codes=saved_codes
+    )
+    return jsonify({"success": True})
 
 @app.route('/mini-dashboard')
 def mini_dashboard():
-    return render_template('mini_dashboard.html')
+    student_data = None
+    if 'user_id' in session:
+        student_data = database.get_user_by_id(session['user_id'])
+        if student_data:
+            student_data['badges'] = json.loads(student_data['badges']) if student_data['badges'] else []
+            student_data['completed_lessons'] = json.loads(student_data['completed_lessons']) if student_data['completed_lessons'] else []
+            student_data['completed_challenges'] = json.loads(student_data['completed_challenges']) if student_data['completed_challenges'] else []
+    return render_template('mini_dashboard.html', student=student_data)
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5000)

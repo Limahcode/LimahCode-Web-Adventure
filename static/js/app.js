@@ -23,6 +23,118 @@ function getGameState() {
 
 function saveGameState(state) {
     localStorage.setItem('html_css_adventure_state', JSON.stringify(state));
+    // Synchronize to server database if logged in
+    syncProgressToServer(state);
+}
+
+// Synchronize state and code to the server backend
+function syncProgressToServer(state) {
+    const editor = document.getElementById('code-editor');
+    let savedCodes = {};
+    try {
+        const storedCodes = localStorage.getItem('adventure_all_saved_codes');
+        if (storedCodes) savedCodes = JSON.parse(storedCodes);
+    } catch(e) {}
+    
+    if (editor) {
+        savedCodes[window.location.pathname] = editor.value;
+        localStorage.setItem('adventure_all_saved_codes', JSON.stringify(savedCodes));
+    }
+
+    fetch('/api/save-progress', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            stars: state.stars,
+            badges: state.badges,
+            completedLessons: state.completedLessons,
+            completedChallenges: state.completedChallenges,
+            savedCodes: savedCodes
+        })
+    }).catch(err => console.log("Offline or guest mode"));
+}
+
+// Generate smart, actionable hints based on student code
+function generateSmartHints(code, ruleStr) {
+    const hints = [];
+    const lower = code.toLowerCase();
+
+    if (ruleStr.includes('doctype') && !lower.includes('<!doctype html>')) {
+        hints.push("Missing <code>&lt;!DOCTYPE html&gt;</code> at the top of your code.");
+    }
+    if (ruleStr.includes('<html>') && (!code.includes('<html>') || !code.includes('</html>'))) {
+        hints.push("Make sure you wrap your webpage inside <code>&lt;html&gt;</code> and <code>&lt;/html&gt;</code> tags.");
+    }
+    if (ruleStr.includes('<body>') && (!code.includes('<body>') || !code.includes('</body>'))) {
+        hints.push("Make sure your visible page elements are inside <code>&lt;body&gt;</code> and <code>&lt;/body&gt;</code>.");
+    }
+    if (ruleStr.includes('<h1>') && (!code.includes('<h1>') || !code.includes('</h1>'))) {
+        hints.push("You need an <code>&lt;h1&gt;</code> main heading tag.");
+    }
+    if (ruleStr.includes('<br>') && !code.includes('<br>')) {
+        hints.push("Add a <code>&lt;br&gt;</code> line break inside your paragraph.");
+    }
+    if (ruleStr.includes('<ol>') && (!code.includes('<ol>') || !code.includes('</ol>'))) {
+        hints.push("You need an ordered list <code>&lt;ol&gt;...&lt;/ol&gt;</code> for numbered items.");
+    }
+    if (ruleStr.includes('<span>') && (!code.includes('<span>') || !code.includes('</span>'))) {
+        hints.push("Wrap at least one word inside an inline <code>&lt;span&gt;...&lt;/span&gt;</code> tag.");
+    }
+    if (ruleStr.includes('href') && !code.includes('href=')) {
+        hints.push("Links need an <code>href=\"...\"</code> attribute to tell the browser where to go (e.g. <code>&lt;a href=\"https://google.com\"&gt;</code>).");
+    }
+    if (ruleStr.includes('<img') && !code.includes('<img')) {
+        hints.push("Add an image tag <code>&lt;img src=\"...\"&gt;</code>.");
+    }
+    if (ruleStr.includes('<form>') && (!code.includes('<form>') || !code.includes('</form>'))) {
+        hints.push("Build a form container with <code>&lt;form&gt;...&lt;/form&gt;</code>.");
+    }
+    if (ruleStr.includes('<input') && !code.includes('<input')) {
+        hints.push("Add at least one input box with <code>&lt;input type=\"text\"&gt;</code> inside your form.");
+    }
+    if (ruleStr.includes('<table>') && (!code.includes('<table>') || !code.includes('</table>'))) {
+        hints.push("You need a table container: <code>&lt;table&gt;...&lt;/table&gt;</code>.");
+    }
+    if (ruleStr.includes('<th>') && (code.match(/<th>/g) || []).length < 2) {
+        hints.push("Add at least 2 column headers with <code>&lt;th&gt;...&lt;/th&gt;</code> inside your table.");
+    }
+    if (ruleStr.includes('border-radius') && !code.includes('border-radius')) {
+        hints.push("Use the CSS property <code>border-radius: ...;</code> to give your boxes smooth rounded corners.");
+    }
+    if (ruleStr.includes('class="card"') && !code.includes('class="card"')) {
+        hints.push("Give your container the class name <code>class=\"card\"</code>.");
+    }
+
+    if (hints.length === 0) {
+        hints.push("Check that all your open HTML tags have matching closing tags (e.g. <code>&lt;/p&gt;</code>, <code>&lt;/div&gt;</code>).");
+    }
+    return hints;
+}
+
+// Display smart hints in the UI
+function showSmartHint(hints) {
+    const box = document.getElementById('smart-hint-box');
+    const content = document.getElementById('smart-hint-content');
+    if (!box || !content) return;
+
+    let html = `
+        <div style="display: flex; align-items: center; gap: 8px; color: #f59e0b; font-weight: 700; margin-bottom: 6px;">
+            <span>💡 Smart Mentor Hint:</span>
+        </div>
+        <ul style="margin: 0; padding-left: 20px; color: #cbd5e1; line-height: 1.6;">
+    `;
+    hints.forEach(h => {
+        html += `<li>${h}</li>`;
+    });
+    html += `</ul>`;
+
+    content.innerHTML = html;
+    box.style.display = 'block';
+}
+
+function hideSmartHint() {
+    const box = document.getElementById('smart-hint-box');
+    if (box) box.style.display = 'none';
 }
 
 // Reset Game State
@@ -33,7 +145,6 @@ function resetGameState() {
 
 // Check if a lesson is unlocked
 function isLessonUnlocked(lessonId, state) {
-    // If teacher explicitly unlocked it in config, it is unlocked for all students!
     if (window.TEACHER_UNLOCKED_LESSONS) {
         return window.TEACHER_UNLOCKED_LESSONS.includes(lessonId);
     }
@@ -106,6 +217,7 @@ function resetEditorCode(defaultTemplate) {
             editor.value = defaultTemplate || '';
             const storageKey = 'adventure_saved_code_' + window.location.pathname;
             localStorage.removeItem(storageKey);
+            hideSmartHint();
             runCodePreview();
         }
     }
@@ -131,6 +243,7 @@ function verifyLesson(lessonId) {
     }
     
     if (passed) {
+        hideSmartHint();
         const state = getGameState();
         
         // Check if already completed to avoid duplicate stars
@@ -152,7 +265,8 @@ function verifyLesson(lessonId) {
         // Play success audio if supported or just trigger effects
         triggerConfettiShower();
     } else {
-        alert("Oops! Your code doesn't match the challenge requirements yet. Read the instructions and try again! Double check tags and matching braces.");
+        const hints = generateSmartHints(code, solutionRule);
+        showSmartHint(hints);
     }
 }
 
@@ -176,6 +290,7 @@ function verifyChallenge(challengeId) {
     }
     
     if (passed) {
+        hideSmartHint();
         const state = getGameState();
         
         const isNew = !state.completedChallenges.includes(challengeId);
@@ -198,7 +313,8 @@ function verifyChallenge(challengeId) {
         
         triggerConfettiShower();
     } else {
-        alert("Not quite right yet! Ensure you have included all the required HTML tags and CSS properties listed in the instructions.");
+        const hints = generateSmartHints(code, solutionRule);
+        showSmartHint(hints);
     }
 }
 
@@ -439,7 +555,47 @@ function checkPageAccess(type, id) {
 
 // Handle layout adjustments and code sync in real-time
 document.addEventListener('DOMContentLoaded', () => {
-    updateNavbarStats();
+    // Attempt to hydrate state from server if logged in
+    fetch('/api/user-state')
+        .then(r => r.json())
+        .then(data => {
+            if (data.logged_in) {
+                const state = getGameState();
+                // Merge server state with local state
+                state.stars = Math.max(state.stars, data.stars || 0);
+                if (data.badges && data.badges.length) {
+                    data.badges.forEach(b => { if (!state.badges.includes(b)) state.badges.push(b); });
+                }
+                if (data.completedLessons && data.completedLessons.length) {
+                    data.completedLessons.forEach(l => { if (!state.completedLessons.includes(l)) state.completedLessons.push(l); });
+                }
+                if (data.completedChallenges && data.completedChallenges.length) {
+                    data.completedChallenges.forEach(c => { if (!state.completedChallenges.includes(c)) state.completedChallenges.push(c); });
+                }
+                localStorage.setItem('html_css_adventure_state', JSON.stringify(state));
+                
+                // If student has saved code for this route in DB
+                const editor = document.getElementById('code-editor');
+                if (editor && data.savedCodes && data.savedCodes[window.location.pathname]) {
+                    const storageKey = 'adventure_saved_code_' + window.location.pathname;
+                    if (!localStorage.getItem(storageKey)) {
+                        editor.value = data.savedCodes[window.location.pathname];
+                        localStorage.setItem(storageKey, editor.value);
+                        runCodePreview();
+                    }
+                }
+            }
+            updateNavbarStats();
+            if (document.getElementById('dashboard-progress-fill')) {
+                renderDashboard();
+            }
+        })
+        .catch(() => {
+            updateNavbarStats();
+            if (document.getElementById('dashboard-progress-fill')) {
+                renderDashboard();
+            }
+        });
     
     // Automatic route access check based on path
     const path = window.location.pathname;
@@ -450,11 +606,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const challengeMatch = path.match(/\/challenge\/(\d+)/);
     if (challengeMatch) {
         checkPageAccess('challenge', parseInt(challengeMatch[1]));
-    }
-    
-    // Check if on Dashboard page
-    if (document.getElementById('dashboard-progress-fill')) {
-        renderDashboard();
     }
     
     // Check if on Lesson or Challenge page

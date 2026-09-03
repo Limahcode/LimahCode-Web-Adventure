@@ -20,3 +20,7 @@ scratch*.txt
 # OS files
 Thumbs.db
 .DS_Store
+Desktop.ini
+
+# SQLite Local DB
+adventure.db

@@ -9,7 +9,13 @@
         <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px;">
             <div>
                 <h1 style="color: white; font-size: 32px; margin-bottom: 8px;">🚀 Student Dashboard</h1>
-                <p style="font-size: 18px; opacity: 0.9;">Welcome back, Junior Developer! Ready to build amazing websites?</p>
+                <p style="font-size: 18px; opacity: 0.9;">
+                    {% if student %}
+                        Welcome back, <strong>{{ student.fullname }}</strong>! (⭐ {{ student.stars }} Stars Earned)
+                    {% else %}
+                        Welcome back, Junior Developer! Ready to build amazing websites?
+                    {% endif %}
+                </p>
             </div>
             <div>
                 <a href="/dashboard" class="btn btn-warning" style="font-size: 16px; padding: 12px 24px;">
