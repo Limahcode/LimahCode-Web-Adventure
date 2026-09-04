@@ -1,51 +1,91 @@
-import sqlite3
 import os
 import json
+import sqlite3
 from werkzeug.security import generate_password_hash, check_password_hash
+
+DATABASE_URL = os.environ.get('DATABASE_URL')
+USE_POSTGRES = False
+
+if DATABASE_URL:
+    try:
+        import psycopg2
+        import psycopg2.extras
+        USE_POSTGRES = True
+        # Handle Render postgres url compatibility (postgres:// -> postgresql://)
+        if DATABASE_URL.startswith("postgres://"):
+            DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql://", 1)
+    except ImportError:
+        USE_POSTGRES = False
 
 DB_PATH = os.path.join(os.path.dirname(__file__), 'adventure.db')
 
 def get_db_connection():
-    conn = sqlite3.connect(DB_PATH)
-    conn.row_factory = sqlite3.Row
-    return conn
+    if USE_POSTGRES:
+        conn = psycopg2.connect(DATABASE_URL)
+        return conn
+    else:
+        conn = sqlite3.connect(DB_PATH)
+        conn.row_factory = sqlite3.Row
+        return conn
+
+def get_cursor(conn):
+    if USE_POSTGRES:
+        import psycopg2.extras
+        return conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+    return conn.cursor()
 
 def init_db():
     conn = get_db_connection()
-    cursor = conn.cursor()
+    cursor = get_cursor(conn)
     
-    # Users table
-    cursor.execute('''
-        CREATE TABLE IF NOT EXISTS users (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            fullname TEXT NOT NULL,
-            email TEXT UNIQUE NOT NULL,
-            password_hash TEXT NOT NULL,
-            role TEXT DEFAULT 'student',
-            track TEXT DEFAULT 'junior',
-            stars INTEGER DEFAULT 0,
-            badges TEXT DEFAULT '[]',
-            completed_lessons TEXT DEFAULT '[]',
-            completed_challenges TEXT DEFAULT '[]',
-            saved_codes TEXT DEFAULT '{}',
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-        )
-    ''')
-    
-    # Run migration if track column does not exist
-    try:
-        cursor.execute("ALTER TABLE users ADD COLUMN track TEXT DEFAULT 'junior'")
-    except Exception:
-        pass # Column already exists
-    
+    if USE_POSTGRES:
+        cursor.execute('''
+            CREATE TABLE IF NOT EXISTS users (
+                id SERIAL PRIMARY KEY,
+                fullname TEXT NOT NULL,
+                email TEXT UNIQUE NOT NULL,
+                password_hash TEXT NOT NULL,
+                role TEXT DEFAULT 'student',
+                track TEXT DEFAULT 'junior',
+                stars INTEGER DEFAULT 0,
+                badges TEXT DEFAULT '[]',
+                completed_lessons TEXT DEFAULT '[]',
+                completed_challenges TEXT DEFAULT '[]',
+                saved_codes TEXT DEFAULT '{}',
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            );
+        ''')
+    else:
+        cursor.execute('''
+            CREATE TABLE IF NOT EXISTS users (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                fullname TEXT NOT NULL,
+                email TEXT UNIQUE NOT NULL,
+                password_hash TEXT NOT NULL,
+                role TEXT DEFAULT 'student',
+                track TEXT DEFAULT 'junior',
+                stars INTEGER DEFAULT 0,
+                badges TEXT DEFAULT '[]',
+                completed_lessons TEXT DEFAULT '[]',
+                completed_challenges TEXT DEFAULT '[]',
+                saved_codes TEXT DEFAULT '{}',
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )
+        ''')
+        try:
+            cursor.execute("ALTER TABLE users ADD COLUMN track TEXT DEFAULT 'junior'")
+        except Exception:
+            pass
+
     # Ensure default teacher account exists
-    cursor.execute('SELECT id FROM users WHERE email = ?', ('teacher@limahcode.com',))
+    ph = '%s' if USE_POSTGRES else '?'
+    cursor.execute(f'SELECT id FROM users WHERE email = {ph}', ('teacher@limahcode.com',))
     teacher = cursor.fetchone()
     if not teacher:
         default_pwd_hash = generate_password_hash('limah2026')
-        cursor.execute('''
+        cursor.execute(f'''
             INSERT INTO users (fullname, email, password_hash, role, track, stars, badges, completed_lessons, completed_challenges)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+            VALUES ({ph}, {ph}, {ph}, {ph}, {ph}, {ph}, {ph}, {ph}, {ph})
         ''', (
             'Teacher Admin',
             'teacher@limahcode.com',
@@ -58,7 +98,6 @@ def init_db():
             json.dumps([])
         ))
     else:
-        # Reset teacher progress to empty if it was seeded with all completed
         cursor.execute('''
             UPDATE users SET completed_lessons = '[]', completed_challenges = '[]', badges = '[]', stars = 0
             WHERE email = 'teacher@limahcode.com' AND role = 'teacher'
@@ -71,18 +110,29 @@ def create_user(fullname, email, password, role='student', track='junior'):
     email = email.strip().lower()
     pwd_hash = generate_password_hash(password)
     conn = get_db_connection()
-    cursor = conn.cursor()
+    cursor = get_cursor(conn)
+    ph = '%s' if USE_POSTGRES else '?'
+    
     try:
-        cursor.execute('''
-            INSERT INTO users (fullname, email, password_hash, role, track)
-            VALUES (?, ?, ?, ?, ?)
-        ''', (fullname.strip(), email, pwd_hash, role, track))
+        if USE_POSTGRES:
+            cursor.execute(f'''
+                INSERT INTO users (fullname, email, password_hash, role, track)
+                VALUES ({ph}, {ph}, {ph}, {ph}, {ph}) RETURNING id
+            ''', (fullname.strip(), email, pwd_hash, role, track))
+            user_id = cursor.fetchone()['id']
+        else:
+            cursor.execute(f'''
+                INSERT INTO users (fullname, email, password_hash, role, track)
+                VALUES ({ph}, {ph}, {ph}, {ph}, {ph})
+            ''', (fullname.strip(), email, pwd_hash, role, track))
+            user_id = cursor.lastrowid
+            
         conn.commit()
-        user_id = cursor.lastrowid
         return user_id, None
-    except sqlite3.IntegrityError:
-        return None, "Email address already registered. Please log in."
     except Exception as e:
+        err_msg = str(e).lower()
+        if "unique" in err_msg or "duplicate key" in err_msg or "integrityerror" in err_msg:
+            return None, "Email address already registered. Please log in."
         return None, str(e)
     finally:
         conn.close()
@@ -90,8 +140,10 @@ def create_user(fullname, email, password, role='student', track='junior'):
 def authenticate_user(email, password):
     email = email.strip().lower()
     conn = get_db_connection()
-    cursor = conn.cursor()
-    cursor.execute('SELECT * FROM users WHERE email = ?', (email,))
+    cursor = get_cursor(conn)
+    ph = '%s' if USE_POSTGRES else '?'
+    
+    cursor.execute(f'SELECT * FROM users WHERE email = {ph}', (email,))
     user = cursor.fetchone()
     conn.close()
     
@@ -101,8 +153,10 @@ def authenticate_user(email, password):
 
 def get_user_by_id(user_id):
     conn = get_db_connection()
-    cursor = conn.cursor()
-    cursor.execute('SELECT * FROM users WHERE id = ?', (user_id,))
+    cursor = get_cursor(conn)
+    ph = '%s' if USE_POSTGRES else '?'
+    
+    cursor.execute(f'SELECT * FROM users WHERE id = {ph}', (user_id,))
     user = cursor.fetchone()
     conn.close()
     if user:
@@ -111,30 +165,31 @@ def get_user_by_id(user_id):
 
 def update_user_progress(user_id, stars=None, badges=None, completed_lessons=None, completed_challenges=None, saved_codes=None):
     conn = get_db_connection()
-    cursor = conn.cursor()
+    cursor = get_cursor(conn)
+    ph = '%s' if USE_POSTGRES else '?'
     
     updates = []
     values = []
     
     if stars is not None:
-        updates.append('stars = ?')
+        updates.append(f'stars = {ph}')
         values.append(stars)
     if badges is not None:
-        updates.append('badges = ?')
+        updates.append(f'badges = {ph}')
         values.append(json.dumps(badges) if isinstance(badges, list) else badges)
     if completed_lessons is not None:
-        updates.append('completed_lessons = ?')
+        updates.append(f'completed_lessons = {ph}')
         values.append(json.dumps(completed_lessons) if isinstance(completed_lessons, list) else completed_lessons)
     if completed_challenges is not None:
-        updates.append('completed_challenges = ?')
+        updates.append(f'completed_challenges = {ph}')
         values.append(json.dumps(completed_challenges) if isinstance(completed_challenges, list) else completed_challenges)
     if saved_codes is not None:
-        updates.append('saved_codes = ?')
+        updates.append(f'saved_codes = {ph}')
         values.append(json.dumps(saved_codes) if isinstance(saved_codes, dict) else saved_codes)
         
     if updates:
         values.append(user_id)
-        sql = f"UPDATE users SET {', '.join(updates)} WHERE id = ?"
+        sql = f"UPDATE users SET {', '.join(updates)} WHERE id = {ph}"
         cursor.execute(sql, tuple(values))
         conn.commit()
         
@@ -142,13 +197,15 @@ def update_user_progress(user_id, stars=None, badges=None, completed_lessons=Non
 
 def get_all_students():
     conn = get_db_connection()
-    cursor = conn.cursor()
-    cursor.execute('''
+    cursor = get_cursor(conn)
+    ph = '%s' if USE_POSTGRES else '?'
+    
+    cursor.execute(f'''
         SELECT id, fullname, email, role, track, stars, badges, completed_lessons, completed_challenges, saved_codes, created_at 
         FROM users 
-        WHERE role = 'student'
+        WHERE role = {ph}
         ORDER BY stars DESC, id ASC
-    ''')
+    ''', ('student',))
     rows = cursor.fetchall()
     conn.close()
     
