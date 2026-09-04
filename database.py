@@ -52,11 +52,17 @@ def init_db():
             default_pwd_hash,
             'teacher',
             'all',
-            100,
-            json.dumps(['html_explorer', 'website_builder', 'junior_web_designer']),
-            json.dumps([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]),
-            json.dumps([1, 2, 3])
+            0,
+            json.dumps([]),
+            json.dumps([]),
+            json.dumps([])
         ))
+    else:
+        # Reset teacher progress to empty if it was seeded with all completed
+        cursor.execute('''
+            UPDATE users SET completed_lessons = '[]', completed_challenges = '[]', badges = '[]', stars = 0
+            WHERE email = 'teacher@limahcode.com' AND role = 'teacher'
+        ''')
     
     conn.commit()
     conn.close()

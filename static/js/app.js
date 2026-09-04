@@ -139,8 +139,25 @@ function hideSmartHint() {
 
 // Reset Game State
 function resetGameState() {
-    localStorage.setItem('html_css_adventure_state', JSON.stringify(DEFAULT_STATE));
-    window.location.reload();
+    if (confirm("Are you sure you want to reset your progress back to zero?")) {
+        localStorage.setItem('html_css_adventure_state', JSON.stringify(DEFAULT_STATE));
+        localStorage.removeItem('adventure_all_saved_codes');
+        
+        // Also sync empty progress to server if logged in
+        fetch('/api/save-progress', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                stars: 0,
+                badges: [],
+                completedLessons: [],
+                completedChallenges: [],
+                savedCodes: {}
+            })
+        }).finally(() => {
+            window.location.reload();
+        });
+    }
 }
 
 // Check if a lesson is unlocked
