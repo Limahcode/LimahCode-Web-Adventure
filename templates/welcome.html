@@ -5,25 +5,32 @@
 {% block content %}
 <div class="welcome-hero">
     <div class="welcome-text">
-        <h1 style="color: var(--color-primary); font-size: 50px;">
-            Become a Web Creator! 🚀
+        <div style="display: inline-flex; gap: 8px; margin-bottom: 12px; flex-wrap: wrap;">
+            <span class="stat-pill" style="background: #e0e7ff; color: var(--color-primary); font-size: 13px; font-weight: 800;">🎒 AGES 9–17 JUNIOR ACADEMY</span>
+            <span class="stat-pill" style="background: #e0f2fe; color: #0284c7; font-size: 13px; font-weight: 800;">💼 18+ ADULT CAREER BOOTCAMP</span>
+        </div>
+        <h1 style="color: var(--color-primary); font-size: 46px; line-height: 1.15;">
+            Master Web Development with LimahCode 🚀
         </h1>
-        <p style="font-size: 22px; margin: 15px 0 30px 0; color: #475569;">
-            Welcome to the ultimate <strong>HTML & CSS Adventure</strong>. Learn how to write code, design beautiful websites, and earn rare badges in just 3 weeks!
+        <p style="font-size: 20px; margin: 15px 0 25px 0; color: #475569;">
+            Whether you are a <strong>teenager</strong> wanting to build cool games and websites, or an <strong>adult</strong> pivoting into tech and high-income freelancing — we have a dedicated 3-month track for you!
         </p>
         
-        <div style="display: flex; gap: 15px; flex-wrap: wrap;">
-            <a href="/dashboard" class="btn btn-primary" style="font-size: 20px; padding: 16px 36px;" id="start-adventure-btn">
-                Start Your Adventure! <i class="fa-solid fa-play"></i>
+        <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+            <a href="/signup?track=junior" class="btn btn-primary" style="font-size: 17px; padding: 14px 26px;">
+                🎒 Join Teens Track (9-17) <i class="fa-solid fa-gamepad"></i>
             </a>
-            <a href="/signup" class="btn btn-warning" style="font-size: 20px; padding: 16px 28px;" id="signup-hero-btn">
-                Try Sign Up Flow <i class="fa-solid fa-arrow-right"></i>
+            <a href="/signup?track=adult" class="btn btn-warning" style="font-size: 17px; padding: 14px 26px;">
+                💼 Join Adult Career Track (18+) <i class="fa-solid fa-briefcase"></i>
+            </a>
+            <a href="/dashboard" class="btn btn-secondary" style="font-size: 17px; padding: 14px 20px;">
+                Explore Learning Map <i class="fa-solid fa-map"></i>
             </a>
         </div>
     </div>
     
     <div class="welcome-image">
-        <img src="{{ url_for('static', filename='images/welcome_hero.png') }}" alt="Teenagers coding websites together" id="hero-img">
+        <img src="{{ url_for('static', filename='images/welcome_hero.png') }}" alt="LimahCode Web Developer Students" id="hero-img">
     </div>
 </div>
 

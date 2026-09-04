@@ -336,26 +336,31 @@ def challenge(challenge_id):
 
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
+    preselected_track = request.args.get('track', 'junior')
     if request.method == 'POST':
         fullname = request.form.get('fullname', '').strip()
         email = request.form.get('email', '').strip()
         password = request.form.get('password', '')
+        track = request.form.get('track', 'junior')
         
         if not fullname or not email or not password:
             flash("All fields are required!", "error")
-            return render_template('signup.html')
+            return render_template('signup.html', selected_track=track)
             
-        user_id, error = database.create_user(fullname, email, password, role='student')
+        user_id, error = database.create_user(fullname, email, password, role='student', track=track)
         if error:
             flash(error, "error")
-            return render_template('signup.html')
+            return render_template('signup.html', selected_track=track)
             
         session['user_id'] = user_id
         session['user_role'] = 'student'
-        flash(f"Welcome to LimahCode Web Adventure, {fullname}! 🚀", "success")
+        session['user_track'] = track
+        
+        cohort_name = "Adult Career Track" if track == 'adult' else "Junior & Teen Adventure"
+        flash(f"Welcome to LimahCode {cohort_name}, {fullname}! 🚀", "success")
         return redirect(url_for('dashboard'))
         
-    return render_template('signup.html')
+    return render_template('signup.html', selected_track=preselected_track)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():

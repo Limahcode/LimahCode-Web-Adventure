@@ -22,6 +22,7 @@ def init_db():
             email TEXT UNIQUE NOT NULL,
             password_hash TEXT NOT NULL,
             role TEXT DEFAULT 'student',
+            track TEXT DEFAULT 'junior',
             stars INTEGER DEFAULT 0,
             badges TEXT DEFAULT '[]',
             completed_lessons TEXT DEFAULT '[]',
@@ -31,38 +32,45 @@ def init_db():
         )
     ''')
     
+    # Run migration if track column does not exist
+    try:
+        cursor.execute("ALTER TABLE users ADD COLUMN track TEXT DEFAULT 'junior'")
+    except Exception:
+        pass # Column already exists
+    
     # Ensure default teacher account exists
     cursor.execute('SELECT id FROM users WHERE email = ?', ('teacher@limahcode.com',))
     teacher = cursor.fetchone()
     if not teacher:
         default_pwd_hash = generate_password_hash('limah2026')
         cursor.execute('''
-            INSERT INTO users (fullname, email, password_hash, role, stars, badges, completed_lessons, completed_challenges)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+            INSERT INTO users (fullname, email, password_hash, role, track, stars, badges, completed_lessons, completed_challenges)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
         ''', (
             'Teacher Admin',
             'teacher@limahcode.com',
             default_pwd_hash,
             'teacher',
+            'all',
             100,
             json.dumps(['html_explorer', 'website_builder', 'junior_web_designer']),
-            json.dumps([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]),
+            json.dumps([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]),
             json.dumps([1, 2, 3])
         ))
     
     conn.commit()
     conn.close()
 
-def create_user(fullname, email, password, role='student'):
+def create_user(fullname, email, password, role='student', track='junior'):
     email = email.strip().lower()
     pwd_hash = generate_password_hash(password)
     conn = get_db_connection()
     cursor = conn.cursor()
     try:
         cursor.execute('''
-            INSERT INTO users (fullname, email, password_hash, role)
-            VALUES (?, ?, ?, ?)
-        ''', (fullname.strip(), email, pwd_hash, role))
+            INSERT INTO users (fullname, email, password_hash, role, track)
+            VALUES (?, ?, ?, ?, ?)
+        ''', (fullname.strip(), email, pwd_hash, role, track))
         conn.commit()
         user_id = cursor.lastrowid
         return user_id, None
@@ -130,7 +138,7 @@ def get_all_students():
     conn = get_db_connection()
     cursor = conn.cursor()
     cursor.execute('''
-        SELECT id, fullname, email, role, stars, badges, completed_lessons, completed_challenges, saved_codes, created_at 
+        SELECT id, fullname, email, role, track, stars, badges, completed_lessons, completed_challenges, saved_codes, created_at 
         FROM users 
         WHERE role = 'student'
         ORDER BY stars DESC, id ASC
