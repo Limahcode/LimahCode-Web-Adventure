@@ -3,81 +3,132 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LimahCode Official Flyer Generator</title>
+    <title>LimahCode Official Brand Flyers</title>
     <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
         :root {
+            /* EXACT LIMAHCODE WEBSITE DESIGN TOKENS */
             --bg-main: #f0f7ff;
             --bg-card: #ffffff;
             --text-primary: #1e293b;
             --text-secondary: #64748b;
+            
             --color-primary: #6366f1; /* Indigo */
             --color-primary-dark: #4f46e5;
             --color-secondary: #3b82f6; /* Blue */
-            --color-success: #22c55e; /* Green */
-            --color-warning: #eab308; /* Yellow */
-            --color-danger: #ef4444; /* Red */
-            --color-purple: #a855f7; /* Purple */
-            --color-orange: #f97316; /* Orange */
+            --color-success: #22c55e; /* WhatsApp Green */
+            --color-warning: #eab308; /* Gold Yellow */
+            --color-danger: #ef4444; /* Coral Red */
+            --color-purple: #a855f7; /* Violet Purple */
+            --color-orange: #f97316; /* Energetic Orange */
+            
             --border-width: 4px;
             --border-color: #1e293b;
             --card-shadow: 6px 6px 0px #1e293b;
+            --btn-shadow: 4px 4px 0px #1e293b;
+            
             --radius-lg: 20px;
-            --radius-md: 12px;
+            --radius-md: 14px;
+            --radius-sm: 8px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
         }
 
         body {
             font-family: 'Nunito', sans-serif;
             background-color: #0f172a;
-            color: #1e293b;
-            padding: 30px 10px;
+            color: var(--text-primary);
+            padding: 30px 15px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 20px;
+            gap: 24px;
         }
 
-        .controls {
+        /* TOP NAVIGATION & FORMAT CONTROLS */
+        .top-toolbar {
             background: white;
-            padding: 16px 24px;
+            padding: 16px 28px;
             border-radius: var(--radius-md);
             border: var(--border-width) solid var(--border-color);
             box-shadow: var(--card-shadow);
             display: flex;
-            gap: 15px;
+            gap: 20px;
             align-items: center;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .tab-btn {
+            background: #f1f5f9;
+            color: var(--text-primary);
+            font-family: 'Fredoka', sans-serif;
+            font-size: 16px;
+            font-weight: 700;
+            padding: 10px 20px;
+            border: 3px solid var(--border-color);
+            border-radius: 12px;
+            cursor: pointer;
+            box-shadow: 3px 3px 0px var(--border-color);
+            transition: all 0.15s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .tab-btn:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 5px 5px 0px var(--border-color);
+        }
+        .tab-btn.active {
+            background: var(--color-primary);
+            color: white;
         }
 
         .btn-download {
             background: var(--color-success);
             color: white;
             font-family: 'Fredoka', sans-serif;
-            font-size: 18px;
+            font-size: 17px;
             font-weight: 700;
-            padding: 12px 24px;
+            padding: 11px 24px;
             border: 3px solid var(--border-color);
             border-radius: 12px;
             cursor: pointer;
             box-shadow: 4px 4px 0px var(--border-color);
-            transition: all 0.1s ease;
+            transition: all 0.15s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
         .btn-download:hover {
             transform: translate(-2px, -2px);
             box-shadow: 6px 6px 0px var(--border-color);
         }
 
-        /* FLYER CANVAS (1080 x 1080 Square Exact) */
-        #flyer-canvas {
+        .flyer-view {
+            display: none;
+        }
+        .flyer-view.active {
+            display: block;
+        }
+
+        /* =======================================================
+           FORMAT 1: SQUARE FLYER (1:1 - 800px x 800px)
+           ======================================================= */
+        #square-flyer {
             width: 800px;
             height: 800px;
             background-color: var(--bg-main);
             border: 6px solid var(--border-color);
             border-radius: 28px;
             box-shadow: 12px 12px 0px #000000;
-            padding: 35px;
-            box-sizing: border-box;
+            padding: 34px;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
@@ -85,29 +136,29 @@
             overflow: hidden;
         }
 
-        /* Decorative background elements matching the website */
-        .bg-circle-1 {
+        /* Decorative playful circles matching website */
+        .deco-circle-tr {
             position: absolute;
             top: -60px;
             right: -60px;
             width: 220px;
             height: 220px;
-            background: rgba(99, 102, 241, 0.12);
+            background: rgba(99, 102, 241, 0.14);
             border-radius: 50%;
             pointer-events: none;
         }
-        .bg-circle-2 {
+        .deco-circle-bl {
             position: absolute;
-            bottom: -40px;
-            left: -40px;
-            width: 260px;
-            height: 260px;
-            background: rgba(234, 179, 8, 0.12);
+            bottom: -50px;
+            left: -50px;
+            width: 240px;
+            height: 240px;
+            background: rgba(234, 179, 8, 0.14);
             border-radius: 50%;
             pointer-events: none;
         }
 
-        /* HEADER */
+        /* Header */
         .flyer-header {
             display: flex;
             justify-content: space-between;
@@ -115,55 +166,55 @@
             position: relative;
             z-index: 2;
         }
-        .brand-logo {
+        .brand-block {
             display: flex;
             align-items: center;
             gap: 12px;
         }
-        .brand-logo img {
+        .brand-logo-img {
             width: 58px;
             height: 58px;
             border-radius: 50%;
             border: 3px solid var(--border-color);
             box-shadow: 3px 3px 0px var(--border-color);
+            background: white;
+            object-fit: contain;
         }
-        .brand-logo h1 {
+        .brand-title {
             font-family: 'Fredoka', sans-serif;
             font-size: 32px;
             color: var(--color-primary);
-            margin: 0;
+            line-height: 1;
         }
-        .brand-logo span {
+        .brand-title span {
             color: var(--color-purple);
-            font-weight: 400;
         }
 
-        .paid-badge {
+        .gold-badge {
             background: var(--color-warning);
-            color: #1e293b;
+            color: var(--text-primary);
             font-family: 'Fredoka', sans-serif;
-            font-size: 16px;
-            font-weight: 800;
+            font-size: 15px;
+            font-weight: 700;
             padding: 8px 18px;
             border-radius: 30px;
             border: 3px solid var(--border-color);
             box-shadow: 4px 4px 0px var(--border-color);
             text-transform: uppercase;
-            letter-spacing: 0.5px;
         }
 
-        /* MAIN HEADLINE CARD */
-        .headline-card {
+        /* Headline Banner */
+        .headline-banner {
             background: white;
             border: var(--border-width) solid var(--border-color);
             border-radius: var(--radius-lg);
             box-shadow: var(--card-shadow);
-            padding: 22px 28px;
+            padding: 20px 24px;
             text-align: center;
             position: relative;
             z-index: 2;
         }
-        .cohort-pill {
+        .tag-pill {
             display: inline-block;
             background: #e0e7ff;
             color: var(--color-primary);
@@ -172,17 +223,17 @@
             padding: 4px 14px;
             border-radius: 20px;
             border: 2px solid var(--color-primary);
-            margin-bottom: 8px;
+            margin-bottom: 6px;
             text-transform: uppercase;
         }
-        .main-title {
+        .hero-heading {
             font-family: 'Fredoka', sans-serif;
             font-size: 36px;
             line-height: 1.15;
             color: var(--text-primary);
-            margin: 0 0 6px 0;
+            margin-bottom: 4px;
         }
-        .main-subtitle {
+        .hero-subtext {
             font-size: 16px;
             font-weight: 800;
             color: var(--color-orange);
@@ -190,207 +241,493 @@
             letter-spacing: 0.5px;
         }
 
-        /* DUAL TRACK CARDS (Teens vs Adults) */
-        .tracks-grid {
+        /* Dual Track Grid */
+        .tracks-row {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 16px;
             position: relative;
             z-index: 2;
         }
-        .track-card {
+        .track-box {
             background: white;
             border: var(--border-width) solid var(--border-color);
             border-radius: var(--radius-md);
             box-shadow: var(--card-shadow);
-            padding: 18px 20px;
+            padding: 16px 18px;
         }
-        .track-card.teens {
+        .track-box.teens {
             border-top: 10px solid var(--color-primary);
         }
-        .track-card.adults {
+        .track-box.adults {
             border-top: 10px solid var(--color-secondary);
         }
-        .track-title {
+        .track-box-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 6px;
+        }
+        .track-h3 {
             font-family: 'Fredoka', sans-serif;
-            font-size: 20px;
-            margin: 0 0 4px 0;
+            font-size: 19px;
             display: flex;
             align-items: center;
             gap: 8px;
         }
-        .track-schedule {
-            font-size: 12px;
+        .sched-pill {
+            font-size: 11px;
             font-weight: 800;
             padding: 3px 8px;
             border-radius: 6px;
             display: inline-block;
-            margin-bottom: 8px;
+            text-transform: uppercase;
         }
-        .track-card.teens .track-schedule {
+        .track-box.teens .sched-pill {
             background: #e0e7ff;
             color: var(--color-primary);
         }
-        .track-card.adults .track-schedule {
+        .track-box.adults .sched-pill {
             background: #e0f2fe;
             color: #0284c7;
         }
-        .track-desc {
+        .track-p {
             font-size: 13px;
             color: var(--text-secondary);
-            line-height: 1.4;
-            margin: 0;
+            line-height: 1.45;
         }
 
-        /* CURRICULUM HIGHLIGHT BAR */
-        .curriculum-bar {
-            background: #f8fafc;
+        /* 3-Month Curriculum Bar */
+        .roadmap-bar {
+            background: #ffffff;
             border: 3px solid var(--border-color);
             border-radius: var(--radius-md);
-            padding: 12px 18px;
+            box-shadow: 4px 4px 0px var(--border-color);
+            padding: 10px 16px;
             display: flex;
             justify-content: space-around;
             align-items: center;
-            font-weight: 800;
-            font-size: 14px;
             position: relative;
             z-index: 2;
         }
-        .curriculum-item {
+        .roadmap-step {
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 8px;
+            font-size: 14px;
+            font-weight: 800;
         }
-        .dot {
-            width: 8px;
-            height: 8px;
+        .step-icon-bubble {
+            width: 26px;
+            height: 26px;
             border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 11px;
         }
 
-        /* FOOTER / CALL TO ACTION (NO WEB LINKS) */
-        .footer-cta {
+        /* WhatsApp CTA Box (Strictly NO web links) */
+        .cta-container {
             background: #1e293b;
             color: white;
             border: 4px solid var(--border-color);
             border-radius: var(--radius-lg);
             box-shadow: 6px 6px 0px #000;
-            padding: 16px 26px;
+            padding: 16px 24px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             position: relative;
             z-index: 2;
         }
-        .cta-text h3 {
+        .cta-info h3 {
             color: var(--color-warning);
+            font-family: 'Fredoka', sans-serif;
             font-size: 20px;
-            margin: 0 0 2px 0;
+            margin-bottom: 2px;
         }
-        .cta-text p {
+        .cta-info p {
             color: #94a3b8;
             font-size: 13px;
-            margin: 0;
         }
-        .cta-whatsapp {
-            display: flex;
-            align-items: center;
-            gap: 10px;
+        .whatsapp-badge {
             background: var(--color-success);
             color: white;
             font-family: 'Fredoka', sans-serif;
             font-size: 20px;
             font-weight: 700;
+            padding: 10px 20px;
+            border-radius: 12px;
+            border: 2px solid white;
+            box-shadow: 3px 3px 0px #000;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            white-space: nowrap;
+        }
+
+        /* =======================================================
+           FORMAT 2: STORY / STATUS FLYER (9:16 - 540px x 960px)
+           ======================================================= */
+        #story-flyer {
+            width: 540px;
+            height: 960px;
+            background-color: var(--bg-main);
+            border: 6px solid var(--border-color);
+            border-radius: 32px;
+            box-shadow: 12px 12px 0px #000000;
+            padding: 36px 30px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .story-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .story-hero {
+            background: white;
+            border: var(--border-width) solid var(--border-color);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--card-shadow);
+            padding: 22px;
+            text-align: center;
+            position: relative;
+            z-index: 2;
+        }
+        .story-hero h2 {
+            font-family: 'Fredoka', sans-serif;
+            font-size: 32px;
+            line-height: 1.2;
+            color: var(--text-primary);
+            margin: 6px 0;
+        }
+
+        .story-tracks-col {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .story-track-card {
+            background: white;
+            border: var(--border-width) solid var(--border-color);
+            border-radius: var(--radius-md);
+            box-shadow: var(--card-shadow);
+            padding: 16px 18px;
+        }
+        .story-track-card.teens {
+            border-left: 10px solid var(--color-primary);
+        }
+        .story-track-card.adults {
+            border-left: 10px solid var(--color-secondary);
+        }
+
+        .story-curriculum {
+            background: white;
+            border: var(--border-width) solid var(--border-color);
+            border-radius: var(--radius-md);
+            box-shadow: var(--card-shadow);
+            padding: 14px 18px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            position: relative;
+            z-index: 2;
+        }
+        .story-curriculum-title {
+            font-family: 'Fredoka', sans-serif;
+            font-size: 15px;
+            color: var(--text-primary);
+            text-align: center;
+            text-transform: uppercase;
+        }
+        .story-curriculum-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+            font-weight: 800;
+        }
+
+        .story-cta {
+            background: #1e293b;
+            border: 4px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            box-shadow: 6px 6px 0px #000;
+            padding: 18px;
+            text-align: center;
+            position: relative;
+            z-index: 2;
+        }
+        .story-cta h3 {
+            color: var(--color-warning);
+            font-family: 'Fredoka', sans-serif;
+            font-size: 19px;
+            margin-bottom: 4px;
+        }
+        .story-cta p {
+            color: #94a3b8;
+            font-size: 13px;
+            margin-bottom: 12px;
+        }
+        .story-whatsapp-btn {
+            background: var(--color-success);
+            color: white;
+            font-family: 'Fredoka', sans-serif;
+            font-size: 21px;
+            font-weight: 700;
             padding: 10px 18px;
             border-radius: 12px;
             border: 2px solid white;
             box-shadow: 3px 3px 0px #000;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
         }
     </style>
 </head>
 <body>
 
-    <div class="controls">
-        <span style="color: #64748b; font-weight: 700;">LimahCode Signature Brand Palette (Neobrutalism CSS)</span>
-        <button class="btn-download" onclick="downloadFlyer()">
-            <i class="fa-solid fa-download"></i> Save Image (PNG)
+    <!-- CONTROL PANEL -->
+    <div class="top-toolbar">
+        <div style="display: flex; gap: 10px;">
+            <button class="tab-btn active" id="tab-square" onclick="switchFormat('square')">
+                <i class="fa-solid fa-square"></i> Feed / Post (1:1)
+            </button>
+            <button class="tab-btn" id="tab-story" onclick="switchFormat('story')">
+                <i class="fa-solid fa-mobile-screen"></i> WhatsApp Status (9:16)
+            </button>
+        </div>
+
+        <button class="btn-download" onclick="downloadCurrentFlyer()">
+            <i class="fa-solid fa-download"></i> Save PNG
         </button>
     </div>
 
-    <!-- FLYER CONTAINER -->
-    <div id="flyer-canvas">
-        <div class="bg-circle-1"></div>
-        <div class="bg-circle-2"></div>
+    <!-- ========================================== -->
+    <!-- FORMAT 1: SQUARE FLYER (1:1)               -->
+    <!-- ========================================== -->
+    <div id="view-square" class="flyer-view active">
+        <div id="square-flyer">
+            <div class="deco-circle-tr"></div>
+            <div class="deco-circle-bl"></div>
 
-        <!-- Header -->
-        <div class="flyer-header">
-            <div class="brand-logo">
-                <img src="/static/images/limahcode_logo.png" alt="LimahCode">
-                <h1>LimahCode <span>Bootcamp</span></h1>
+            <!-- Header -->
+            <div class="flyer-header">
+                <div class="brand-block">
+                    <img src="/static/images/limahcode_logo.png" alt="LimahCode" class="brand-logo-img">
+                    <div class="brand-title">LimahCode <span>Bootcamp</span></div>
+                </div>
+                <div class="gold-badge">
+                    ⭐ Paid Bootcamp • Cohort 2
+                </div>
             </div>
-            <div class="paid-badge">
-                ⭐ Paid Bootcamp | Enroll Now
-            </div>
-        </div>
 
-        <!-- Main Headline -->
-        <div class="headline-card">
-            <span class="cohort-pill">🚀 Cohort 2 Admissions Open</span>
-            <h2 class="main-title">3-Month Web Development Bootcamp</h2>
-            <p class="main-subtitle">Open for All Ages: Teens (9–17) & Adults (18+)</p>
-        </div>
+            <!-- Headline Banner -->
+            <div class="headline-banner">
+                <span class="tag-pill">🚀 ALL AGES WELCOME • SEPARATE TRACKS</span>
+                <h1 class="hero-heading">3-Month Web Development Bootcamp</h1>
+                <p class="hero-subtext">Learn HTML5, CSS3 & JavaScript from Scratch</p>
+            </div>
 
-        <!-- 2 Tracks -->
-        <div class="tracks-grid">
-            <div class="track-card teens">
-                <h3 class="track-title" style="color: var(--color-primary);"><i class="fa-solid fa-gamepad"></i> Teens Track (9-17)</h3>
-                <span class="track-schedule">🗓️ Weekend Classes</span>
-                <p class="track-desc">
-                    Fun, game-inspired coding! Build custom websites, interactive games, and earn official skill milestone badges.
-                </p>
-            </div>
-            <div class="track-card adults">
-                <h3 class="track-title" style="color: var(--color-secondary);"><i class="fa-solid fa-briefcase"></i> Adult Pro Track (18+)</h3>
-                <span class="track-schedule">🗓️ Flexible Evening Classes</span>
-                <p class="track-desc">
-                    Practical career-building! Master modern frontend web development, responsive design, Netlify hosting, and freelancing.
-                </p>
-            </div>
-        </div>
+            <!-- Dual Track Grid -->
+            <div class="tracks-row">
+                <!-- Teens Track -->
+                <div class="track-box teens">
+                    <div class="track-box-header">
+                        <h3 class="track-h3" style="color: var(--color-primary);">
+                            <i class="fa-solid fa-gamepad"></i> Teens Track (9–17)
+                        </h3>
+                        <span class="sched-pill">🗓️ Weekends</span>
+                    </div>
+                    <p class="track-p">
+                        Fun, game-inspired coding! Build custom websites, playful games, earn skill milestone badges, and discover tech early.
+                    </p>
+                </div>
 
-        <!-- Curriculum Highlights -->
-        <div class="curriculum-bar">
-            <div class="curriculum-item" style="color: var(--color-primary);">
-                <div class="dot" style="background: var(--color-primary);"></div>
-                <span>Month 1: HTML5 Architecture</span>
+                <!-- Adult Track -->
+                <div class="track-box adults">
+                    <div class="track-box-header">
+                        <h3 class="track-h3" style="color: var(--color-secondary);">
+                            <i class="fa-solid fa-briefcase"></i> Adult Track (18+)
+                        </h3>
+                        <span class="sched-pill">🗓️ Evening & Flex</span>
+                    </div>
+                    <p class="track-p">
+                        Practical career & freelancing! Master responsive web apps, real-world portfolio projects, hosting, and client-ready code.
+                    </p>
+                </div>
             </div>
-            <div class="curriculum-item" style="color: var(--color-orange);">
-                <div class="dot" style="background: var(--color-orange);"></div>
-                <span>Month 2: CSS3 Modern Styling</span>
-            </div>
-            <div class="curriculum-item" style="color: var(--color-purple);">
-                <div class="dot" style="background: var(--color-purple);"></div>
-                <span>Month 3: JavaScript & Games</span>
-            </div>
-        </div>
 
-        <!-- Call to Action (DM / WhatsApp ONLY - No Web Links) -->
-        <div class="footer-cta">
-            <div class="cta-text">
-                <h3>💬 Limited Seats Available per Track!</h3>
-                <p>Chat directly on WhatsApp to enroll and claim your slot.</p>
+            <!-- Roadmap Bar -->
+            <div class="roadmap-bar">
+                <div class="roadmap-step" style="color: var(--color-primary);">
+                    <div class="step-icon-bubble" style="background: var(--color-primary);">1</div>
+                    <span>Month 1: HTML5 Architecture</span>
+                </div>
+                <div class="roadmap-step" style="color: var(--color-orange);">
+                    <div class="step-icon-bubble" style="background: var(--color-orange);">2</div>
+                    <span>Month 2: CSS3 Modern UI</span>
+                </div>
+                <div class="roadmap-step" style="color: var(--color-purple);">
+                    <div class="step-icon-bubble" style="background: var(--color-purple);">3</div>
+                    <span>Month 3: JavaScript & Games</span>
+                </div>
             </div>
-            <div class="cta-whatsapp">
-                <i class="fa-brands fa-whatsapp"></i> +234 802 503 4999
+
+            <!-- Call to Action (Strictly NO web links) -->
+            <div class="cta-container">
+                <div class="cta-info">
+                    <h3>💬 Limited Slots Available per Track!</h3>
+                    <p>Send a WhatsApp message or DM to register and claim your slot.</p>
+                </div>
+                <div class="whatsapp-badge">
+                    <i class="fa-brands fa-whatsapp"></i> +234 802 503 4999
+                </div>
             </div>
         </div>
     </div>
 
+    <!-- ========================================== -->
+    <!-- FORMAT 2: STORY / STATUS FLYER (9:16)      -->
+    <!-- ========================================== -->
+    <div id="view-story" class="flyer-view">
+        <div id="story-flyer">
+            <div class="deco-circle-tr"></div>
+            <div class="deco-circle-bl"></div>
+
+            <!-- Header -->
+            <div class="story-header">
+                <div class="brand-block">
+                    <img src="/static/images/limahcode_logo.png" alt="LimahCode" class="brand-logo-img">
+                    <div class="brand-title" style="font-size: 26px;">LimahCode <span>Bootcamp</span></div>
+                </div>
+                <div class="gold-badge" style="font-size: 13px; padding: 6px 14px;">
+                    ⭐ Cohort 2
+                </div>
+            </div>
+
+            <!-- Story Hero -->
+            <div class="story-hero">
+                <span class="tag-pill">🚀 ALL AGES WELCOME</span>
+                <h2>3-Month Web Development Bootcamp</h2>
+                <p style="font-size: 14px; font-weight: 800; color: var(--color-orange); text-transform: uppercase;">
+                    HTML5 • CSS3 • JavaScript
+                </p>
+            </div>
+
+            <!-- Story Tracks -->
+            <div class="story-tracks-col">
+                <div class="story-track-card teens">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                        <h3 style="color: var(--color-primary); font-family: 'Fredoka', sans-serif; font-size: 18px;">
+                            <i class="fa-solid fa-gamepad"></i> Teens Track (9–17)
+                        </h3>
+                        <span style="background: #e0e7ff; color: var(--color-primary); font-size: 11px; font-weight: 800; padding: 2px 8px; border-radius: 6px;">
+                            🗓️ WEEKENDS
+                        </span>
+                    </div>
+                    <p style="font-size: 13px; color: var(--text-secondary); line-height: 1.4;">
+                        Build custom websites, interactive games, earn official skill milestone badges, and learn tech in a fun environment.
+                    </p>
+                </div>
+
+                <div class="story-track-card adults">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                        <h3 style="color: var(--color-secondary); font-family: 'Fredoka', sans-serif; font-size: 18px;">
+                            <i class="fa-solid fa-briefcase"></i> Adult Track (18+)
+                        </h3>
+                        <span style="background: #e0f2fe; color: #0284c7; font-size: 11px; font-weight: 800; padding: 2px 8px; border-radius: 6px;">
+                            🗓️ EVENING CLASSES
+                        </span>
+                    </div>
+                    <p style="font-size: 13px; color: var(--text-secondary); line-height: 1.4;">
+                        Career-focused! Master responsive websites, freelancing fundamentals, live project deployment, and client-ready coding.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Story Curriculum -->
+            <div class="story-curriculum">
+                <div class="story-curriculum-title">3-Month Step-by-Step Curriculum</div>
+                <div class="story-curriculum-row" style="color: var(--color-primary);">
+                    <span>🧱 Month 1: HTML5 Architecture</span>
+                    <span>4 Weeks</span>
+                </div>
+                <div class="story-curriculum-row" style="color: var(--color-orange);">
+                    <span>🎨 Month 2: CSS3 Modern Styling</span>
+                    <span>4 Weeks</span>
+                </div>
+                <div class="story-curriculum-row" style="color: var(--color-purple);">
+                    <span>⚡ Month 3: JavaScript & Games</span>
+                    <span>4 Weeks</span>
+                </div>
+            </div>
+
+            <!-- Story Perks -->
+            <div style="display: flex; justify-content: space-around; font-size: 13px; font-weight: 800; color: #475569;">
+                <span>💻 100% Practical</span>
+                <span>•</span>
+                <span>📜 Certificate</span>
+                <span>•</span>
+                <span>👥 Mentorship</span>
+            </div>
+
+            <!-- Story CTA (Strictly NO web links) -->
+            <div class="story-cta">
+                <h3>💬 Limited Slots Available!</h3>
+                <p>Send a WhatsApp message to reserve your slot now.</p>
+                <div class="story-whatsapp-btn">
+                    <i class="fa-brands fa-whatsapp"></i> +234 802 503 4999
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT SWITCHER & EXPORT -->
     <script>
-        function downloadFlyer() {
-            const flyer = document.getElementById('flyer-canvas');
-            html2canvas(flyer, { scale: 2, useCORS: true }).then(canvas => {
+        let currentFormat = 'square';
+
+        function switchFormat(format) {
+            currentFormat = format;
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.flyer-view').forEach(view => view.classList.remove('active'));
+
+            if (format === 'square') {
+                document.getElementById('tab-square').classList.add('active');
+                document.getElementById('view-square').classList.add('active');
+            } else {
+                document.getElementById('tab-story').classList.add('active');
+                document.getElementById('view-story').classList.add('active');
+            }
+        }
+
+        function downloadCurrentFlyer() {
+            const targetId = currentFormat === 'square' ? 'square-flyer' : 'story-flyer';
+            const filename = currentFormat === 'square' 
+                ? 'LimahCode_Cohort2_Square_Flyer.png' 
+                : 'LimahCode_Cohort2_Status_Flyer.png';
+            
+            const flyerElement = document.getElementById(targetId);
+            
+            html2canvas(flyerElement, { 
+                scale: 2, 
+                useCORS: true,
+                backgroundColor: null
+            }).then(canvas => {
                 const link = document.createElement('a');
-                link.download = 'LimahCode_Cohort2_Official_Flyer.png';
+                link.download = filename;
                 link.href = canvas.toDataURL('image/png');
                 link.click();
             });
