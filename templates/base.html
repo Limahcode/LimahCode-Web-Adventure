@@ -48,8 +48,8 @@
                     <a href="/dashboard" class="btn btn-warning" id="dashboard-nav-btn" style="box-shadow: 2px 2px 0px var(--border-color); padding: 6px 14px; font-size: 14px;">
                         <i class="fa-solid fa-map"></i> Map
                     </a>
-                    <a href="/logout" class="btn btn-danger" style="padding: 6px 12px; font-size: 13px; box-shadow: 2px 2px 0px var(--border-color);" title="Log out">
-                        <i class="fa-solid fa-right-from-bracket"></i>
+                    <a href="/logout" onclick="localStorage.clear();" class="btn btn-danger" style="padding: 6px 12px; font-size: 13px; box-shadow: 2px 2px 0px var(--border-color);" title="Log out">
+                        <i class="fa-solid fa-right-from-bracket"></i> Logout
                     </a>
                 {% else %}
                     <a href="/signup" class="btn btn-primary" id="signup-nav-btn" style="box-shadow: 2px 2px 0px var(--border-color); padding: 6px 14px; font-size: 14px;">

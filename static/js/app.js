@@ -577,29 +577,22 @@ document.addEventListener('DOMContentLoaded', () => {
         .then(r => r.json())
         .then(data => {
             if (data.logged_in) {
-                const state = getGameState();
-                // Merge server state with local state
-                state.stars = Math.max(state.stars, data.stars || 0);
-                if (data.badges && data.badges.length) {
-                    data.badges.forEach(b => { if (!state.badges.includes(b)) state.badges.push(b); });
-                }
-                if (data.completedLessons && data.completedLessons.length) {
-                    data.completedLessons.forEach(l => { if (!state.completedLessons.includes(l)) state.completedLessons.push(l); });
-                }
-                if (data.completedChallenges && data.completedChallenges.length) {
-                    data.completedChallenges.forEach(c => { if (!state.completedChallenges.includes(c)) state.completedChallenges.push(c); });
-                }
+                // When logged in, the user's REAL account state from the server is source of truth!
+                const state = {
+                    stars: data.stars || 0,
+                    badges: data.badges || [],
+                    completedLessons: data.completedLessons || [],
+                    completedChallenges: data.completedChallenges || []
+                };
                 localStorage.setItem('html_css_adventure_state', JSON.stringify(state));
                 
                 // If student has saved code for this route in DB
                 const editor = document.getElementById('code-editor');
                 if (editor && data.savedCodes && data.savedCodes[window.location.pathname]) {
+                    editor.value = data.savedCodes[window.location.pathname];
                     const storageKey = 'adventure_saved_code_' + window.location.pathname;
-                    if (!localStorage.getItem(storageKey)) {
-                        editor.value = data.savedCodes[window.location.pathname];
-                        localStorage.setItem(storageKey, editor.value);
-                        runCodePreview();
-                    }
+                    localStorage.setItem(storageKey, editor.value);
+                    runCodePreview();
                 }
             }
             updateNavbarStats();
