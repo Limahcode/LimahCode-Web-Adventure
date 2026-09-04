@@ -409,6 +409,10 @@ def admin_panel():
     config = get_teacher_config()
     return render_template('admin.html', students=students, config=config, lessons=LESSONS, challenges=CHALLENGES)
 
+@app.route('/flyer')
+def flyer():
+    return render_template('flyer_designer.html')
+
 @app.route('/admin/update-locks', methods=['POST'])
 def admin_update_locks():
     if 'user_id' not in session or session.get('user_role') != 'teacher':

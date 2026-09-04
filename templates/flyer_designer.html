@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LimahCode Official Flyer Generator</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <style>
+        :root {
+            --bg-main: #f0f7ff;
+            --bg-card: #ffffff;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --color-primary: #6366f1; /* Indigo */
+            --color-primary-dark: #4f46e5;
+            --color-secondary: #3b82f6; /* Blue */
+            --color-success: #22c55e; /* Green */
+            --color-warning: #eab308; /* Yellow */
+            --color-danger: #ef4444; /* Red */
+            --color-purple: #a855f7; /* Purple */
+            --color-orange: #f97316; /* Orange */
+            --border-width: 4px;
+            --border-color: #1e293b;
+            --card-shadow: 6px 6px 0px #1e293b;
+            --radius-lg: 20px;
+            --radius-md: 12px;
+        }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background-color: #0f172a;
+            color: #1e293b;
+            padding: 30px 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .controls {
+            background: white;
+            padding: 16px 24px;
+            border-radius: var(--radius-md);
+            border: var(--border-width) solid var(--border-color);
+            box-shadow: var(--card-shadow);
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .btn-download {
+            background: var(--color-success);
+            color: white;
+            font-family: 'Fredoka', sans-serif;
+            font-size: 18px;
+            font-weight: 700;
+            padding: 12px 24px;
+            border: 3px solid var(--border-color);
+            border-radius: 12px;
+            cursor: pointer;
+            box-shadow: 4px 4px 0px var(--border-color);
+            transition: all 0.1s ease;
+        }
+        .btn-download:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 6px 6px 0px var(--border-color);
+        }
+
+        /* FLYER CANVAS (1080 x 1080 Square Exact) */
+        #flyer-canvas {
+            width: 800px;
+            height: 800px;
+            background-color: var(--bg-main);
+            border: 6px solid var(--border-color);
+            border-radius: 28px;
+            box-shadow: 12px 12px 0px #000000;
+            padding: 35px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Decorative background elements matching the website */
+        .bg-circle-1 {
+            position: absolute;
+            top: -60px;
+            right: -60px;
+            width: 220px;
+            height: 220px;
+            background: rgba(99, 102, 241, 0.12);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+        .bg-circle-2 {
+            position: absolute;
+            bottom: -40px;
+            left: -40px;
+            width: 260px;
+            height: 260px;
+            background: rgba(234, 179, 8, 0.12);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        /* HEADER */
+        .flyer-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+        }
+        .brand-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .brand-logo img {
+            width: 58px;
+            height: 58px;
+            border-radius: 50%;
+            border: 3px solid var(--border-color);
+            box-shadow: 3px 3px 0px var(--border-color);
+        }
+        .brand-logo h1 {
+            font-family: 'Fredoka', sans-serif;
+            font-size: 32px;
+            color: var(--color-primary);
+            margin: 0;
+        }
+        .brand-logo span {
+            color: var(--color-purple);
+            font-weight: 400;
+        }
+
+        .paid-badge {
+            background: var(--color-warning);
+            color: #1e293b;
+            font-family: 'Fredoka', sans-serif;
+            font-size: 16px;
+            font-weight: 800;
+            padding: 8px 18px;
+            border-radius: 30px;
+            border: 3px solid var(--border-color);
+            box-shadow: 4px 4px 0px var(--border-color);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* MAIN HEADLINE CARD */
+        .headline-card {
+            background: white;
+            border: var(--border-width) solid var(--border-color);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--card-shadow);
+            padding: 22px 28px;
+            text-align: center;
+            position: relative;
+            z-index: 2;
+        }
+        .cohort-pill {
+            display: inline-block;
+            background: #e0e7ff;
+            color: var(--color-primary);
+            font-size: 13px;
+            font-weight: 800;
+            padding: 4px 14px;
+            border-radius: 20px;
+            border: 2px solid var(--color-primary);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+        }
+        .main-title {
+            font-family: 'Fredoka', sans-serif;
+            font-size: 36px;
+            line-height: 1.15;
+            color: var(--text-primary);
+            margin: 0 0 6px 0;
+        }
+        .main-subtitle {
+            font-size: 16px;
+            font-weight: 800;
+            color: var(--color-orange);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* DUAL TRACK CARDS (Teens vs Adults) */
+        .tracks-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            position: relative;
+            z-index: 2;
+        }
+        .track-card {
+            background: white;
+            border: var(--border-width) solid var(--border-color);
+            border-radius: var(--radius-md);
+            box-shadow: var(--card-shadow);
+            padding: 18px 20px;
+        }
+        .track-card.teens {
+            border-top: 10px solid var(--color-primary);
+        }
+        .track-card.adults {
+            border-top: 10px solid var(--color-secondary);
+        }
+        .track-title {
+            font-family: 'Fredoka', sans-serif;
+            font-size: 20px;
+            margin: 0 0 4px 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .track-schedule {
+            font-size: 12px;
+            font-weight: 800;
+            padding: 3px 8px;
+            border-radius: 6px;
+            display: inline-block;
+            margin-bottom: 8px;
+        }
+        .track-card.teens .track-schedule {
+            background: #e0e7ff;
+            color: var(--color-primary);
+        }
+        .track-card.adults .track-schedule {
+            background: #e0f2fe;
+            color: #0284c7;
+        }
+        .track-desc {
+            font-size: 13px;
+            color: var(--text-secondary);
+            line-height: 1.4;
+            margin: 0;
+        }
+
+        /* CURRICULUM HIGHLIGHT BAR */
+        .curriculum-bar {
+            background: #f8fafc;
+            border: 3px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 12px 18px;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            font-weight: 800;
+            font-size: 14px;
+            position: relative;
+            z-index: 2;
+        }
+        .curriculum-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+
+        /* FOOTER / CALL TO ACTION (NO WEB LINKS) */
+        .footer-cta {
+            background: #1e293b;
+            color: white;
+            border: 4px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            box-shadow: 6px 6px 0px #000;
+            padding: 16px 26px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+        }
+        .cta-text h3 {
+            color: var(--color-warning);
+            font-size: 20px;
+            margin: 0 0 2px 0;
+        }
+        .cta-text p {
+            color: #94a3b8;
+            font-size: 13px;
+            margin: 0;
+        }
+        .cta-whatsapp {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--color-success);
+            color: white;
+            font-family: 'Fredoka', sans-serif;
+            font-size: 20px;
+            font-weight: 700;
+            padding: 10px 18px;
+            border-radius: 12px;
+            border: 2px solid white;
+            box-shadow: 3px 3px 0px #000;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="controls">
+        <span style="color: #64748b; font-weight: 700;">LimahCode Signature Brand Palette (Neobrutalism CSS)</span>
+        <button class="btn-download" onclick="downloadFlyer()">
+            <i class="fa-solid fa-download"></i> Save Image (PNG)
+        </button>
+    </div>
+
+    <!-- FLYER CONTAINER -->
+    <div id="flyer-canvas">
+        <div class="bg-circle-1"></div>
+        <div class="bg-circle-2"></div>
+
+        <!-- Header -->
+        <div class="flyer-header">
+            <div class="brand-logo">
+                <img src="/static/images/limahcode_logo.png" alt="LimahCode">
+                <h1>LimahCode <span>Bootcamp</span></h1>
+            </div>
+            <div class="paid-badge">
+                ⭐ Paid Bootcamp | Enroll Now
+            </div>
+        </div>
+
+        <!-- Main Headline -->
+        <div class="headline-card">
+            <span class="cohort-pill">🚀 Cohort 2 Admissions Open</span>
+            <h2 class="main-title">3-Month Web Development Bootcamp</h2>
+            <p class="main-subtitle">Open for All Ages: Teens (9–17) & Adults (18+)</p>
+        </div>
+
+        <!-- 2 Tracks -->
+        <div class="tracks-grid">
+            <div class="track-card teens">
+                <h3 class="track-title" style="color: var(--color-primary);"><i class="fa-solid fa-gamepad"></i> Teens Track (9-17)</h3>
+                <span class="track-schedule">🗓️ Weekend Classes</span>
+                <p class="track-desc">
+                    Fun, game-inspired coding! Build custom websites, interactive games, and earn official skill milestone badges.
+                </p>
+            </div>
+            <div class="track-card adults">
+                <h3 class="track-title" style="color: var(--color-secondary);"><i class="fa-solid fa-briefcase"></i> Adult Pro Track (18+)</h3>
+                <span class="track-schedule">🗓️ Flexible Evening Classes</span>
+                <p class="track-desc">
+                    Practical career-building! Master modern frontend web development, responsive design, Netlify hosting, and freelancing.
+                </p>
+            </div>
+        </div>
+
+        <!-- Curriculum Highlights -->
+        <div class="curriculum-bar">
+            <div class="curriculum-item" style="color: var(--color-primary);">
+                <div class="dot" style="background: var(--color-primary);"></div>
+                <span>Month 1: HTML5 Architecture</span>
+            </div>
+            <div class="curriculum-item" style="color: var(--color-orange);">
+                <div class="dot" style="background: var(--color-orange);"></div>
+                <span>Month 2: CSS3 Modern Styling</span>
+            </div>
+            <div class="curriculum-item" style="color: var(--color-purple);">
+                <div class="dot" style="background: var(--color-purple);"></div>
+                <span>Month 3: JavaScript & Games</span>
+            </div>
+        </div>
+
+        <!-- Call to Action (DM / WhatsApp ONLY - No Web Links) -->
+        <div class="footer-cta">
+            <div class="cta-text">
+                <h3>💬 Limited Seats Available per Track!</h3>
+                <p>Chat directly on WhatsApp to enroll and claim your slot.</p>
+            </div>
+            <div class="cta-whatsapp">
+                <i class="fa-brands fa-whatsapp"></i> +234 802 503 4999
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function downloadFlyer() {
+            const flyer = document.getElementById('flyer-canvas');
+            html2canvas(flyer, { scale: 2, useCORS: true }).then(canvas => {
+                const link = document.createElement('a');
+                link.download = 'LimahCode_Cohort2_Official_Flyer.png';
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+            });
+        }
+    </script>
+</body>
+</html>
