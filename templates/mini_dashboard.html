@@ -30,17 +30,35 @@
         <div class="card" style="background: white; padding: 20px; text-align: center;">
             <div style="font-size: 36px; margin-bottom: 5px;">📘</div>
             <h3 style="color: var(--text-secondary); font-size: 16px;">Course Status</h3>
-            <p style="font-size: 24px; font-weight: 700; color: var(--color-primary); margin-top: 5px;">Lessons 1 - 9 Active</p>
+            <p style="font-size: 24px; font-weight: 700; color: var(--color-primary); margin-top: 5px;">
+                {% if student %}
+                    {{ student.completed_lessons | length }} / 12 Completed
+                {% else %}
+                    0 / 12 Completed
+                {% endif %}
+            </p>
         </div>
         <div class="card" style="background: white; padding: 20px; text-align: center;">
             <div style="font-size: 36px; margin-bottom: 5px;">🏆</div>
-            <h3 style="color: var(--text-secondary); font-size: 16px;">Capstone Project</h3>
-            <p style="font-size: 24px; font-weight: 700; color: var(--color-success); margin-top: 5px;">Ready for Defense</p>
+            <h3 style="color: var(--text-secondary); font-size: 16px;">Milestone Challenges</h3>
+            <p style="font-size: 24px; font-weight: 700; color: var(--color-success); margin-top: 5px;">
+                {% if student %}
+                    {{ student.completed_challenges | length }} / 3 Conquered
+                {% else %}
+                    0 / 3 Conquered
+                {% endif %}
+            </p>
         </div>
         <div class="card" style="background: white; padding: 20px; text-align: center;">
             <div style="font-size: 36px; margin-bottom: 5px;">🎓</div>
-            <h3 style="color: var(--text-secondary); font-size: 16px;">Certificate</h3>
-            <p style="font-size: 24px; font-weight: 700; color: var(--color-purple); margin-top: 5px;">Unlocked!</p>
+            <h3 style="color: var(--text-secondary); font-size: 16px;">Badges Earned</h3>
+            <p style="font-size: 24px; font-weight: 700; color: var(--color-purple); margin-top: 5px;">
+                {% if student %}
+                    {{ student.badges | length }} Badges
+                {% else %}
+                    0 Badges
+                {% endif %}
+            </p>
         </div>
     </div>
 
