@@ -67,6 +67,16 @@ def init_db():
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             );
         ''')
+        cursor.execute('''
+            CREATE TABLE IF NOT EXISTS page_views (
+                id SERIAL PRIMARY KEY,
+                event_type TEXT NOT NULL,
+                page TEXT NOT NULL,
+                device TEXT,
+                referrer TEXT,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            );
+        ''')
     else:
         cursor.execute('''
             CREATE TABLE IF NOT EXISTS users (
@@ -93,6 +103,16 @@ def init_db():
                 email TEXT NOT NULL,
                 experience TEXT,
                 status TEXT DEFAULT 'new',
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            );
+        ''')
+        cursor.execute('''
+            CREATE TABLE IF NOT EXISTS page_views (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                event_type TEXT NOT NULL,
+                page TEXT NOT NULL,
+                device TEXT,
+                referrer TEXT,
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             );
         ''')
@@ -289,5 +309,54 @@ def delete_reservation(res_id):
         return False, str(e)
     finally:
         conn.close()
+
+def record_analytics_event(event_type, page, device='', referrer=''):
+    conn = get_db_connection()
+    cursor = get_cursor(conn)
+    ph = '%s' if USE_POSTGRES else '?'
+    try:
+        cursor.execute(f'''
+            INSERT INTO page_views (event_type, page, device, referrer)
+            VALUES ({ph}, {ph}, {ph}, {ph})
+        ''', (event_type.strip(), page.strip() or 'index.html', device.strip() or 'Desktop', referrer.strip()))
+        conn.commit()
+        return True, None
+    except Exception as e:
+        return False, str(e)
+    finally:
+        conn.close()
+
+def get_analytics_summary():
+    conn = get_db_connection()
+    cursor = get_cursor(conn)
+    
+    # Total page views
+    cursor.execute("SELECT COUNT(*) as count FROM page_views WHERE event_type = 'pageview'")
+    row = cursor.fetchone()
+    total_views = row['count'] if row else 0
+
+    # Total WhatsApp clicks
+    cursor.execute("SELECT COUNT(*) as count FROM page_views WHERE event_type = 'whatsapp_click'")
+    row = cursor.fetchone()
+    total_wa_clicks = row['count'] if row else 0
+
+    # Mobile vs Desktop
+    cursor.execute("SELECT device, COUNT(*) as count FROM page_views GROUP BY device")
+    device_rows = cursor.fetchall() or []
+    devices = {r['device']: r['count'] for r in device_rows}
+
+    # Top visited pages
+    cursor.execute("SELECT page, COUNT(*) as count FROM page_views WHERE event_type = 'pageview' GROUP BY page ORDER BY count DESC LIMIT 8")
+    page_rows = cursor.fetchall() or []
+    top_pages = [{'page': r['page'], 'views': r['count']} for r in page_rows]
+
+    conn.close()
+    return {
+        'total_views': total_views,
+        'total_wa_clicks': total_wa_clicks,
+        'devices': devices,
+        'top_pages': top_pages
+    }
+
 
 

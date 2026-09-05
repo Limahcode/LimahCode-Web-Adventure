@@ -420,8 +420,28 @@ def admin_panel():
         
     students = database.get_all_students()
     reservations = database.get_all_reservations()
+    analytics = database.get_analytics_summary()
     config = get_teacher_config()
-    return render_template('admin.html', students=students, reservations=reservations, config=config, lessons=LESSONS, challenges=CHALLENGES)
+    return render_template('admin.html', students=students, reservations=reservations, analytics=analytics, config=config, lessons=LESSONS, challenges=CHALLENGES)
+
+@app.route('/api/track', methods=['POST', 'OPTIONS'])
+def api_track():
+    if request.method == 'OPTIONS':
+        res = make_response()
+        res.headers["Access-Control-Allow-Origin"] = "*"
+        res.headers["Access-Control-Allow-Headers"] = "*"
+        res.headers["Access-Control-Allow-Methods"] = "POST, OPTIONS"
+        return res
+        
+    data = request.get_json(silent=True) or request.form.to_dict() or {}
+    event_type = data.get('event_type') or 'pageview'
+    page = data.get('page') or 'index.html'
+    device = data.get('device') or 'Desktop'
+    referrer = data.get('referrer') or ''
+    database.record_analytics_event(event_type, page, device, referrer)
+    res = jsonify({"success": True})
+    res.headers["Access-Control-Allow-Origin"] = "*"
+    return res
 
 @app.route('/admin/add-lead', methods=['POST'])
 def admin_add_lead():
