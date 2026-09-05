@@ -26,11 +26,16 @@
     </div>
 
     <!-- Quick Stats Cards -->
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; margin-bottom: 30px;">
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 30px;">
         <div class="card" style="background: white; padding: 20px; text-align: center;">
             <div style="font-size: 36px; margin-bottom: 5px;">👥</div>
             <h3 style="color: var(--text-secondary); font-size: 15px;">Registered Students</h3>
             <p style="font-size: 30px; font-weight: 700; color: var(--color-primary); margin-top: 5px;">{{ students | length }}</p>
+        </div>
+        <div class="card" style="background: white; padding: 20px; text-align: center;">
+            <div style="font-size: 36px; margin-bottom: 5px;">📥</div>
+            <h3 style="color: var(--text-secondary); font-size: 15px;">Cohort 2 Leads</h3>
+            <p style="font-size: 30px; font-weight: 700; color: var(--color-purple); margin-top: 5px;">{{ reservations | length }}</p>
         </div>
         <div class="card" style="background: white; padding: 20px; text-align: center;">
             <div style="font-size: 36px; margin-bottom: 5px;">⭐</div>
@@ -43,7 +48,7 @@
             <div style="font-size: 36px; margin-bottom: 5px;">🚀</div>
             <h3 style="color: var(--text-secondary); font-size: 15px;">Active Topics</h3>
             <p style="font-size: 30px; font-weight: 700; color: var(--color-success); margin-top: 5px;">
-                {{ config.unlocked_lessons | length }} / 10
+                {{ config.unlocked_lessons | length }} / 12
             </p>
         </div>
     </div>
@@ -83,6 +88,81 @@
                 {% endfor %}
             </div>
         </div>
+    </div>
+
+    <!-- Cohort 2 Admissions & Seat Reservations (from Website) -->
+    <div class="card" style="background: white; padding: 25px; margin-bottom: 30px; border-left: 6px solid var(--color-primary);">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; flex-wrap: wrap; gap: 10px;">
+            <div>
+                <h2 style="font-size: 22px; color: var(--text-primary); margin: 0;">
+                    <i class="fa-solid fa-clipboard-list" style="color: var(--color-primary);"></i> Cohort 2 Admissions & Seat Reservations
+                </h2>
+                <p style="color: var(--text-secondary); font-size: 14px; margin-top: 4px;">Direct applicant leads submitted from the academy registration portal.</p>
+            </div>
+            <span style="background: #e6f4ea; color: #137333; font-size: 13px; font-weight: 700; padding: 6px 12px; border-radius: 20px; border: 1px solid #ceead6;">
+                {{ reservations | length }} Total Inquiries
+            </span>
+        </div>
+
+        {% if reservations | length == 0 %}
+            <div style="text-align: center; padding: 35px 20px; color: var(--text-secondary); background: #f8fafc; border-radius: var(--radius-md);">
+                <div style="font-size: 36px; margin-bottom: 8px;">📥</div>
+                <p style="font-size: 15px; font-weight: 600;">No seat reservations received yet.</p>
+                <p style="font-size: 13px; margin-top: 4px;">When prospective students submit the Seat Reservation form on <code>academy.html</code>, their records will instantly appear here!</p>
+            </div>
+        {% else %}
+            <div style="overflow-x: auto;">
+                <table style="width: 100%; border-collapse: collapse; margin-top: 10px;">
+                    <thead>
+                        <tr style="background: #f8fafc; text-align: left;">
+                            <th style="padding: 12px 14px; border-bottom: 2px solid var(--border-color); font-size: 13px;">Applicant Name</th>
+                            <th style="padding: 12px 14px; border-bottom: 2px solid var(--border-color); font-size: 13px;">Track Selected</th>
+                            <th style="padding: 12px 14px; border-bottom: 2px solid var(--border-color); font-size: 13px;">Contact Channels</th>
+                            <th style="padding: 12px 14px; border-bottom: 2px solid var(--border-color); font-size: 13px;">Experience</th>
+                            <th style="padding: 12px 14px; border-bottom: 2px solid var(--border-color); font-size: 13px;">Submitted</th>
+                            <th style="padding: 12px 14px; border-bottom: 2px solid var(--border-color); font-size: 13px;">Quick Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for r in reservations %}
+                        <tr>
+                            <td style="padding: 14px; border-bottom: 1px solid #e2e8f0;">
+                                <div style="font-weight: 700; color: var(--text-primary);">{{ r.fullname }}</div>
+                            </td>
+                            <td style="padding: 14px; border-bottom: 1px solid #e2e8f0;">
+                                {% if 'adult' in r.track | lower or 'pro' in r.track | lower %}
+                                    <span style="background: #e0f2fe; color: #0369a1; font-size: 11px; font-weight: 800; padding: 3px 8px; border-radius: 12px; border: 1px solid #bae6fd;">
+                                        💼 {{ r.track }}
+                                    </span>
+                                {% else %}
+                                    <span style="background: #f5f3ff; color: #6d28d9; font-size: 11px; font-weight: 800; padding: 3px 8px; border-radius: 12px; border: 1px solid #ddd6fe;">
+                                        🎒 {{ r.track }}
+                                    </span>
+                                {% endif %}
+                            </td>
+                            <td style="padding: 14px; border-bottom: 1px solid #e2e8f0; font-size: 13px;">
+                                <div><i class="fa-solid fa-phone" style="color: var(--text-secondary); width: 14px;"></i> {{ r.phone }}</div>
+                                {% if r.email %}
+                                <div style="margin-top: 3px;"><i class="fa-solid fa-envelope" style="color: var(--text-secondary); width: 14px;"></i> <a href="mailto:{{ r.email }}" style="color: var(--color-primary); text-decoration: none;">{{ r.email }}</a></div>
+                                {% endif %}
+                            </td>
+                            <td style="padding: 14px; border-bottom: 1px solid #e2e8f0; font-size: 13px; color: var(--text-secondary);">
+                                {{ r.experience or 'None specified' }}
+                            </td>
+                            <td style="padding: 14px; border-bottom: 1px solid #e2e8f0; font-size: 12px; color: #64748b;">
+                                {{ r.created_at_str or 'Recent' }}
+                            </td>
+                            <td style="padding: 14px; border-bottom: 1px solid #e2e8f0;">
+                                <a href="https://wa.me/{{ r.phone | replace('+', '') | replace(' ', '') | replace('-', '') }}?text=Hello%20{{ r.fullname | urlencode }},%20this%20is%20LimahCode%20Academy%20following%20up%20on%20your%20Cohort%202%20admission%20reservation!" target="_blank" class="btn" style="background: #25D366; color: white; padding: 6px 12px; font-size: 12px; border-radius: 6px; text-decoration: none; display: inline-flex; align-items: center; gap: 6px;">
+                                    <i class="fa-brands fa-whatsapp"></i> WhatsApp
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% endif %}
     </div>
 
     <!-- Student Roster & Code Submissions -->

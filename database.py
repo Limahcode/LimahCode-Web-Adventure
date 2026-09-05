@@ -55,6 +55,18 @@ def init_db():
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             );
         ''')
+        cursor.execute('''
+            CREATE TABLE IF NOT EXISTS reservations (
+                id SERIAL PRIMARY KEY,
+                fullname TEXT NOT NULL,
+                track TEXT NOT NULL,
+                phone TEXT NOT NULL,
+                email TEXT NOT NULL,
+                experience TEXT,
+                status TEXT DEFAULT 'new',
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            );
+        ''')
     else:
         cursor.execute('''
             CREATE TABLE IF NOT EXISTS users (
@@ -70,7 +82,19 @@ def init_db():
                 completed_challenges TEXT DEFAULT '[]',
                 saved_codes TEXT DEFAULT '{}',
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-            )
+            );
+        ''')
+        cursor.execute('''
+            CREATE TABLE IF NOT EXISTS reservations (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                fullname TEXT NOT NULL,
+                track TEXT NOT NULL,
+                phone TEXT NOT NULL,
+                email TEXT NOT NULL,
+                experience TEXT,
+                status TEXT DEFAULT 'new',
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            );
         ''')
         try:
             cursor.execute("ALTER TABLE users ADD COLUMN track TEXT DEFAULT 'junior'")
@@ -219,3 +243,37 @@ def get_all_students():
         d['completion_pct'] = round((len(d['completed_lessons']) + len(d['completed_challenges'])) / 13 * 100)
         students.append(d)
     return students
+
+def create_reservation(fullname, track, phone, email, experience=''):
+    conn = get_db_connection()
+    cursor = get_cursor(conn)
+    ph = '%s' if USE_POSTGRES else '?'
+    try:
+        cursor.execute(f'''
+            INSERT INTO reservations (fullname, track, phone, email, experience)
+            VALUES ({ph}, {ph}, {ph}, {ph}, {ph})
+        ''', (fullname.strip(), track.strip(), phone.strip(), email.strip().lower(), (experience or '').strip()))
+        conn.commit()
+        return True, None
+    except Exception as e:
+        return False, str(e)
+    finally:
+        conn.close()
+
+def get_all_reservations():
+    conn = get_db_connection()
+    cursor = get_cursor(conn)
+    cursor.execute('SELECT * FROM reservations ORDER BY created_at DESC')
+    rows = cursor.fetchall()
+    conn.close()
+    
+    reservations = []
+    for r in rows:
+        d = dict(r)
+        if 'created_at' in d and d['created_at']:
+            d['created_at_str'] = str(d['created_at'])[:16]
+        else:
+            d['created_at_str'] = ''
+        reservations.append(d)
+    return reservations
+

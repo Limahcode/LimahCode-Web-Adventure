@@ -1,6 +1,6 @@
 import json
 import os
-from flask import Flask, render_template, jsonify, request, redirect, url_for, session, flash
+from flask import Flask, render_template, jsonify, request, redirect, url_for, session, flash, make_response
 import database
 
 app = Flask(__name__)
@@ -419,8 +419,43 @@ def admin_panel():
         return render_template('admin_login.html')
         
     students = database.get_all_students()
+    reservations = database.get_all_reservations()
     config = get_teacher_config()
-    return render_template('admin.html', students=students, config=config, lessons=LESSONS, challenges=CHALLENGES)
+    return render_template('admin.html', students=students, reservations=reservations, config=config, lessons=LESSONS, challenges=CHALLENGES)
+
+@app.route('/api/admissions', methods=['POST', 'OPTIONS'])
+def api_admissions():
+    if request.method == 'OPTIONS':
+        res = make_response()
+        res.headers["Access-Control-Allow-Origin"] = "*"
+        res.headers["Access-Control-Allow-Headers"] = "*"
+        res.headers["Access-Control-Allow-Methods"] = "POST, OPTIONS"
+        return res
+        
+    data = request.get_json(silent=True) or request.form.to_dict() or {}
+    fullname = data.get('fullname') or data.get('name') or ''
+    track = data.get('track') or ''
+    phone = data.get('phone') or ''
+    email = data.get('email') or ''
+    experience = data.get('experience') or ''
+    
+    if not fullname or not phone:
+        res = jsonify({"success": False, "error": "Name and phone number are required"})
+        res.headers["Access-Control-Allow-Origin"] = "*"
+        return res, 400
+        
+    success, error = database.create_reservation(fullname, track, phone, email, experience)
+    if not success:
+        res = jsonify({"success": False, "error": error})
+        res.headers["Access-Control-Allow-Origin"] = "*"
+        return res, 500
+        
+    res = jsonify({
+        "success": True, 
+        "message": f"Reservation successfully saved for {fullname} ({track})! Admissions team will message on WhatsApp."
+    })
+    res.headers["Access-Control-Allow-Origin"] = "*"
+    return res
 
 @app.route('/flyer')
 def flyer():
