@@ -443,6 +443,10 @@ def api_track():
     res.headers["Access-Control-Allow-Origin"] = "*"
     return res
 
+@app.route('/flyer')
+def flyer_designer():
+    return render_template('flyer_designer.html')
+
 @app.route('/admin/add-lead', methods=['POST'])
 def admin_add_lead():
     if 'user_id' not in session or session.get('user_role') != 'teacher':
