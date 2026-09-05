@@ -299,14 +299,23 @@ CHALLENGES = {
 
 @app.route('/')
 def welcome():
+    if 'user_id' in session:
+        return redirect(url_for('dashboard'))
     return render_template('welcome.html')
 
 @app.route('/dashboard')
 def dashboard():
+    if 'user_id' not in session:
+        flash("Please log in with your registered student account to access the classroom.", "info")
+        return redirect(url_for('login'))
     return render_template('dashboard.html', lessons=LESSONS, challenges=CHALLENGES)
 
 @app.route('/lesson/<int:lesson_id>')
 def lesson(lesson_id):
+    if 'user_id' not in session:
+        flash("Please log in to access your coding lessons.", "info")
+        return redirect(url_for('login'))
+        
     if lesson_id not in LESSONS:
         return "Lesson not found!", 404
         
@@ -328,6 +337,10 @@ def lesson(lesson_id):
 
 @app.route('/challenge/<int:challenge_id>')
 def challenge(challenge_id):
+    if 'user_id' not in session:
+        flash("Please log in to access this milestone capstone challenge.", "info")
+        return redirect(url_for('login'))
+        
     if challenge_id not in CHALLENGES:
         return "Challenge not found!", 404
         
