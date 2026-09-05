@@ -277,3 +277,17 @@ def get_all_reservations():
         reservations.append(d)
     return reservations
 
+def delete_reservation(res_id):
+    conn = get_db_connection()
+    cursor = get_cursor(conn)
+    ph = '%s' if USE_POSTGRES else '?'
+    try:
+        cursor.execute(f'DELETE FROM reservations WHERE id = {ph}', (res_id,))
+        conn.commit()
+        return True, None
+    except Exception as e:
+        return False, str(e)
+    finally:
+        conn.close()
+
+

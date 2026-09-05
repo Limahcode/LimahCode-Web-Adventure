@@ -423,6 +423,31 @@ def admin_panel():
     config = get_teacher_config()
     return render_template('admin.html', students=students, reservations=reservations, config=config, lessons=LESSONS, challenges=CHALLENGES)
 
+@app.route('/admin/add-lead', methods=['POST'])
+def admin_add_lead():
+    if 'user_id' not in session or session.get('user_role') != 'teacher':
+        return jsonify({"success": False, "error": "Unauthorized"}), 403
+    fullname = request.form.get('fullname', '').strip()
+    track = request.form.get('track', 'Teens (9-17)').strip()
+    phone = request.form.get('phone', '').strip()
+    email = request.form.get('email', '').strip()
+    experience = request.form.get('experience', '').strip()
+    if not fullname or not phone:
+        flash("Name and phone number are required.", "error")
+        return redirect(url_for('admin_panel'))
+    database.create_reservation(fullname, track, phone, email, experience)
+    flash(f"Lead for {fullname} successfully added!", "success")
+    return redirect(url_for('admin_panel'))
+
+@app.route('/admin/delete-lead/<int:lead_id>', methods=['POST'])
+def admin_delete_lead(lead_id):
+    if 'user_id' not in session or session.get('user_role') != 'teacher':
+        return jsonify({"success": False, "error": "Unauthorized"}), 403
+    database.delete_reservation(lead_id)
+    flash("Lead removed successfully.", "info")
+    return redirect(url_for('admin_panel'))
+
+
 @app.route('/api/admissions', methods=['POST', 'OPTIONS'])
 def api_admissions():
     if request.method == 'OPTIONS':
