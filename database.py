@@ -88,6 +88,13 @@ def init_db():
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             );
         ''')
+        cursor.execute('''
+            CREATE TABLE IF NOT EXISTS site_settings (
+                setting_key TEXT PRIMARY KEY,
+                setting_value TEXT NOT NULL,
+                updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            );
+        ''')
     else:
         cursor.execute('''
             CREATE TABLE IF NOT EXISTS users (
@@ -136,6 +143,13 @@ def init_db():
                 comment TEXT NOT NULL,
                 status TEXT DEFAULT 'pending',
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            );
+        ''')
+        cursor.execute('''
+            CREATE TABLE IF NOT EXISTS site_settings (
+                setting_key TEXT PRIMARY KEY,
+                setting_value TEXT NOT NULL,
+                updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             );
         ''')
         try:
@@ -472,5 +486,66 @@ def get_analytics_summary():
         'top_pages': top_pages
     }
 
+# ==========================================
+# BRAND THEME & COLOR CUSTOMIZER SETTINGS
+# ==========================================
+DEFAULT_THEME = {
+    'primary_color': '#1A7A52',      # LIM Forest Emerald
+    'primary_dark': '#0D3D29',       # Deep Forest
+    'secondary_color': '#2EAA72',    # Bright Emerald
+    'accent_gold': '#FAC740',        # Amber Gold
+    'bg_main': '#F8FAFC',            # Canvas light
+    'text_primary': '#0E0E0C'        # Obsidian text
+}
 
+def get_site_theme():
+    """Retrieve active site brand colors with fallback to default LIM palette."""
+    theme = dict(DEFAULT_THEME)
+    try:
+        conn = get_db_connection()
+        cursor = get_cursor(conn)
+        cursor.execute("SELECT setting_key, setting_value FROM site_settings WHERE setting_key LIKE 'theme_%'")
+        rows = cursor.fetchall() or []
+        for r in rows:
+            clean_key = r['setting_key'].replace('theme_', '')
+            if clean_key in theme and r['setting_value']:
+                theme[clean_key] = r['setting_value'].strip()
+        conn.close()
+    except Exception as e:
+        print(f"Error fetching site theme: {e}")
+    return theme
 
+def update_site_theme(theme_dict):
+    """Save custom brand colors to the database."""
+    conn = get_db_connection()
+    cursor = get_cursor(conn)
+    try:
+        for key, val in theme_dict.items():
+            if key in DEFAULT_THEME and val:
+                setting_key = f"theme_{key}"
+                cleaned_val = str(val).strip()
+                if USE_POSTGRES:
+                    cursor.execute("""
+                        INSERT INTO site_settings (setting_key, setting_value, updated_at)
+                        VALUES (%s, %s, CURRENT_TIMESTAMP)
+                        ON CONFLICT (setting_key) 
+                        DO UPDATE SET setting_value = EXCLUDED.setting_value, updated_at = CURRENT_TIMESTAMP
+                    """, (setting_key, cleaned_val))
+                else:
+                    cursor.execute("""
+                        INSERT OR REPLACE INTO site_settings (setting_key, setting_value, updated_at)
+                        VALUES (?, ?, CURRENT_TIMESTAMP)
+                    """, (setting_key, cleaned_val))
+        conn.commit()
+    finally:
+        conn.close()
+
+def reset_site_theme():
+    """Reset all brand colors back to default LIM Innovations Emerald & Gold."""
+    conn = get_db_connection()
+    cursor = get_cursor(conn)
+    try:
+        cursor.execute("DELETE FROM site_settings WHERE setting_key LIKE 'theme_%'")
+        conn.commit()
+    finally:
+        conn.close()

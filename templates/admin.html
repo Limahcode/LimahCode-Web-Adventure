@@ -63,6 +63,176 @@
         </div>
     </div>
 
+    <!-- ========================================== -->
+    <!-- BRAND THEME & COLOR CUSTOMIZER CARD        -->
+    <!-- ========================================== -->
+    <div class="card" style="background: white; padding: 26px; margin-bottom: 30px; border-top: 5px solid var(--color-primary); box-shadow: 0 4px 20px rgba(0,0,0,0.06);">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 15px; margin-bottom: 20px;">
+            <div>
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <span style="font-size: 26px;">🎨</span>
+                    <h2 style="font-size: 22px; color: var(--text-primary); margin: 0;">Live Brand Theme & Color Customizer</h2>
+                </div>
+                <p style="color: var(--text-secondary); font-size: 14px; margin-top: 5px;">
+                    Customize or switch the visual theme. Colors take effect <strong>immediately</strong> across both the <strong>Learning Portal</strong> and the <strong>Public Website</strong>.
+                </p>
+            </div>
+            
+            <form action="/admin/reset-theme" method="POST" onsubmit="return confirm('Reset all colors back to the official LIM Innovations Emerald & Gold?');" style="margin: 0;">
+                <button type="submit" class="btn" style="background: #f1f5f9; color: #475569; border: 2px solid #cbd5e1; padding: 8px 16px; font-size: 13px; font-weight: 700; border-radius: 8px;">
+                    <i class="fa-solid fa-arrow-rotate-left"></i> Reset to LIM Default
+                </button>
+            </form>
+        </div>
+
+        <!-- 1-Click Curated Brand Presets -->
+        <div style="background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 12px; padding: 16px; margin-bottom: 22px;">
+            <div style="font-size: 13px; font-weight: 800; color: #334155; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px;">
+                ⚡ Quick 1-Click Theme Presets:
+            </div>
+            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                <button type="button" class="preset-btn" onclick="applyPreset('emerald')" style="background: #ffffff; border: 2px solid #1A7A52; color: #1A7A52; padding: 8px 14px; border-radius: 8px; font-weight: 700; font-size: 13px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px;">
+                    <span style="display: inline-block; width: 14px; height: 14px; border-radius: 50%; background: #1A7A52;"></span> 🌲 LIM Emerald (Default)
+                </button>
+                <button type="button" class="preset-btn" onclick="applyPreset('ocean')" style="background: #ffffff; border: 2px solid #0284C7; color: #0284C7; padding: 8px 14px; border-radius: 8px; font-weight: 700; font-size: 13px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px;">
+                    <span style="display: inline-block; width: 14px; height: 14px; border-radius: 50%; background: #0284C7;"></span> 🌊 Electric Ocean
+                </button>
+                <button type="button" class="preset-btn" onclick="applyPreset('royal')" style="background: #ffffff; border: 2px solid #7C3AED; color: #7C3AED; padding: 8px 14px; border-radius: 8px; font-weight: 700; font-size: 13px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px;">
+                    <span style="display: inline-block; width: 14px; height: 14px; border-radius: 50%; background: #7C3AED;"></span> 👑 Royal Amethyst
+                </button>
+                <button type="button" class="preset-btn" onclick="applyPreset('crimson')" style="background: #ffffff; border: 2px solid #DC2626; color: #DC2626; padding: 8px 14px; border-radius: 8px; font-weight: 700; font-size: 13px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px;">
+                    <span style="display: inline-block; width: 14px; height: 14px; border-radius: 50%; background: #DC2626;"></span> 🔥 Sunset Crimson
+                </button>
+                <button type="button" class="preset-btn" onclick="applyPreset('obsidian')" style="background: #ffffff; border: 2px solid #0F172A; color: #0F172A; padding: 8px 14px; border-radius: 8px; font-weight: 700; font-size: 13px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px;">
+                    <span style="display: inline-block; width: 14px; height: 14px; border-radius: 50%; background: #0F172A;"></span> 🌑 Cyber Obsidian
+                </button>
+            </div>
+        </div>
+
+        <form action="/admin/update-theme" method="POST" id="theme-form">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-bottom: 24px;">
+                <!-- Color Input 1: Primary Brand Color -->
+                <div style="background: #ffffff; border: 2px solid #e2e8f0; border-radius: 10px; padding: 14px;">
+                    <label style="display: block; font-weight: 700; font-size: 13px; margin-bottom: 4px; color: var(--text-primary);">
+                        Primary Brand Color (Buttons & Badges)
+                    </label>
+                    <div style="display: flex; align-items: center; gap: 10px; margin-top: 8px;">
+                        <input type="color" id="picker-primary" value="{{ theme.primary_color or '#1A7A52' }}" oninput="syncColor('primary', this.value)" style="width: 44px; height: 44px; border: none; cursor: pointer; border-radius: 8px; background: none;">
+                        <input type="text" id="hex-primary" name="primary_color" value="{{ theme.primary_color or '#1A7A52' }}" oninput="syncColor('primary', this.value)" style="flex: 1; padding: 10px; border: 2px solid #cbd5e1; border-radius: 8px; font-family: monospace; font-size: 14px; font-weight: 700;">
+                    </div>
+                </div>
+
+                <!-- Color Input 2: Primary Dark -->
+                <div style="background: #ffffff; border: 2px solid #e2e8f0; border-radius: 10px; padding: 14px;">
+                    <label style="display: block; font-weight: 700; font-size: 13px; margin-bottom: 4px; color: var(--text-primary);">
+                        Dark Shade / Header (Footers & Nav)
+                    </label>
+                    <div style="display: flex; align-items: center; gap: 10px; margin-top: 8px;">
+                        <input type="color" id="picker-dark" value="{{ theme.primary_dark or '#0D3D29' }}" oninput="syncColor('dark', this.value)" style="width: 44px; height: 44px; border: none; cursor: pointer; border-radius: 8px; background: none;">
+                        <input type="text" id="hex-dark" name="primary_dark" value="{{ theme.primary_dark or '#0D3D29' }}" oninput="syncColor('dark', this.value)" style="flex: 1; padding: 10px; border: 2px solid #cbd5e1; border-radius: 8px; font-family: monospace; font-size: 14px; font-weight: 700;">
+                    </div>
+                </div>
+
+                <!-- Color Input 3: Secondary Accent -->
+                <div style="background: #ffffff; border: 2px solid #e2e8f0; border-radius: 10px; padding: 14px;">
+                    <label style="display: block; font-weight: 700; font-size: 13px; margin-bottom: 4px; color: var(--text-primary);">
+                        Secondary Accent (Highlights & Tag Pills)
+                    </label>
+                    <div style="display: flex; align-items: center; gap: 10px; margin-top: 8px;">
+                        <input type="color" id="picker-secondary" value="{{ theme.secondary_color or '#2EAA72' }}" oninput="syncColor('secondary', this.value)" style="width: 44px; height: 44px; border: none; cursor: pointer; border-radius: 8px; background: none;">
+                        <input type="text" id="hex-secondary" name="secondary_color" value="{{ theme.secondary_color or '#2EAA72' }}" oninput="syncColor('secondary', this.value)" style="flex: 1; padding: 10px; border: 2px solid #cbd5e1; border-radius: 8px; font-family: monospace; font-size: 14px; font-weight: 700;">
+                    </div>
+                </div>
+
+                <!-- Color Input 4: Accent Gold -->
+                <div style="background: #ffffff; border: 2px solid #e2e8f0; border-radius: 10px; padding: 14px;">
+                    <label style="display: block; font-weight: 700; font-size: 13px; margin-bottom: 4px; color: var(--text-primary);">
+                        Action Gold / CTA (Enroll Now & Stars)
+                    </label>
+                    <div style="display: flex; align-items: center; gap: 10px; margin-top: 8px;">
+                        <input type="color" id="picker-gold" value="{{ theme.accent_gold or '#FAC740' }}" oninput="syncColor('gold', this.value)" style="width: 44px; height: 44px; border: none; cursor: pointer; border-radius: 8px; background: none;">
+                        <input type="text" id="hex-gold" name="accent_gold" value="{{ theme.accent_gold or '#FAC740' }}" oninput="syncColor('gold', this.value)" style="flex: 1; padding: 10px; border: 2px solid #cbd5e1; border-radius: 8px; font-family: monospace; font-size: 14px; font-weight: 700;">
+                    </div>
+                </div>
+
+                <!-- Color Input 5: Background Canvas -->
+                <div style="background: #ffffff; border: 2px solid #e2e8f0; border-radius: 10px; padding: 14px;">
+                    <label style="display: block; font-weight: 700; font-size: 13px; margin-bottom: 4px; color: var(--text-primary);">
+                        Canvas Background (Page Base)
+                    </label>
+                    <div style="display: flex; align-items: center; gap: 10px; margin-top: 8px;">
+                        <input type="color" id="picker-bg" value="{{ theme.bg_main or '#F8FAFC' }}" oninput="syncColor('bg', this.value)" style="width: 44px; height: 44px; border: none; cursor: pointer; border-radius: 8px; background: none;">
+                        <input type="text" id="hex-bg" name="bg_main" value="{{ theme.bg_main or '#F8FAFC' }}" oninput="syncColor('bg', this.value)" style="flex: 1; padding: 10px; border: 2px solid #cbd5e1; border-radius: 8px; font-family: monospace; font-size: 14px; font-weight: 700;">
+                    </div>
+                </div>
+
+                <!-- Color Input 6: Primary Text -->
+                <div style="background: #ffffff; border: 2px solid #e2e8f0; border-radius: 10px; padding: 14px;">
+                    <label style="display: block; font-weight: 700; font-size: 13px; margin-bottom: 4px; color: var(--text-primary);">
+                        Text Color (Headings & Bold Text)
+                    </label>
+                    <div style="display: flex; align-items: center; gap: 10px; margin-top: 8px;">
+                        <input type="color" id="picker-text" value="{{ theme.text_primary or '#0E0E0C' }}" oninput="syncColor('text', this.value)" style="width: 44px; height: 44px; border: none; cursor: pointer; border-radius: 8px; background: none;">
+                        <input type="text" id="hex-text" name="text_primary" value="{{ theme.text_primary or '#0E0E0C' }}" oninput="syncColor('text', this.value)" style="flex: 1; padding: 10px; border: 2px solid #cbd5e1; border-radius: 8px; font-family: monospace; font-size: 14px; font-weight: 700;">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Real-time Live Preview Sandbox -->
+            <div style="background: #f1f5f9; border: 2px dashed #94a3b8; border-radius: 12px; padding: 20px; margin-bottom: 24px;">
+                <div style="font-size: 12px; font-weight: 800; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 12px;">
+                    👁️ Real-time UI Preview (Shows how components look with your selected colors):
+                </div>
+                
+                <div id="preview-canvas" style="background: {{ theme.bg_main or '#F8FAFC' }}; border: 2px solid #cbd5e1; border-radius: 10px; padding: 20px; transition: all 0.2s ease;">
+                    <!-- Mini Nav Preview -->
+                    <div id="preview-nav" style="background: white; border: 2px solid #0E0E0C; border-radius: 8px; padding: 12px 18px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; box-shadow: 2px 2px 0px #0E0E0C;">
+                        <div style="font-weight: 800; font-size: 16px; color: #0E0E0C;">
+                            LIM <span id="preview-nav-brand" style="color: {{ theme.primary_color or '#1A7A52' }};">Innovations</span>
+                        </div>
+                        <div style="display: flex; gap: 8px;">
+                            <span id="preview-badge" style="background: #e6f4ea; color: {{ theme.primary_color or '#1A7A52' }}; font-weight: 700; font-size: 11px; padding: 4px 8px; border-radius: 6px;">
+                                Cohort 2
+                            </span>
+                            <span id="preview-stars" style="color: {{ theme.accent_gold or '#FAC740' }}; font-weight: 700; font-size: 13px;">
+                                ★★★★★
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Mini Track Card Preview -->
+                    <div style="display: flex; gap: 14px; flex-wrap: wrap;">
+                        <div id="preview-card" style="flex: 1; min-width: 240px; background: white; border: 2px solid #0E0E0C; border-radius: 10px; padding: 18px; box-shadow: 3px 3px 0px #0E0E0C;">
+                            <span id="preview-pill" style="display: inline-block; background: {{ theme.secondary_color or '#2EAA72' }}; color: white; font-size: 11px; font-weight: 800; padding: 3px 8px; border-radius: 10px; margin-bottom: 8px;">
+                                🚀 JUNIOR TRACK
+                            </span>
+                            <h4 id="preview-card-title" style="color: {{ theme.text_primary or '#0E0E0C' }}; font-size: 16px; margin-bottom: 6px;">
+                                3-Month Web Development
+                            </h4>
+                            <p style="color: #64748b; font-size: 13px; margin-bottom: 14px;">
+                                Learn HTML5, CSS3 & JavaScript from live mentors.
+                            </p>
+                            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                                <button type="button" id="preview-btn-primary" style="background: {{ theme.primary_color or '#1A7A52' }}; color: white; border: 2px solid #0E0E0C; padding: 8px 14px; font-weight: 800; font-size: 12px; border-radius: 6px; box-shadow: 2px 2px 0px #0E0E0C; cursor: default;">
+                                    Start Lesson
+                                </button>
+                                <button type="button" id="preview-btn-cta" style="background: {{ theme.accent_gold or '#FAC740' }}; color: #0E0E0C; border: 2px solid #0E0E0C; padding: 8px 14px; font-weight: 800; font-size: 12px; border-radius: 6px; box-shadow: 2px 2px 0px #0E0E0C; cursor: default;">
+                                    Enroll Now →
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div style="display: flex; justify-content: flex-end; gap: 12px;">
+                <button type="submit" class="btn btn-primary" style="padding: 12px 26px; font-size: 15px; font-weight: 800; border-radius: 8px; box-shadow: var(--btn-shadow);">
+                    <i class="fa-solid fa-floppy-disk"></i> Save & Apply Brand Colors
+                </button>
+            </div>
+        </form>
+    </div>
+
     <!-- Lesson & Challenge Unlock Controls -->
     <div class="card" style="background: white; padding: 25px; margin-bottom: 30px;">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; flex-wrap: wrap; gap: 10px;">
@@ -495,6 +665,112 @@ function closeAddLeadModal() {
 function escapeHtml(text) {
     if (!text) return '';
     return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+}
+
+/* ========================================== */
+/* LIVE THEME & COLOR CUSTOMIZER LOGIC        */
+/* ========================================== */
+const PRESETS = {
+    emerald: {
+        primary: '#1A7A52',
+        dark: '#0D3D29',
+        secondary: '#2EAA72',
+        gold: '#FAC740',
+        bg: '#F8FAFC',
+        text: '#0E0E0C'
+    },
+    ocean: {
+        primary: '#0284C7',
+        dark: '#0C4A6E',
+        secondary: '#38BDF8',
+        gold: '#F59E0B',
+        bg: '#F0F9FF',
+        text: '#0F172A'
+    },
+    royal: {
+        primary: '#7C3AED',
+        dark: '#4C1D95',
+        secondary: '#A78BFA',
+        gold: '#FBBF24',
+        bg: '#FAF5FF',
+        text: '#1E1B4B'
+    },
+    crimson: {
+        primary: '#DC2626',
+        dark: '#7F1D1D',
+        secondary: '#F87171',
+        gold: '#F59E0B',
+        bg: '#FEF2F2',
+        text: '#18181B'
+    },
+    obsidian: {
+        primary: '#10B981',
+        dark: '#047857',
+        secondary: '#34D399',
+        gold: '#F59E0B',
+        bg: '#0F172A',
+        text: '#F8FAFC'
+    }
+};
+
+function syncColor(key, value) {
+    if (!value) return;
+    const picker = document.getElementById(`picker-${key}`);
+    const hex = document.getElementById(`hex-${key}`);
+    if (picker && picker.value.toLowerCase() !== value.toLowerCase() && value.startsWith('#') && value.length === 7) {
+        picker.value = value;
+    }
+    if (hex && hex.value !== value) {
+        hex.value = value;
+    }
+    updateLivePreview();
+}
+
+function applyPreset(presetKey) {
+    const p = PRESETS[presetKey];
+    if (!p) return;
+    for (const [k, val] of Object.entries(p)) {
+        const picker = document.getElementById(`picker-${k}`);
+        const hex = document.getElementById(`hex-${k}`);
+        if (picker) picker.value = val;
+        if (hex) hex.value = val;
+    }
+    updateLivePreview();
+}
+
+function updateLivePreview() {
+    const primary = document.getElementById('hex-primary')?.value || '#1A7A52';
+    const dark = document.getElementById('hex-dark')?.value || '#0D3D29';
+    const secondary = document.getElementById('hex-secondary')?.value || '#2EAA72';
+    const gold = document.getElementById('hex-gold')?.value || '#FAC740';
+    const bg = document.getElementById('hex-bg')?.value || '#F8FAFC';
+    const text = document.getElementById('hex-text')?.value || '#0E0E0C';
+
+    const canvas = document.getElementById('preview-canvas');
+    if (canvas) canvas.style.backgroundColor = bg;
+
+    const navBrand = document.getElementById('preview-nav-brand');
+    if (navBrand) navBrand.style.color = primary;
+
+    const badge = document.getElementById('preview-badge');
+    if (badge) {
+        badge.style.color = primary;
+    }
+
+    const stars = document.getElementById('preview-stars');
+    if (stars) stars.style.color = gold;
+
+    const pill = document.getElementById('preview-pill');
+    if (pill) pill.style.backgroundColor = secondary;
+
+    const cardTitle = document.getElementById('preview-card-title');
+    if (cardTitle) cardTitle.style.color = text;
+
+    const btnPrimary = document.getElementById('preview-btn-primary');
+    if (btnPrimary) btnPrimary.style.backgroundColor = primary;
+
+    const btnCta = document.getElementById('preview-btn-cta');
+    if (btnCta) btnCta.style.backgroundColor = gold;
 }
 </script>
 

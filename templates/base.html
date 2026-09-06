@@ -19,6 +19,20 @@
     <!-- Custom Stylesheet -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     
+    <!-- Dynamic Brand Theme Variables -->
+    {% if theme %}
+    <style id="dynamic-brand-theme">
+        :root {
+            {% if theme.primary_color %}--color-primary: {{ theme.primary_color }} !important;{% endif %}
+            {% if theme.primary_dark %}--color-primary-dark: {{ theme.primary_dark }} !important;{% endif %}
+            {% if theme.secondary_color %}--color-secondary: {{ theme.secondary_color }} !important;{% endif %}
+            {% if theme.accent_gold %}--color-warning: {{ theme.accent_gold }} !important;{% endif %}
+            {% if theme.bg_main %}--bg-main: {{ theme.bg_main }} !important;{% endif %}
+            {% if theme.text_primary %}--text-primary: {{ theme.text_primary }} !important;{% endif %}
+        }
+    </style>
+    {% endif %}
+    
     <!-- Teacher Configurations -->
     <script>
         window.TEACHER_UNLOCKED_LESSONS = {{ teacher_unlocked_lessons | tojson }};

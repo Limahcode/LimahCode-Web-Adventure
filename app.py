@@ -28,10 +28,15 @@ def inject_global_context():
     current_user = None
     if 'user_id' in session:
         current_user = database.get_user_by_id(session['user_id'])
+    try:
+        site_theme = database.get_site_theme()
+    except Exception:
+        site_theme = getattr(database, 'DEFAULT_THEME', {})
     return {
         "teacher_unlocked_lessons": config.get("unlocked_lessons", [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]),
         "teacher_unlocked_challenges": config.get("unlocked_challenges", [1, 2, 3]),
-        "current_user": current_user
+        "current_user": current_user,
+        "theme": site_theme
     }
 
 
@@ -510,6 +515,53 @@ def admin_delete_review(review_id):
         return jsonify({"success": False, "error": "Unauthorized"}), 403
     database.delete_review(review_id)
     flash("Review deleted.", "info")
+    return redirect(url_for('admin_panel'))
+
+@app.route('/api/theme', methods=['GET', 'OPTIONS'])
+def api_theme():
+    if request.method == 'OPTIONS':
+        res = make_response()
+        res.headers["Access-Control-Allow-Origin"] = "*"
+        res.headers["Access-Control-Allow-Headers"] = "*"
+        res.headers["Access-Control-Allow-Methods"] = "GET, OPTIONS"
+        return res
+    theme = database.get_site_theme()
+    res = jsonify({"success": True, "theme": theme})
+    res.headers["Access-Control-Allow-Origin"] = "*"
+    return res
+
+@app.route('/admin/update-theme', methods=['POST'])
+def admin_update_theme():
+    if 'user_id' not in session or session.get('user_role') != 'teacher':
+        flash("Unauthorized access.", "danger")
+        return redirect(url_for('admin_login'))
+    
+    primary_color = request.form.get('primary_color', '').strip()
+    primary_dark = request.form.get('primary_dark', '').strip()
+    secondary_color = request.form.get('secondary_color', '').strip()
+    accent_gold = request.form.get('accent_gold', '').strip()
+    bg_main = request.form.get('bg_main', '').strip()
+    text_primary = request.form.get('text_primary', '').strip()
+    
+    theme_data = {
+        'primary_color': primary_color,
+        'primary_dark': primary_dark,
+        'secondary_color': secondary_color,
+        'accent_gold': accent_gold,
+        'bg_main': bg_main,
+        'text_primary': text_primary
+    }
+    database.update_site_theme(theme_data)
+    flash("🎨 Brand colors updated successfully across the entire platform!", "success")
+    return redirect(url_for('admin_panel'))
+
+@app.route('/admin/reset-theme', methods=['POST'])
+def admin_reset_theme():
+    if 'user_id' not in session or session.get('user_role') != 'teacher':
+        flash("Unauthorized access.", "danger")
+        return redirect(url_for('admin_login'))
+    database.reset_site_theme()
+    flash("Brand colors reset to official LIM Innovations Emerald & Gold!", "info")
     return redirect(url_for('admin_panel'))
 
 @app.route('/api/track', methods=['POST', 'OPTIONS'])
