@@ -113,9 +113,23 @@
 
         .flyer-view {
             display: none;
+            width: 100%;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            padding-bottom: 20px;
         }
         .flyer-view.active {
-            display: block;
+            display: flex;
+            justify-content: center;
+        }
+
+        @media (max-width: 860px) {
+            .flyer-view.active {
+                display: block;
+            }
+            #square-flyer, #story-flyer {
+                margin: 0 auto;
+            }
         }
 
         /* =======================================================

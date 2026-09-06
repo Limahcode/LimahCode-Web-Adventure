@@ -297,6 +297,35 @@ CHALLENGES = {
     }
 }
 
+def get_client_device(client_hint=''):
+    if client_hint and client_hint.strip() == 'Mobile':
+        return 'Mobile'
+    ua = request.headers.get('User-Agent', '').lower()
+    mobile_agents = [
+        'mobile', 'android', 'iphone', 'ipad', 'ipod', 
+        'webos', 'blackberry', 'opera mini', 'iemobile', 
+        'windows phone', 'huawei', 'xiaomi', 'redmi', 
+        'samsungbrowser', 'silk', 'fennec', 'tablet', 'kindle'
+    ]
+    if any(m in ua for m in mobile_agents) or request.headers.get('Sec-CH-UA-Mobile') == '?1':
+        return 'Mobile'
+    if client_hint and client_hint.strip():
+        return client_hint.strip()
+    return 'Desktop'
+
+@app.before_request
+def track_portal_visitor():
+    if request.method == 'GET':
+        path = request.path
+        if not path.startswith('/static') and not path.startswith('/api') and not path.startswith('/admin'):
+            try:
+                page_name = path if path != '/' else 'portal_home'
+                device = get_client_device()
+                referrer = request.referrer or ''
+                database.record_analytics_event('portal_view', page_name, device, referrer)
+            except Exception:
+                pass
+
 @app.route('/')
 def welcome():
     if 'user_id' in session:
@@ -369,6 +398,12 @@ def signup():
         session['user_role'] = 'student'
         session['user_track'] = track
         
+        try:
+            device = get_client_device()
+            database.record_analytics_event('signup', '/signup', device, '')
+        except Exception:
+            pass
+
         cohort_name = "Adult Career Track" if track == 'adult' else "Junior & Teen Adventure"
         flash(f"Welcome to LimahCode {cohort_name}, {fullname}! 🚀", "success")
         return redirect(url_for('dashboard'))
@@ -388,6 +423,13 @@ def login():
             
         session['user_id'] = user['id']
         session['user_role'] = user['role']
+        
+        try:
+            device = get_client_device()
+            database.record_analytics_event('login', '/login', device, '')
+        except Exception:
+            pass
+
         flash(f"Welcome back, {user['fullname']}! 🌟", "success")
         
         if user['role'] == 'teacher':
@@ -436,7 +478,8 @@ def api_track():
     data = request.get_json(silent=True) or request.form.to_dict() or {}
     event_type = data.get('event_type') or 'pageview'
     page = data.get('page') or 'index.html'
-    device = data.get('device') or 'Desktop'
+    client_device = data.get('device') or ''
+    device = get_client_device(client_device)
     referrer = data.get('referrer') or ''
     database.record_analytics_event(event_type, page, device, referrer)
     res = jsonify({"success": True})

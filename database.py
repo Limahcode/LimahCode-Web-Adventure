@@ -330,8 +330,8 @@ def get_analytics_summary():
     conn = get_db_connection()
     cursor = get_cursor(conn)
     
-    # Total page views
-    cursor.execute("SELECT COUNT(*) as count FROM page_views WHERE event_type = 'pageview'")
+    # Total page views (website + learning portal)
+    cursor.execute("SELECT COUNT(*) as count FROM page_views WHERE event_type IN ('pageview', 'portal_view', 'login')")
     row = cursor.fetchone()
     total_views = row['count'] if row else 0
 
@@ -340,13 +340,26 @@ def get_analytics_summary():
     row = cursor.fetchone()
     total_wa_clicks = row['count'] if row else 0
 
-    # Mobile vs Desktop
-    cursor.execute("SELECT device, COUNT(*) as count FROM page_views GROUP BY device")
+    # Mobile vs Desktop (case-insensitive normalization)
+    cursor.execute("""
+        SELECT 
+            CASE 
+                WHEN LOWER(device) LIKE '%mobile%' OR LOWER(device) LIKE '%phone%' OR LOWER(device) LIKE '%android%' OR LOWER(device) LIKE '%iphone%' OR LOWER(device) LIKE '%ipad%' THEN 'Mobile'
+                ELSE 'Desktop'
+            END as dev_type,
+            COUNT(*) as count 
+        FROM page_views 
+        GROUP BY dev_type
+    """)
     device_rows = cursor.fetchall() or []
-    devices = {r['device']: r['count'] for r in device_rows}
+    devices = {r['dev_type']: r['count'] for r in device_rows}
+    if 'Mobile' not in devices:
+        devices['Mobile'] = 0
+    if 'Desktop' not in devices:
+        devices['Desktop'] = 0
 
     # Top visited pages
-    cursor.execute("SELECT page, COUNT(*) as count FROM page_views WHERE event_type = 'pageview' GROUP BY page ORDER BY count DESC LIMIT 8")
+    cursor.execute("SELECT page, COUNT(*) as count FROM page_views WHERE event_type IN ('pageview', 'portal_view') GROUP BY page ORDER BY count DESC LIMIT 8")
     page_rows = cursor.fetchall() or []
     top_pages = [{'page': r['page'], 'views': r['count']} for r in page_rows]
 

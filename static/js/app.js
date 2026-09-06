@@ -639,4 +639,31 @@ document.addEventListener('DOMContentLoaded', () => {
             localStorage.setItem(storageKey, editor.value);
         });
     }
+
+    // Floating WhatsApp CTA Tracking & Telemetry
+    const waBtn = document.getElementById('global-wa-float-btn');
+    if (waBtn) {
+        waBtn.addEventListener('click', function() {
+            try {
+                const ua = (navigator.userAgent || '').toLowerCase();
+                const isMobile = /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini|mobile|silk|fennec|tablet/i.test(ua) || window.innerWidth <= 768;
+                const payload = {
+                    event_type: 'whatsapp_click',
+                    page: window.location.pathname || 'portal',
+                    device: isMobile ? 'Mobile' : 'Desktop',
+                    referrer: document.referrer || ''
+                };
+                if (navigator.sendBeacon) {
+                    navigator.sendBeacon('/api/track', JSON.stringify(payload));
+                } else {
+                    fetch('/api/track', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload),
+                        keepalive: true
+                    }).catch(function() {});
+                }
+            } catch (e) {}
+        });
+    }
 });
