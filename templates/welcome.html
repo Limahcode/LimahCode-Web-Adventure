@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}HTML & CSS Adventure for Teenagers | Welcome{% endblock %}
+{% block title %}HTML & CSS Adventure | LIM Innovations{% endblock %}
 
 {% block content %}
 <div class="welcome-hero">
@@ -9,28 +9,28 @@
             <span class="stat-pill" style="background: #e0e7ff; color: var(--color-primary); font-size: 13px; font-weight: 800;">🎒 AGES 9–17 JUNIOR ACADEMY</span>
             <span class="stat-pill" style="background: #e0f2fe; color: #0284c7; font-size: 13px; font-weight: 800;">💼 18+ ADULT CAREER BOOTCAMP</span>
         </div>
-        <h1 style="color: var(--color-primary); font-size: 46px; line-height: 1.15;">
-            Master Web Development with LimahCode 🚀
+        <h1 style="color: var(--color-primary); font-size: clamp(28px, 6vw, 44px); line-height: 1.15;">
+            Master Web Development with LIM Innovations 🚀
         </h1>
-        <p style="font-size: 20px; margin: 15px 0 25px 0; color: #475569;">
+        <p style="font-size: 18px; margin: 15px 0 25px 0; color: #475569;">
             Whether you are a <strong>teenager</strong> wanting to build cool games and websites, or an <strong>adult</strong> pivoting into tech and high-income freelancing — we have a dedicated 3-month track for you!
         </p>
         
         <div style="display: flex; gap: 12px; flex-wrap: wrap;">
-            <a href="/login" class="btn btn-primary" style="font-size: 17px; padding: 14px 26px;">
+            <a href="/login" class="btn btn-primary" style="font-size: 16px; padding: 12px 24px;">
                 Student Login <i class="fa-solid fa-right-to-bracket"></i>
             </a>
-            <a href="https://limahcode.github.io/limahcode-website/academy.html" target="_blank" class="btn btn-warning" style="font-size: 17px; padding: 14px 26px;">
+            <a href="https://limahcode.github.io/limahcode-website/academy.html" target="_blank" class="btn btn-warning" style="font-size: 16px; padding: 12px 24px;">
                 Enroll for Cohort 2 (₦50,000) <i class="fa-solid fa-graduation-cap"></i>
             </a>
-            <a href="/signup" class="btn btn-secondary" style="font-size: 17px; padding: 14px 20px;">
+            <a href="/signup" class="btn btn-secondary" style="font-size: 16px; padding: 12px 20px;">
                 Student Register <i class="fa-solid fa-user-plus"></i>
             </a>
         </div>
     </div>
     
     <div class="welcome-image">
-        <img src="{{ url_for('static', filename='images/welcome_hero.png') }}" alt="LimahCode Web Developer Students" id="hero-img">
+        <img src="{{ url_for('static', filename='images/classroom_action.jpg') }}" alt="LIM Innovations Classroom in Action" id="hero-img" style="border-radius: var(--radius-lg); border: 3px solid var(--border-color); box-shadow: var(--card-shadow); max-width: 100%; height: auto;">
     </div>
 </div>
 

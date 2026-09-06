@@ -405,7 +405,7 @@ def signup():
             pass
 
         cohort_name = "Adult Career Track" if track == 'adult' else "Junior & Teen Adventure"
-        flash(f"Welcome to LimahCode {cohort_name}, {fullname}! 🚀", "success")
+        flash(f"Welcome to LIM Innovations {cohort_name}, {fullname}! 🚀", "success")
         return redirect(url_for('dashboard'))
         
     return render_template('signup.html', selected_track=preselected_track)
@@ -463,8 +463,54 @@ def admin_panel():
     students = database.get_all_students()
     reservations = database.get_all_reservations()
     analytics = database.get_analytics_summary()
+    reviews = database.get_all_reviews()
     config = get_teacher_config()
-    return render_template('admin.html', students=students, reservations=reservations, analytics=analytics, config=config, lessons=LESSONS, challenges=CHALLENGES)
+    return render_template('admin.html', students=students, reservations=reservations, analytics=analytics, reviews=reviews, config=config, lessons=LESSONS, challenges=CHALLENGES)
+
+@app.route('/api/reviews', methods=['GET'])
+def api_get_reviews():
+    revs = database.get_approved_reviews()
+    res = jsonify({"success": True, "reviews": revs})
+    res.headers["Access-Control-Allow-Origin"] = "*"
+    return res
+
+@app.route('/api/submit-review', methods=['POST', 'OPTIONS'])
+def api_submit_review():
+    if request.method == 'OPTIONS':
+        res = make_response()
+        res.headers["Access-Control-Allow-Origin"] = "*"
+        res.headers["Access-Control-Allow-Headers"] = "*"
+        res.headers["Access-Control-Allow-Methods"] = "POST, OPTIONS"
+        return res
+    data = request.get_json(silent=True) or request.form.to_dict() or {}
+    name = (data.get('name') or '').strip()
+    role = (data.get('role') or 'Student / Parent').strip()
+    rating = int(data.get('rating') or 5)
+    comment = (data.get('comment') or '').strip()
+    if not name or not comment:
+        res = jsonify({"success": False, "error": "Name and review comment are required."})
+        res.headers["Access-Control-Allow-Origin"] = "*"
+        return res, 400
+    database.create_review(name, role, rating, comment)
+    res = jsonify({"success": True, "message": "Thank you! Your review has been submitted for instructor verification."})
+    res.headers["Access-Control-Allow-Origin"] = "*"
+    return res
+
+@app.route('/admin/approve-review/<int:review_id>', methods=['POST'])
+def admin_approve_review(review_id):
+    if 'user_id' not in session or session.get('user_role') != 'teacher':
+        return jsonify({"success": False, "error": "Unauthorized"}), 403
+    database.approve_review(review_id)
+    flash("Review approved and published live!", "success")
+    return redirect(url_for('admin_panel'))
+
+@app.route('/admin/delete-review/<int:review_id>', methods=['POST'])
+def admin_delete_review(review_id):
+    if 'user_id' not in session or session.get('user_role') != 'teacher':
+        return jsonify({"success": False, "error": "Unauthorized"}), 403
+    database.delete_review(review_id)
+    flash("Review deleted.", "info")
+    return redirect(url_for('admin_panel'))
 
 @app.route('/api/track', methods=['POST', 'OPTIONS'])
 def api_track():

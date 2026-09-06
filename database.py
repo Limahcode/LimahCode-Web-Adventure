@@ -77,6 +77,17 @@ def init_db():
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             );
         ''')
+        cursor.execute('''
+            CREATE TABLE IF NOT EXISTS reviews (
+                id SERIAL PRIMARY KEY,
+                name TEXT NOT NULL,
+                role TEXT DEFAULT 'Student',
+                rating INTEGER DEFAULT 5,
+                comment TEXT NOT NULL,
+                status TEXT DEFAULT 'pending',
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            );
+        ''')
     else:
         cursor.execute('''
             CREATE TABLE IF NOT EXISTS users (
@@ -116,10 +127,41 @@ def init_db():
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             );
         ''')
+        cursor.execute('''
+            CREATE TABLE IF NOT EXISTS reviews (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                name TEXT NOT NULL,
+                role TEXT DEFAULT 'Student',
+                rating INTEGER DEFAULT 5,
+                comment TEXT NOT NULL,
+                status TEXT DEFAULT 'pending',
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            );
+        ''')
         try:
             cursor.execute("ALTER TABLE users ADD COLUMN track TEXT DEFAULT 'junior'")
         except Exception:
             pass
+
+    # Seed initial approved reviews if empty
+    try:
+        ph_seed = '%s' if USE_POSTGRES else '?'
+        cursor.execute("SELECT COUNT(*) as count FROM reviews")
+        rev_count = cursor.fetchone()['count']
+        if rev_count == 0:
+            seed_reviews = [
+                ("Mrs. Adebayo", "Parent (Teen Academy)", 5, "The academy gave my son real skills — not just tutorials. He deployed his first web portfolio after 4 weeks and is now teaching his friends!", "approved"),
+                ("Bello L.", "Adult Career Track", 5, "LIM Innovations built our inventory system in 6 weeks and saved us hours of daily manual tracking. The engineering and mentoring quality is world class.", "approved"),
+                ("Chioma M.", "Product Manager", 5, "The practical, hands-on approach is amazing. Learning HTML, modern responsive CSS, and JavaScript with live instructors gave me the confidence to build real projects.", "approved")
+            ]
+            for r_name, r_role, r_rating, r_comm, r_stat in seed_reviews:
+                cursor.execute(f'''
+                    INSERT INTO reviews (name, role, rating, comment, status)
+                    VALUES ({ph_seed}, {ph_seed}, {ph_seed}, {ph_seed}, {ph_seed})
+                ''', (r_name, r_role, r_rating, r_comm, r_stat))
+            conn.commit()
+    except Exception:
+        pass
 
     # Ensure default teacher account exists
     ph = '%s' if USE_POSTGRES else '?'
@@ -303,6 +345,65 @@ def delete_reservation(res_id):
     ph = '%s' if USE_POSTGRES else '?'
     try:
         cursor.execute(f'DELETE FROM reservations WHERE id = {ph}', (res_id,))
+        conn.commit()
+        return True, None
+    except Exception as e:
+        return False, str(e)
+    finally:
+        conn.close()
+
+def create_review(name, role, rating, comment):
+    conn = get_db_connection()
+    cursor = get_cursor(conn)
+    ph = '%s' if USE_POSTGRES else '?'
+    try:
+        cursor.execute(f'''
+            INSERT INTO reviews (name, role, rating, comment, status)
+            VALUES ({ph}, {ph}, {ph}, {ph}, {ph})
+        ''', (name.strip(), (role or 'Student / Parent').strip(), int(rating or 5), comment.strip(), 'pending'))
+        conn.commit()
+        return True, None
+    except Exception as e:
+        return False, str(e)
+    finally:
+        conn.close()
+
+def get_approved_reviews():
+    conn = get_db_connection()
+    cursor = get_cursor(conn)
+    ph = '%s' if USE_POSTGRES else '?'
+    cursor.execute(f"SELECT * FROM reviews WHERE status = {ph} ORDER BY created_at DESC", ('approved',))
+    rows = cursor.fetchall()
+    conn.close()
+    return [dict(r) for r in rows]
+
+def get_all_reviews():
+    conn = get_db_connection()
+    cursor = get_cursor(conn)
+    cursor.execute("SELECT * FROM reviews ORDER BY created_at DESC")
+    rows = cursor.fetchall()
+    conn.close()
+    return [dict(r) for r in rows]
+
+def approve_review(review_id):
+    conn = get_db_connection()
+    cursor = get_cursor(conn)
+    ph = '%s' if USE_POSTGRES else '?'
+    try:
+        cursor.execute(f"UPDATE reviews SET status = 'approved' WHERE id = {ph}", (review_id,))
+        conn.commit()
+        return True, None
+    except Exception as e:
+        return False, str(e)
+    finally:
+        conn.close()
+
+def delete_review(review_id):
+    conn = get_db_connection()
+    cursor = get_cursor(conn)
+    ph = '%s' if USE_POSTGRES else '?'
+    try:
+        cursor.execute(f"DELETE FROM reviews WHERE id = {ph}", (review_id,))
         conn.commit()
         return True, None
     except Exception as e:
