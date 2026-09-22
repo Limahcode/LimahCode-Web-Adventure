@@ -1,5 +1,9 @@
 import json
 import os
+import threading
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
 from flask import Flask, render_template, jsonify, request, redirect, url_for, session, flash, make_response
 import database
 
@@ -588,11 +592,57 @@ def api_track():
 def flyer_designer():
     return render_template('flyer_designer.html')
 
+def send_admin_lead_notification(fullname, track, phone, email, experience):
+    """Sends background email alert to instructor when a new seat reservation is received."""
+    def _send():
+        admin_email = os.environ.get('ADMIN_NOTIFICATION_EMAIL', 'abimbolaalimat12@gmail.com')
+        smtp_server = os.environ.get('SMTP_SERVER', 'smtp.gmail.com')
+        smtp_port = int(os.environ.get('SMTP_PORT', 587))
+        smtp_user = os.environ.get('SMTP_USERNAME') or os.environ.get('MAIL_USERNAME')
+        smtp_pass = os.environ.get('SMTP_PASSWORD') or os.environ.get('MAIL_PASSWORD')
+        
+        if not smtp_user or not smtp_pass:
+            print(f"[RESERVATION NOTIFICATION] Student: {fullname} | Track: {track} | Phone: {phone} | Email: {email} | Exp: {experience}")
+            return
+
+        try:
+            clean_phone = phone.replace('+', '').replace(' ', '').replace('-', '')
+            msg = MIMEMultipart()
+            msg['From'] = f"LIM Innovations <{smtp_user}>"
+            msg['To'] = admin_email
+            msg['Subject'] = f"🚀 New Cohort 2 Reservation: {fullname} ({track})"
+
+            body = f"""New Cohort 2 Seat Reservation Received!
+
+Applicant Name: {fullname}
+Track Selection: {track}
+WhatsApp Phone: {phone}
+Email Address: {email or 'Not provided'}
+Prior Experience: {experience or 'None specified'}
+
+Teacher Command Center:
+https://limahcode-web-adventure.onrender.com/admin
+
+Click to message applicant on WhatsApp:
+https://wa.me/{clean_phone}?text=Hello%20{fullname},%20this%20is%20LIM%20Innovations%20following%20up%20on%20your%20Cohort%202%20admission%20reservation!
+"""
+            msg.attach(MIMEText(body, 'plain'))
+            with smtplib.SMTP(smtp_server, smtp_port, timeout=10) as server:
+                server.starttls()
+                server.login(smtp_user, smtp_pass)
+                server.send_message(msg)
+            print(f"[EMAIL NOTIFICATION] Alert successfully sent to {admin_email} for {fullname}")
+        except Exception as e:
+            print(f"[EMAIL NOTIFICATION ERROR] Could not dispatch alert: {e}")
+
+    threading.Thread(target=_send, daemon=True).start()
+
 @app.route('/admin/add-lead', methods=['POST'])
 def admin_add_lead():
     if 'user_id' not in session or session.get('user_role') != 'teacher':
         return jsonify({"success": False, "error": "Unauthorized"}), 403
     fullname = request.form.get('fullname', '').strip()
+
     track = request.form.get('track', 'Teens (9-17)').strip()
     phone = request.form.get('phone', '').strip()
     email = request.form.get('email', '').strip()
@@ -601,6 +651,7 @@ def admin_add_lead():
         flash("Name and phone number are required.", "error")
         return redirect(url_for('admin_panel'))
     database.create_reservation(fullname, track, phone, email, experience)
+    send_admin_lead_notification(fullname, track, phone, email, experience)
     flash(f"Lead for {fullname} successfully added!", "success")
     return redirect(url_for('admin_panel'))
 
@@ -640,6 +691,8 @@ def api_admissions():
         res.headers["Access-Control-Allow-Origin"] = "*"
         return res, 500
         
+    send_admin_lead_notification(fullname, track, phone, email, experience)
+
     res = jsonify({
         "success": True, 
         "message": f"Reservation successfully saved for {fullname} ({track})! Admissions team will message on WhatsApp."
