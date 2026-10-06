@@ -3,26 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LIM Innovations Official Brand Flyers</title>
+    <title>LIM Innovations Official Brand Flyers - Cohort 2</title>
     <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Nunito:wght@400;600;700;800;900&family=Syne:wght@700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
         :root {
-            /* EXACT LIMAHCODE WEBSITE DESIGN TOKENS */
             --bg-main: #f0f7ff;
             --bg-card: #ffffff;
             --text-primary: #1e293b;
             --text-secondary: #64748b;
             
-            --color-primary: #6366f1; /* Indigo */
-            --color-primary-dark: #4f46e5;
-            --color-secondary: #3b82f6; /* Blue */
+            --color-primary: #1A7A52; /* LIM Emerald */
+            --color-primary-dark: #0D3D29;
+            --color-secondary: #0284c7; /* Sky Blue */
             --color-success: #22c55e; /* WhatsApp Green */
-            --color-warning: #eab308; /* Gold Yellow */
-            --color-danger: #ef4444; /* Coral Red */
-            --color-purple: #a855f7; /* Violet Purple */
-            --color-orange: #f97316; /* Energetic Orange */
+            --color-warning: #FAC740; /* Gold Yellow */
+            --color-danger: #ef4444;
+            --color-purple: #8b5cf6;
+            --color-orange: #ea580c;
             
             --border-width: 4px;
             --border-color: #1e293b;
@@ -42,7 +41,7 @@
 
         body {
             font-family: 'Nunito', sans-serif;
-            background-color: #0f172a;
+            background-color: #0b1320;
             color: var(--text-primary);
             padding: 30px 15px;
             display: flex;
@@ -51,15 +50,68 @@
             gap: 24px;
         }
 
+        /* HD QUICK DOWNLOAD BAR */
+        .hd-banner {
+            width: 100%;
+            max-width: 860px;
+            background: linear-gradient(135deg, #092c1e 0%, #124b33 100%);
+            border: 3px solid var(--color-warning);
+            border-radius: var(--radius-md);
+            padding: 20px 24px;
+            color: #ffffff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+            box-shadow: 0 12px 30px rgba(0,0,0,0.4);
+        }
+        .hd-banner h2 {
+            font-family: 'Syne', sans-serif;
+            font-size: 20px;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .hd-banner p {
+            color: #9fe1cb;
+            font-size: 13.5px;
+            margin-top: 4px;
+        }
+        .hd-btn-group {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .btn-hd {
+            background: var(--color-warning);
+            color: #092c1e;
+            font-family: 'Syne', sans-serif;
+            font-weight: 800;
+            font-size: 13.5px;
+            padding: 10px 18px;
+            border-radius: 8px;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: transform 0.15s, background 0.15s;
+        }
+        .btn-hd:hover {
+            background: #ffffff;
+            transform: translateY(-2px);
+        }
+
         /* TOP NAVIGATION & FORMAT CONTROLS */
         .top-toolbar {
             background: white;
-            padding: 16px 28px;
+            padding: 14px 24px;
             border-radius: var(--radius-md);
             border: var(--border-width) solid var(--border-color);
             box-shadow: var(--card-shadow);
             display: flex;
-            gap: 20px;
+            gap: 16px;
             align-items: center;
             flex-wrap: wrap;
             justify-content: center;
@@ -69,9 +121,9 @@
             background: #f1f5f9;
             color: var(--text-primary);
             font-family: 'Fredoka', sans-serif;
-            font-size: 16px;
+            font-size: 15px;
             font-weight: 700;
-            padding: 10px 20px;
+            padding: 9px 18px;
             border: 3px solid var(--border-color);
             border-radius: 12px;
             cursor: pointer;
@@ -94,9 +146,9 @@
             background: var(--color-success);
             color: white;
             font-family: 'Fredoka', sans-serif;
-            font-size: 17px;
+            font-size: 16px;
             font-weight: 700;
-            padding: 11px 24px;
+            padding: 10px 22px;
             border: 3px solid var(--border-color);
             border-radius: 12px;
             cursor: pointer;
@@ -142,7 +194,7 @@
             border: 6px solid var(--border-color);
             border-radius: 28px;
             box-shadow: 12px 12px 0px #000000;
-            padding: 34px;
+            padding: 32px;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
@@ -150,14 +202,13 @@
             overflow: hidden;
         }
 
-        /* Decorative playful circles matching website */
         .deco-circle-tr {
             position: absolute;
             top: -60px;
             right: -60px;
             width: 220px;
             height: 220px;
-            background: rgba(99, 102, 241, 0.14);
+            background: rgba(26, 122, 82, 0.12);
             border-radius: 50%;
             pointer-events: none;
         }
@@ -167,12 +218,11 @@
             left: -50px;
             width: 240px;
             height: 240px;
-            background: rgba(234, 179, 8, 0.14);
+            background: rgba(250, 199, 64, 0.15);
             border-radius: 50%;
             pointer-events: none;
         }
 
-        /* Header */
         .flyer-header {
             display: flex;
             justify-content: space-between;
@@ -186,8 +236,8 @@
             gap: 12px;
         }
         .brand-logo-img {
-            width: 58px;
-            height: 58px;
+            width: 56px;
+            height: 56px;
             border-radius: 50%;
             border: 3px solid var(--border-color);
             box-shadow: 3px 3px 0px var(--border-color);
@@ -195,22 +245,22 @@
             object-fit: contain;
         }
         .brand-title {
-            font-family: 'Syne', 'Fredoka', sans-serif;
+            font-family: 'Syne', sans-serif;
             font-weight: 800;
-            font-size: 34px;
+            font-size: 32px;
             color: #0E0E0C;
             line-height: 1;
             letter-spacing: -0.02em;
         }
         .brand-title span {
-            color: #1A7A52;
+            color: var(--color-primary);
         }
 
         .gold-badge {
             background: var(--color-warning);
-            color: var(--text-primary);
+            color: #0E0E0C;
             font-family: 'Fredoka', sans-serif;
-            font-size: 15px;
+            font-size: 14px;
             font-weight: 700;
             padding: 8px 18px;
             border-radius: 30px;
@@ -225,39 +275,45 @@
             border: var(--border-width) solid var(--border-color);
             border-radius: var(--radius-lg);
             box-shadow: var(--card-shadow);
-            padding: 20px 24px;
+            padding: 16px 22px;
             text-align: center;
             position: relative;
             z-index: 2;
         }
         .tag-pill {
             display: inline-block;
-            background: #e0e7ff;
-            color: var(--color-primary);
-            font-size: 13px;
+            background: #dcfce7;
+            color: #15803d;
+            font-size: 12px;
             font-weight: 800;
             padding: 4px 14px;
             border-radius: 20px;
-            border: 2px solid var(--color-primary);
-            margin-bottom: 6px;
+            border: 2px solid #86efac;
+            margin-bottom: 4px;
             text-transform: uppercase;
         }
         .hero-heading {
             font-family: 'Fredoka', sans-serif;
-            font-size: 36px;
+            font-size: 33px;
             line-height: 1.15;
             color: var(--text-primary);
             margin-bottom: 4px;
         }
-        .hero-subtext {
-            font-size: 16px;
+        .kickoff-date-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: #fef08a;
+            color: #854d0e;
             font-weight: 800;
-            color: var(--color-orange);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
+            font-size: 13.5px;
+            padding: 4px 14px;
+            border-radius: 8px;
+            border: 2px solid #eab308;
+            margin-top: 4px;
         }
 
-        /* Dual Track Grid */
+        /* Dual Track Grid (NO PRICES) */
         .tracks-row {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -270,7 +326,7 @@
             border: var(--border-width) solid var(--border-color);
             border-radius: var(--radius-md);
             box-shadow: var(--card-shadow);
-            padding: 16px 18px;
+            padding: 15px 18px;
         }
         .track-box.teens {
             border-top: 10px solid var(--color-primary);
@@ -286,7 +342,7 @@
         }
         .track-h3 {
             font-family: 'Fredoka', sans-serif;
-            font-size: 19px;
+            font-size: 18px;
             display: flex;
             align-items: center;
             gap: 8px;
@@ -300,8 +356,8 @@
             text-transform: uppercase;
         }
         .track-box.teens .sched-pill {
-            background: #e0e7ff;
-            color: var(--color-primary);
+            background: #dcfce7;
+            color: #15803d;
         }
         .track-box.adults .sched-pill {
             background: #e0f2fe;
@@ -319,7 +375,7 @@
             border: 3px solid var(--border-color);
             border-radius: var(--radius-md);
             box-shadow: 4px 4px 0px var(--border-color);
-            padding: 10px 16px;
+            padding: 9px 14px;
             display: flex;
             justify-content: space-around;
             align-items: center;
@@ -330,12 +386,12 @@
             display: flex;
             align-items: center;
             gap: 8px;
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 800;
         }
         .step-icon-bubble {
-            width: 26px;
-            height: 26px;
+            width: 24px;
+            height: 24px;
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -344,14 +400,14 @@
             font-size: 11px;
         }
 
-        /* WhatsApp CTA Box (Strictly NO web links) */
+        /* Call To Action Container (NO PRICES - Form & WhatsApp) */
         .cta-container {
-            background: #1e293b;
+            background: #0f172a;
             color: white;
             border: 4px solid var(--border-color);
             border-radius: var(--radius-lg);
             box-shadow: 6px 6px 0px #000;
-            padding: 16px 24px;
+            padding: 16px 22px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -361,26 +417,36 @@
         .cta-info h3 {
             color: var(--color-warning);
             font-family: 'Fredoka', sans-serif;
-            font-size: 20px;
-            margin-bottom: 2px;
+            font-size: 19px;
+            margin-bottom: 3px;
         }
         .cta-info p {
             color: #94a3b8;
-            font-size: 13px;
+            font-size: 12.5px;
+        }
+        .form-link-tag {
+            display: inline-block;
+            margin-top: 4px;
+            background: rgba(255,255,255,0.1);
+            color: #9fe1cb;
+            font-size: 11.5px;
+            font-weight: 700;
+            padding: 2px 8px;
+            border-radius: 6px;
         }
         .whatsapp-badge {
             background: var(--color-success);
             color: white;
             font-family: 'Fredoka', sans-serif;
-            font-size: 20px;
+            font-size: 18px;
             font-weight: 700;
-            padding: 10px 20px;
+            padding: 10px 18px;
             border-radius: 12px;
             border: 2px solid white;
             box-shadow: 3px 3px 0px #000;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
             white-space: nowrap;
         }
 
@@ -394,7 +460,7 @@
             border: 6px solid var(--border-color);
             border-radius: 32px;
             box-shadow: 12px 12px 0px #000000;
-            padding: 36px 30px;
+            padding: 34px 28px;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
@@ -415,15 +481,15 @@
             border: var(--border-width) solid var(--border-color);
             border-radius: var(--radius-lg);
             box-shadow: var(--card-shadow);
-            padding: 22px;
+            padding: 20px;
             text-align: center;
             position: relative;
             z-index: 2;
         }
         .story-hero h2 {
             font-family: 'Fredoka', sans-serif;
-            font-size: 32px;
-            line-height: 1.2;
+            font-size: 30px;
+            line-height: 1.18;
             color: var(--text-primary);
             margin: 6px 0;
         }
@@ -431,7 +497,7 @@
         .story-tracks-col {
             display: flex;
             flex-direction: column;
-            gap: 14px;
+            gap: 12px;
             position: relative;
             z-index: 2;
         }
@@ -441,7 +507,7 @@
             border: var(--border-width) solid var(--border-color);
             border-radius: var(--radius-md);
             box-shadow: var(--card-shadow);
-            padding: 16px 18px;
+            padding: 14px 16px;
         }
         .story-track-card.teens {
             border-left: 10px solid var(--color-primary);
@@ -455,16 +521,16 @@
             border: var(--border-width) solid var(--border-color);
             border-radius: var(--radius-md);
             box-shadow: var(--card-shadow);
-            padding: 14px 18px;
+            padding: 12px 16px;
             display: flex;
             flex-direction: column;
-            gap: 8px;
+            gap: 7px;
             position: relative;
             z-index: 2;
         }
         .story-curriculum-title {
             font-family: 'Fredoka', sans-serif;
-            font-size: 15px;
+            font-size: 14px;
             color: var(--text-primary);
             text-align: center;
             text-transform: uppercase;
@@ -472,16 +538,16 @@
         .story-curriculum-row {
             display: flex;
             justify-content: space-between;
-            font-size: 13px;
+            font-size: 12.5px;
             font-weight: 800;
         }
 
         .story-cta {
-            background: #1e293b;
+            background: #0f172a;
             border: 4px solid var(--border-color);
             border-radius: var(--radius-lg);
             box-shadow: 6px 6px 0px #000;
-            padding: 18px;
+            padding: 16px;
             text-align: center;
             position: relative;
             z-index: 2;
@@ -489,31 +555,47 @@
         .story-cta h3 {
             color: var(--color-warning);
             font-family: 'Fredoka', sans-serif;
-            font-size: 19px;
-            margin-bottom: 4px;
+            font-size: 18px;
+            margin-bottom: 3px;
         }
         .story-cta p {
             color: #94a3b8;
-            font-size: 13px;
-            margin-bottom: 12px;
+            font-size: 12px;
+            margin-bottom: 10px;
         }
         .story-whatsapp-btn {
             background: var(--color-success);
             color: white;
             font-family: 'Fredoka', sans-serif;
-            font-size: 21px;
+            font-size: 19px;
             font-weight: 700;
-            padding: 10px 18px;
+            padding: 9px 18px;
             border-radius: 12px;
             border: 2px solid white;
             box-shadow: 3px 3px 0px #000;
             display: inline-flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
         }
     </style>
 </head>
 <body>
+
+    <!-- 1-CLICK HD GENERATED FLYER DOWNLOADS -->
+    <div class="hd-banner">
+        <div>
+            <h2><i class="fa-solid fa-crown" style="color: #FAC740;"></i> Official High-Resolution Flyers (No Price)</h2>
+            <p>Kickoff: <strong>Saturday, November 7, 2026</strong> • WhatsApp: <strong>+234 802 503 4999</strong> • Form: <strong>forms.gle/BYwqZgEshskd6smr6</strong></p>
+        </div>
+        <div class="hd-btn-group">
+            <a href="/static/images/lim_cohort2_square_flyer.jpg" download="LIM_Innovations_Square_Flyer.jpg" class="btn-hd">
+                <i class="fa-solid fa-download"></i> Save HD Square Flyer (1:1)
+            </a>
+            <a href="/static/images/lim_cohort2_status_flyer.jpg" download="LIM_Innovations_Status_Flyer.jpg" class="btn-hd">
+                <i class="fa-solid fa-mobile-screen"></i> Save HD WhatsApp Status (9:16)
+            </a>
+        </div>
+    </div>
 
     <!-- CONTROL PANEL -->
     <div class="top-toolbar">
@@ -527,7 +609,7 @@
         </div>
 
         <button class="btn-download" onclick="downloadCurrentFlyer()">
-            <i class="fa-solid fa-download"></i> Save PNG
+            <i class="fa-solid fa-download"></i> Export Canvas PNG
         </button>
     </div>
 
@@ -554,10 +636,12 @@
             <div class="headline-banner">
                 <span class="tag-pill">🚀 ALL AGES WELCOME • SEPARATE TRACKS</span>
                 <h1 class="hero-heading">3-Month Web Development Bootcamp</h1>
-                <p class="hero-subtext">Learn HTML5, CSS3 & JavaScript from Scratch</p>
+                <div class="kickoff-date-pill">
+                    <i class="fa-solid fa-calendar-check"></i> Kickoff: Saturday, Nov 7, 2026 • 4:00 PM (WAT)
+                </div>
             </div>
 
-            <!-- Dual Track Grid -->
+            <!-- Dual Track Grid (NO PRICES) -->
             <div class="tracks-row">
                 <!-- Teens Track -->
                 <div class="track-box teens">
@@ -578,7 +662,7 @@
                         <h3 class="track-h3" style="color: var(--color-secondary);">
                             <i class="fa-solid fa-briefcase"></i> Adult Track (18+)
                         </h3>
-                        <span class="sched-pill">🗓️ Evening & Flex</span>
+                        <span class="sched-pill">🗓️ Weekend & Flex</span>
                     </div>
                     <p class="track-p">
                         Practical career & freelancing! Master responsive web apps, real-world portfolio projects, hosting, and client-ready code.
@@ -602,11 +686,12 @@
                 </div>
             </div>
 
-            <!-- Call to Action (Strictly NO web links) -->
+            <!-- Call to Action (NO PRICES - Form & WhatsApp) -->
             <div class="cta-container">
                 <div class="cta-info">
                     <h3>💬 Limited Slots Available per Track!</h3>
-                    <p>Send a WhatsApp message or DM to register and claim your slot.</p>
+                    <p>Apply via Google Form or WhatsApp to claim your slot.</p>
+                    <span class="form-link-tag">📋 Google Form: forms.gle/BYwqZgEshskd6smr6</span>
                 </div>
                 <div class="whatsapp-badge">
                     <i class="fa-brands fa-whatsapp"></i> +234 802 503 4999
@@ -638,37 +723,37 @@
             <div class="story-hero">
                 <span class="tag-pill">🚀 ALL AGES WELCOME</span>
                 <h2>3-Month Web Development Bootcamp</h2>
-                <p style="font-size: 14px; font-weight: 800; color: var(--color-orange); text-transform: uppercase;">
-                    HTML5 • CSS3 • JavaScript
-                </p>
+                <div class="kickoff-date-pill" style="font-size: 12px; margin-top: 2px;">
+                    <i class="fa-solid fa-calendar-check"></i> Starts: Saturday, Nov 7, 2026
+                </div>
             </div>
 
-            <!-- Story Tracks -->
+            <!-- Story Tracks (NO PRICES) -->
             <div class="story-tracks-col">
                 <div class="story-track-card teens">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-                        <h3 style="color: var(--color-primary); font-family: 'Fredoka', sans-serif; font-size: 18px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                        <h3 style="color: var(--color-primary); font-family: 'Fredoka', sans-serif; font-size: 17px;">
                             <i class="fa-solid fa-gamepad"></i> Teens Track (9–17)
                         </h3>
-                        <span style="background: #e0e7ff; color: var(--color-primary); font-size: 11px; font-weight: 800; padding: 2px 8px; border-radius: 6px;">
-                            🗓️ WEEKENDS
+                        <span style="background: #dcfce7; color: #15803d; font-size: 11px; font-weight: 800; padding: 2px 8px; border-radius: 6px;">
+                            WEEKENDS
                         </span>
                     </div>
-                    <p style="font-size: 13px; color: var(--text-secondary); line-height: 1.4;">
+                    <p style="font-size: 12.5px; color: var(--text-secondary); line-height: 1.4;">
                         Build custom websites, interactive games, earn official skill milestone badges, and learn tech in a fun environment.
                     </p>
                 </div>
 
                 <div class="story-track-card adults">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-                        <h3 style="color: var(--color-secondary); font-family: 'Fredoka', sans-serif; font-size: 18px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                        <h3 style="color: var(--color-secondary); font-family: 'Fredoka', sans-serif; font-size: 17px;">
                             <i class="fa-solid fa-briefcase"></i> Adult Track (18+)
                         </h3>
                         <span style="background: #e0f2fe; color: #0284c7; font-size: 11px; font-weight: 800; padding: 2px 8px; border-radius: 6px;">
-                            🗓️ EVENING CLASSES
+                            FLEX SCHEDULE
                         </span>
                     </div>
-                    <p style="font-size: 13px; color: var(--text-secondary); line-height: 1.4;">
+                    <p style="font-size: 12.5px; color: var(--text-secondary); line-height: 1.4;">
                         Career-focused! Master responsive websites, freelancing fundamentals, live project deployment, and client-ready coding.
                     </p>
                 </div>
@@ -686,13 +771,13 @@
                     <span>4 Weeks</span>
                 </div>
                 <div class="story-curriculum-row" style="color: var(--color-purple);">
-                    <span>⚡ Month 3: JavaScript & Games</span>
+                    <span>⚡ Month 3: JavaScript & Web Apps</span>
                     <span>4 Weeks</span>
                 </div>
             </div>
 
             <!-- Story Perks -->
-            <div style="display: flex; justify-content: space-around; font-size: 13px; font-weight: 800; color: #475569;">
+            <div style="display: flex; justify-content: space-around; font-size: 12.5px; font-weight: 800; color: #475569;">
                 <span>💻 100% Practical</span>
                 <span>•</span>
                 <span>📜 Certificate</span>
@@ -700,10 +785,10 @@
                 <span>👥 Mentorship</span>
             </div>
 
-            <!-- Story CTA (Strictly NO web links) -->
+            <!-- Story CTA (NO PRICE - Form & WhatsApp) -->
             <div class="story-cta">
                 <h3>💬 Limited Slots Available!</h3>
-                <p>Send a WhatsApp message to reserve your slot now.</p>
+                <p>Register via Google Form: <strong>forms.gle/BYwqZgEshskd6smr6</strong></p>
                 <div class="story-whatsapp-btn">
                     <i class="fa-brands fa-whatsapp"></i> +234 802 503 4999
                 </div>
